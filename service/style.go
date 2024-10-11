@@ -218,6 +218,7 @@ func (gs *GeoserverService) GetStyles(options ...utils.Option) (*style.GetStyles
 	}
 
 	request.SetBasicAuth(gs.username, gs.password)
+	request.Header.Add("Accept", "application/json")
 
 	response, err := gs.client.Do(request)
 	if err != nil {
