@@ -62,8 +62,10 @@ func (gs *GeoserverService) CreateStyle(name, format string, content []byte, opt
 	switch format {
 	case "css":
 		request.Header.Add("Content-Type", "application/vnd.geoserver.geocss+css")
-	case "sld":
-		return customerrors.NewNotImplementedError("sld style creation is not implemented")
+	case "sld 1.1.0":
+		request.Header.Add("Content-Type", "application/vnd.ogc.se+xml")
+	case "sld 1.0.0":
+		request.Header.Add("Content-Type", "application/vnd.ogc.sld+xml")
 	case "zip":
 		return customerrors.NewNotImplementedError("zip style creation is not implemented")
 	}
