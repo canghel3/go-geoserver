@@ -184,9 +184,9 @@ func (gs *GeoserverService) CreateLayerGroup(name, srs string, children []string
 		groupContent.Group.Publishables = layergroups.Publishables{Published: publishables}
 	}
 
-	groupStyles := make([]misc.Style, 0, len(children))
+	groupStyles := make([]misc.StyleWithLink, 0, len(children))
 	for range children {
-		groupStyles = append(groupStyles, misc.Style{})
+		groupStyles = append(groupStyles, misc.StyleWithLink{})
 	}
 	groupContent.Group.Styles.Style = groupStyles
 
@@ -305,9 +305,9 @@ func (gs *GeoserverService) UpdateLayerGroup(name, srs string, layersToAdd []str
 		groupContent.Group.Publishables = layergroups.Publishables{Published: publishables}
 	}
 
-	groupStyles := make([]misc.Style, 0, len(lg.Group.Publishables.Published)+len(layersToAdd))
+	groupStyles := make([]misc.StyleWithLink, 0, len(lg.Group.Publishables.Published)+len(layersToAdd))
 	for range len(lg.Group.Publishables.Published) + len(layersToAdd) {
-		groupStyles = append(groupStyles, misc.Style{})
+		groupStyles = append(groupStyles, misc.StyleWithLink{})
 	}
 	groupContent.Group.Styles.Style = groupStyles
 
