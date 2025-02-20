@@ -28,11 +28,3 @@ type GetStyleDetails struct {
 	DateCreate      string                       `json:"dateCreate,omitempty"`
 	DateModified    string                       `json:"dateModified,omitempty"`
 }
-
-type GetStylesWrapper struct {
-	Styles GetStyles `json:"styles"`
-}
-
-type GetStyles struct {
-	Styles []misc.StyleWithHref `json:"style"`
-}

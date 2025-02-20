@@ -84,10 +84,10 @@ func (gs *GeoserverService) CreateCoverageStore(wksp, name, url, type_ string) e
 			if gs.isDataDirectorySet() {
 				if strings.HasPrefix(gs.getDataDirectory(), "file:") {
 					//provided url is only of file name and data dir is set in geoserver
-					url = filepath.Join(gs.datadir, f)
+					url = filepath.Join(gs.getDataDirectory(), f)
 				} else {
 					//provided url is only of file name and data dir is set in geoserver
-					url = fmt.Sprintf("file:%s", filepath.Join(gs.datadir, f))
+					url = fmt.Sprintf("file:%s", filepath.Join(gs.getDataDirectory(), f))
 				}
 			} else {
 				url = fmt.Sprintf("file:%s", url)

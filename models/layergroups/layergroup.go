@@ -31,7 +31,7 @@ type Layer struct {
 }
 
 type GroupStyles struct {
-	Style []misc.StyleWithLink `json:"style"`
+	Style []misc.Style `json:"style"`
 }
 
 type GetGroupWrapper struct {

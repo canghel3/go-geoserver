@@ -18,5 +18,7 @@ func TestLayers(t *testing.T) {
 		t.Skip()
 	})
 
+	t.Run("WITH SINGLE KEYWORD", func(t *testing.T) {})
+
 	assert.NilError(t, geoserverService.DeleteWorkspace("init", utils.RecurseOption(true)))
 }

@@ -27,7 +27,7 @@ import (
 // Example:
 // err := gs.CreateStyle("myStyle", "css", []byte(cssContent))
 //
-// Note: "zip" formats are currently not supported for creating styles.
+// Note: "sld" and "zip" formats are currently not supported for creating styles.
 func (gs *GeoserverService) CreateStyle(name, format string, content []byte, options ...utils.Option) error {
 	var enf *customerrors.NotFoundError
 
@@ -62,10 +62,8 @@ func (gs *GeoserverService) CreateStyle(name, format string, content []byte, opt
 	switch format {
 	case "css":
 		request.Header.Add("Content-Type", "application/vnd.geoserver.geocss+css")
-	case "sld 1.1.0":
-		request.Header.Add("Content-Type", "application/vnd.ogc.se+xml")
-	case "sld 1.0.0":
-		request.Header.Add("Content-Type", "application/vnd.ogc.sld+xml")
+	case "sld":
+		return customerrors.NewNotImplementedError("sld style creation is not implemented")
 	case "zip":
 		return customerrors.NewNotImplementedError("zip style creation is not implemented")
 	}
@@ -185,57 +183,6 @@ func (gs *GeoserverService) GetStyle(name, format string, options ...utils.Optio
 		}
 	case http.StatusNotFound:
 		return nil, customerrors.WrapNotFoundError(fmt.Errorf("style %s does not exist", name))
-	default:
-		body, err := io.ReadAll(response.Body)
-		if err != nil {
-			return nil, err
-		}
-
-		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
-	}
-}
-
-// GetStyles available options: WorkspaceOption
-func (gs *GeoserverService) GetStyles(options ...utils.Option) (*style.GetStylesWrapper, error) {
-	params := utils.ProcessOptions(options)
-
-	var target string
-	wksp, set := params["workspace"]
-	if set {
-		_, err := gs.GetWorkspace(wksp.(string))
-		if err != nil {
-			return nil, err
-		}
-
-		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/styles", gs.url, wksp)
-	} else {
-		target = fmt.Sprintf("%s/geoserver/rest/styles", gs.url)
-	}
-
-	request, err := http.NewRequest(http.MethodGet, target, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	request.SetBasicAuth(gs.username, gs.password)
-	request.Header.Add("Accept", "application/json")
-
-	response, err := gs.client.Do(request)
-	if err != nil {
-		return nil, err
-	}
-
-	defer response.Body.Close()
-
-	switch response.StatusCode {
-	case http.StatusOK:
-		var styles style.GetStylesWrapper
-		err = json.NewDecoder(response.Body).Decode(&styles)
-		if err != nil {
-			return nil, err
-		}
-
-		return &styles, nil
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
