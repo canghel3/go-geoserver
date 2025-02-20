@@ -8,7 +8,7 @@ import (
 )
 
 func TestLayerGroup(t *testing.T) {
-	geoserverService := NewGeoserverService(target, username, password)
+	geoserverService := NewGeoserverService(geoserverURL, username, password)
 
 	bbox := [4]float64{-180, -90, 180, 90}
 	connectionParams := postgis.ConnectionParams{

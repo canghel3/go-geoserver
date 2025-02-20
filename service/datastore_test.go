@@ -9,7 +9,7 @@ import (
 )
 
 func TestDataStore(t *testing.T) {
-	geoserverService := NewGeoserverService(target, username, password)
+	geoserverService := NewGeoserverService(geoserverURL, username, password)
 
 	t.Run("PostGIS", func(t *testing.T) {
 		t.Run("CREATE", func(t *testing.T) {

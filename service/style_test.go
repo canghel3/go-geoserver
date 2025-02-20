@@ -11,7 +11,7 @@ import (
 )
 
 func TestStyle(t *testing.T) {
-	geoserverService := NewGeoserverService(target, username, password)
+	geoserverService := NewGeoserverService(geoserverURL, username, password)
 	assert.NilError(t, geoserverService.CreateWorkspace("init"))
 	styleContent := []byte("*{raster-channels: auto; raster-color-map-type:intervals; raster-color-map: color-map-entry('#febb81', 1189.02001953125, 1, '1189.02001953125') color-map-entry('#f8765c', 310000.0, 1, '310000.0') color-map-entry('#d3436e', 660000.0, 1, '660000.0') color-map-entry('#982d80', 1403927.675, 1, '1403927.675') color-map-entry('#5f187f', 3581199.250000002, 1, '3581199.250000002') color-map-entry('#221150', 2671396865.0, 1, '2671396865.0')}")
 

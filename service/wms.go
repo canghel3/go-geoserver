@@ -31,21 +31,21 @@ func (gs *GeoserverService) GetCapabilities(version string, options ...utils.Opt
 		version = "1.3.0"
 	}
 
-	var target = fmt.Sprintf("%s/geoserver/wms?service=wms&version=%s&request=GetCapabilities", gs.url, version)
+	var target = fmt.Sprintf("%s/geoserver/wms?service=wms&version=%s&request=GetCapabilities", gs.data.Connection.URL, version)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return wms.Capabilities{}, err
 	}
 
-	request.SetBasicAuth(gs.username, gs.password)
+	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
 
 	params := utils.ProcessOptions(options)
 	if wksp, set := params["workspace"]; set {
 		target = fmt.Sprintf("%s&namespace=%s", target, wksp.(string))
 	}
 
-	response, err := gs.client.Do(request)
+	response, err := gs.data.Client.Do(request)
 	if err != nil {
 		return wms.Capabilities{}, err
 	}

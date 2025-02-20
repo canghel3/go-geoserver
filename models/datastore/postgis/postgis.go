@@ -1,17 +1,16 @@
-package vector
+package postgis
 
 import (
 	"encoding/json"
 	"github.com/canghel3/go-geoserver/models/datastore"
-	"github.com/canghel3/go-geoserver/models/datastore/postgis"
 )
 
 type PostGISStore struct {
 	name             string
-	connectionParams postgis.ConnectionParams
+	connectionParams ConnectionParams
 }
 
-func newPostGISStore(name string, connectionParams postgis.ConnectionParams) *PostGISStore {
+func NewPostGISStore(name string, connectionParams ConnectionParams) *PostGISStore {
 	return &PostGISStore{
 		name:             name,
 		connectionParams: connectionParams,
@@ -38,4 +37,15 @@ func (pgs *PostGISStore) MarshalJSON() ([]byte, error) {
 	}
 
 	return json.Marshal(&data)
+}
+
+type storageParams map[string]string
+
+func (params storageParams) toDatastoreEntries() []datastore.Entry {
+	entries := make([]datastore.Entry, 0)
+	for k, v := range params {
+		entries = append(entries, datastore.Entry{Key: k, Value: v})
+	}
+
+	return entries
 }

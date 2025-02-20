@@ -20,9 +20,9 @@ func (gs *GeoserverService) GetLayer(name string, options ...utils.Option) (*lay
 			return nil, err
 		}
 
-		target = fmt.Sprintf("%s/geoserver/rest/layers/%s:%s", gs.url, wksp, name)
+		target = fmt.Sprintf("%s/geoserver/rest/layers/%s:%s", gs.data.Connection.URL, wksp, name)
 	} else {
-		target = fmt.Sprintf("%s/geoserver/rest/layers/%s", gs.url, name)
+		target = fmt.Sprintf("%s/geoserver/rest/layers/%s", gs.data.Connection.URL, name)
 	}
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -30,10 +30,10 @@ func (gs *GeoserverService) GetLayer(name string, options ...utils.Option) (*lay
 		return nil, err
 	}
 
-	request.SetBasicAuth(gs.username, gs.password)
+	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
 	request.Header.Add("Accept", "application/json")
 
-	response, err := gs.client.Do(request)
+	response, err := gs.data.Client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -80,9 +80,9 @@ func (gs *GeoserverService) DeleteLayer(name string, options ...utils.Option) er
 			return err
 		}
 
-		target = fmt.Sprintf("%s/geoserver/rest/layers/%s:%s", gs.url, wksp, name)
+		target = fmt.Sprintf("%s/geoserver/rest/layers/%s:%s", gs.data.Connection.URL, wksp, name)
 	} else {
-		target = fmt.Sprintf("%s/geoserver/rest/layers/%s", gs.url, name)
+		target = fmt.Sprintf("%s/geoserver/rest/layers/%s", gs.data.Connection.URL, name)
 	}
 
 	request, err := http.NewRequest(http.MethodDelete, target, nil)
@@ -96,9 +96,9 @@ func (gs *GeoserverService) DeleteLayer(name string, options ...utils.Option) er
 		request.URL.RawQuery = q.Encode()
 	}
 
-	request.SetBasicAuth(gs.username, gs.password)
+	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
 
-	response, err := gs.client.Do(request)
+	response, err := gs.data.Client.Do(request)
 	if err != nil {
 		return err
 	}

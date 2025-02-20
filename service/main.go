@@ -1,18 +1,30 @@
 package service
 
-import "github.com/canghel3/go-geoserver/models/datastore/postgis"
+import (
+	"github.com/canghel3/go-geoserver/models/datastore/postgis"
+	"github.com/rs/zerolog/log"
+)
 
-func x() {
+func Foo() {
 	geosvc := NewGeoserverService("http://localhost:8080", "admin", "geoserver")
-	err := geosvc.Workspace("a").Vectors().Stores().PostGIS("ok", postgis.ConnectionParams{
-		Host:     "",
-		Database: "",
-		User:     "",
-		Password: "",
-		Port:     "",
-		SSL:      "",
-	}).Create()
+	v := geosvc.Workspace("PLAYGROUND").Vectors()
+	s := v.Stores().PostGIS("ok", postgis.ConnectionParams{
+		Host:     "localhost",
+		Database: "vectors",
+		User:     "geoserver",
+		Password: "geoserver",
+		Port:     "5432",
+		SSL:      "disable",
+	})
+
+	err := v.Stores().Create(s)
 	if err != nil {
-		return
+		log.Error().Err(err)
 	}
+
+	err = v.Stores().Delete("ok", false)
+	if err != nil {
+		log.Error().Msg(err.Error())
+	}
+
 }

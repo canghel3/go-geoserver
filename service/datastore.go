@@ -57,15 +57,15 @@ func (gs *GeoserverService) GetDataStore(workspace, store string) (*datastore.Da
 		return nil, err
 	}
 
-	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", gs.url, workspace, store), nil)
+	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", gs.data.Connection.URL, workspace, store), nil)
 	if err != nil {
 		return nil, err
 	}
 
-	request.SetBasicAuth(gs.username, gs.password)
+	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
 	request.Header.Add("Accept", "application/json")
 
-	response, err := gs.client.Do(request)
+	response, err := gs.data.Client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +113,7 @@ func (gs *GeoserverService) DeleteDataStore(workspace string, store string, opts
 		return err
 	}
 
-	request, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", gs.url, workspace, store), nil)
+	request, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", gs.data.Connection.URL, workspace, store), nil)
 	if err != nil {
 		return err
 	}
@@ -125,9 +125,9 @@ func (gs *GeoserverService) DeleteDataStore(workspace string, store string, opts
 		request.URL.RawQuery = q.Encode()
 	}
 
-	request.SetBasicAuth(gs.username, gs.password)
+	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
 
-	response, err := gs.client.Do(request)
+	response, err := gs.data.Client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -177,15 +177,15 @@ func (gs *GeoserverService) createDataStore(workspace, store string, connectionP
 		return err
 	}
 
-	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores", gs.url, workspace), bytes.NewBuffer(content))
+	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores", gs.data.Connection.URL, workspace), bytes.NewBuffer(content))
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(gs.username, gs.password)
+	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	response, err := gs.client.Do(request)
+	response, err := gs.data.Client.Do(request)
 	if err != nil {
 		return err
 	}

@@ -7,7 +7,7 @@ import (
 )
 
 func TestWorkspace(t *testing.T) {
-	geoserverService := NewGeoserverService(target, username, password)
+	geoserverService := NewGeoserverService(geoserverURL, username, password)
 
 	t.Run("CREATE", func(t *testing.T) {
 		t.Run("SIMPLE", func(t *testing.T) {

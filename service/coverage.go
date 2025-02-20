@@ -32,17 +32,17 @@ func (gs *GeoserverService) GetCoverage(workspace, store, name string) (*geotiff
 		return nil, err
 	}
 
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages/%s", gs.url, workspace, store, name)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages/%s", gs.data.Connection.URL, workspace, store, name)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	request.SetBasicAuth(gs.username, gs.password)
+	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
 	request.Header.Add("Accept", "application/json")
 
-	response, err := gs.client.Do(request)
+	response, err := gs.data.Client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +104,7 @@ func (gs *GeoserverService) CreateCoverage(wksp, store, layerName, srs string, b
 			Name:    layerName,
 			Namespace: workspace.MultiWorkspace{
 				Name: wksp,
-				Href: fmt.Sprintf("%s/geoserver/rest/namespaces/%s.json", gs.url, wksp),
+				Href: fmt.Sprintf("%s/geoserver/rest/namespaces/%s.json", gs.data.Connection.URL, wksp),
 			},
 			NativeBoundingBox: misc.BoundingBox{
 				MinX: bbox[0],
@@ -118,7 +118,7 @@ func (gs *GeoserverService) CreateCoverage(wksp, store, layerName, srs string, b
 			Store: geotiff.StoreDetails{
 				Class: "coverageStore",
 				Name:  fmt.Sprintf("%s:%s", wksp, store),
-				Href:  fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s.json", gs.url, wksp, store),
+				Href:  fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s.json", gs.data.Connection.URL, wksp, store),
 			},
 			Title: layerName,
 		},
@@ -147,15 +147,15 @@ func (gs *GeoserverService) CreateCoverage(wksp, store, layerName, srs string, b
 }
 
 func (gs *GeoserverService) createCoverage(workspace, store string, coverage []byte) error {
-	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", gs.url, workspace, store), bytes.NewReader(coverage))
+	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", gs.data.Connection.URL, workspace, store), bytes.NewReader(coverage))
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(gs.username, gs.password)
+	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	response, err := gs.client.Do(request)
+	response, err := gs.data.Client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -192,7 +192,7 @@ func (gs *GeoserverService) DeleteCoverage(workspace, store, name string, option
 		return err
 	}
 
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages/%s", gs.url, workspace, store, name)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages/%s", gs.data.Connection.URL, workspace, store, name)
 	request, err := http.NewRequest(http.MethodDelete, target, nil)
 	if err != nil {
 		return err
@@ -205,8 +205,8 @@ func (gs *GeoserverService) DeleteCoverage(workspace, store, name string, option
 		request.URL.RawQuery = q.Encode()
 	}
 
-	request.SetBasicAuth(gs.username, gs.password)
-	response, err := gs.client.Do(request)
+	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	response, err := gs.data.Client.Do(request)
 	if err != nil {
 		return err
 	}

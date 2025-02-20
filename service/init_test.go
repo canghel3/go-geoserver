@@ -21,9 +21,9 @@ import (
 var (
 	host = "" //automatically filled in
 
-	target   string
-	username = "admin"
-	password = "geoserver"
+	geoserverURL string
+	username     = "admin"
+	password     = "geoserver"
 
 	databaseUser     = "admin"
 	databasePassword = "geoserver"
@@ -56,7 +56,7 @@ func TestMain(m *testing.M) {
 		return
 	}
 
-	target = fmt.Sprintf("http://%s:%s", host, geoserver.GetPort("8080/tcp"))
+	geoserverURL = fmt.Sprintf("http://%s:%s", host, geoserver.GetPort("8080/tcp"))
 
 	code := m.Run()
 	purge(pool, database, geoserver)

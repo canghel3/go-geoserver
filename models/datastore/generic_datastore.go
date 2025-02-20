@@ -4,6 +4,10 @@ import (
 	"github.com/canghel3/go-geoserver/models/workspace"
 )
 
+type Storage interface {
+	MarshalJSON() ([]byte, error)
+}
+
 //CREATION MODELS
 
 type GenericDataStoreCreationWrapper struct {

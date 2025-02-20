@@ -52,15 +52,15 @@ func (gs *GeoserverService) CreateWorkspace(name string) error {
 		return err
 	}
 
-	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces", gs.url), bytes.NewBuffer(content))
+	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces", gs.data.Connection.URL), bytes.NewBuffer(content))
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(gs.username, gs.password)
+	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	response, err := gs.client.Do(request)
+	response, err := gs.data.Client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -87,17 +87,17 @@ GetWorkspaces retrieves information about all existing workspaces in the Geoserv
 - For other issues (like network or JSON parsing problems), it returns the respective Go error and a nil pointer.
 */
 func (gs *GeoserverService) GetWorkspaces() (*workspace.MultiWorkspaceRetrievalWrapper, error) {
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces", gs.url)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces", gs.data.Connection.URL)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	request.SetBasicAuth(gs.username, gs.password)
+	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
 	request.Header.Add("Accept", "application/json")
 
-	response, err := gs.client.Do(request)
+	response, err := gs.data.Client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -138,17 +138,17 @@ func (gs *GeoserverService) GetWorkspace(name string) (*workspace.SingleWorkspac
 		return nil, err
 	}
 
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", gs.url, name)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", gs.data.Connection.URL, name)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	request.SetBasicAuth(gs.username, gs.password)
+	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
 	request.Header.Add("Accept", "application/json")
 
-	response, err := gs.client.Do(request)
+	response, err := gs.data.Client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -185,7 +185,7 @@ func (gs *GeoserverService) DeleteWorkspace(name string, options ...utils.Option
 		return err
 	}
 
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", gs.url, name)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", gs.data.Connection.URL, name)
 	request, err := http.NewRequest(http.MethodDelete, target, nil)
 	if err != nil {
 		return err
@@ -198,9 +198,9 @@ func (gs *GeoserverService) DeleteWorkspace(name string, options ...utils.Option
 		request.URL.RawQuery = q.Encode()
 	}
 
-	request.SetBasicAuth(gs.username, gs.password)
+	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
 
-	response, err := gs.client.Do(request)
+	response, err := gs.data.Client.Do(request)
 	if err != nil {
 		return err
 	}

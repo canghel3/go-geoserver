@@ -9,7 +9,7 @@ import (
 )
 
 func TestFeatureType(t *testing.T) {
-	geoserverService := NewGeoserverService(target, username, password)
+	geoserverService := NewGeoserverService(geoserverURL, username, password)
 
 	bbox := [4]float64{}
 	connectionParams := postgis.ConnectionParams{

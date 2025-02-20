@@ -9,7 +9,7 @@ import (
 )
 
 func TestCoverage(t *testing.T) {
-	geoserverService := NewGeoserverService(target, username, password)
+	geoserverService := NewGeoserverService(geoserverURL, username, password)
 	assert.NilError(t, geoserverService.CreateWorkspace("init"))
 
 	t.Run("GeoTIFF", func(t *testing.T) {

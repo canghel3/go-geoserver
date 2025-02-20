@@ -9,7 +9,7 @@ import (
 )
 
 func TestGetCapabilities(t *testing.T) {
-	geoserverService := NewGeoserverService(target, username, password)
+	geoserverService := NewGeoserverService(geoserverURL, username, password)
 	assert.NilError(t, geoserverService.CreateWorkspace("init"))
 	assert.NilError(t, geoserverService.CreateCoverageStore("init", "init", "file:/opt/geoserver/data/shipments_2_geocoded.tif", "GeoTIFF"))
 

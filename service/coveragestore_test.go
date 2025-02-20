@@ -8,7 +8,7 @@ import (
 )
 
 func TestCoverageStore(t *testing.T) {
-	geoserverService := NewGeoserverService(target, username, password)
+	geoserverService := NewGeoserverService(geoserverURL, username, password)
 	assert.NilError(t, geoserverService.CreateWorkspace("init"))
 
 	t.Run("GeoTIFF", func(t *testing.T) {
@@ -22,7 +22,7 @@ func TestCoverageStore(t *testing.T) {
 			})
 
 			t.Run("WITHOUT FILE PREFIX IN URL", func(t *testing.T) {
-				geoserverService = NewGeoserverService(target, username, password, GeoserverServiceDataDirOption("/opt/geoserver/data"))
+				geoserverService = NewGeoserverService(geoserverURL, username, password, GeoserverServiceDataDirOption("/opt/geoserver/data"))
 				assert.Equal(t, geoserverService.isDataDirectorySet(), true)
 				assert.NilError(t, geoserverService.CreateCoverageStore("init", "init_with_option", "shipments_2_geocoded.tif", "GeoTIFF"))
 			})

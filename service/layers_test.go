@@ -7,7 +7,7 @@ import (
 )
 
 func TestLayers(t *testing.T) {
-	geoserverService := NewGeoserverService(target, username, password)
+	geoserverService := NewGeoserverService(geoserverURL, username, password)
 	assert.NilError(t, geoserverService.CreateWorkspace("init"))
 
 	t.Run("GET", func(t *testing.T) {
