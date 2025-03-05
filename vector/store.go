@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/models"
-	"github.com/canghel3/go-geoserver/models/datastore"
-	"github.com/canghel3/go-geoserver/models/datastore/postgis"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/datastore"
+	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
 	"io"
 	"net/http"
 )
@@ -19,10 +19,10 @@ type Storage interface {
 type storageParams map[string]string
 
 type Stores struct {
-	info models.GeoserverInfo
+	info *internal.GeoserverInfo
 }
 
-func newStores(info models.GeoserverInfo) Stores {
+func newStores(info *internal.GeoserverInfo) Stores {
 	return Stores{
 		info: info,
 	}
@@ -63,14 +63,14 @@ func (s Stores) Get(name string) (*datastore.DataStoreRetrieval, error) {
 }
 
 func (s Stores) Delete(store string, recurse bool) error {
-	request, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s?recurse=%v", s.info.Connection.URL, s.info.Workspace, store, recurse), nil)
+	request, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s?recurse=%v", s.info.connection.URL, s.info.Workspace, store, recurse), nil)
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(s.info.Connection.Credentials.Username, s.info.Connection.Credentials.Password)
+	request.SetBasicAuth(s.info.connection.Credentials.Username, s.info.connection.Credentials.Password)
 
-	response, err := s.info.Client.Do(request)
+	response, err := s.info.client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -103,11 +103,7 @@ func (s Stores) Create(store Storage) error {
 	request.SetBasicAuth(s.info.Connection.Credentials.Username, s.info.Connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	if s.info.Client == nil {
-		s.info.Client = &http.Client{}
-	}
-
-	response, err := s.info.Client.Do(request)
+	response, err := s.info.client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -124,6 +120,10 @@ func (s Stores) Create(store Storage) error {
 
 		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
+}
+
+func (s Stores) Update(store Storage) error {
+	return fmt.Errorf("not implemented")
 }
 
 func (s Stores) PostGIS(name string, connectionParams postgis.ConnectionParams) Storage {
@@ -145,19 +145,19 @@ func (s Stores) createGenericDataStore(store string, connectionParams storagePar
 		return err
 	}
 
-	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores", s.info.Connection.URL, s.info.Workspace), bytes.NewBuffer(content))
+	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores", s.info.connection.URL, s.info.Workspace), bytes.NewBuffer(content))
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(s.info.Connection.Credentials.Username, s.info.Connection.Credentials.Password)
+	request.SetBasicAuth(s.info.connection.Credentials.Username, s.info.connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	if s.info.Client == nil {
-		s.info.Client = &http.Client{}
+	if s.info.client == nil {
+		s.info.client = &http.Client{}
 	}
 
-	response, err := s.info.Client.Do(request)
+	response, err := s.info.client.Do(request)
 	if err != nil {
 		return err
 	}

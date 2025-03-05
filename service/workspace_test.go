@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
 	"gotest.tools/v3/assert"
 	"testing"
 )
@@ -52,7 +52,7 @@ func TestWorkspace(t *testing.T) {
 
 	t.Run("DELETE", func(t *testing.T) {
 		t.Run("WORKSPACE", func(t *testing.T) {
-			assert.NilError(t, geoserverService.DeleteWorkspace("init", utils.RecurseOption(true)))
+			assert.NilError(t, geoserverService.DeleteWorkspace("init", internal.RecurseOption(true)))
 			_, err := geoserverService.GetWorkspace("init")
 			assert.Error(t, err, "workspace init does not exist")
 		})

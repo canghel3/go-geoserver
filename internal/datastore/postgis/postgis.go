@@ -2,7 +2,7 @@ package postgis
 
 import (
 	"encoding/json"
-	"github.com/canghel3/go-geoserver/models/datastore"
+	"github.com/canghel3/go-geoserver/internal/datastore"
 )
 
 type PostGISStore struct {

@@ -2,8 +2,8 @@ package service
 
 import (
 	"encoding/xml"
-	"github.com/canghel3/go-geoserver/models/wms"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/wms"
 	"gotest.tools/v3/assert"
 	"testing"
 )
@@ -15,7 +15,7 @@ func TestGetCapabilities(t *testing.T) {
 
 	keywords := []string{"adu", "telefonul", "marian"}
 	bbox := [4]float64{-13625746.1231970004737377, -5661864.1336409999057651, 19523253.8768029995262623, 8287135.8663590000942349}
-	assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, utils.ProjectionPolicyOption("FORCE_DECLARED"), utils.KeywordsOption(keywords)))
+	assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, internal.ProjectionPolicyOption("FORCE_DECLARED"), internal.KeywordsOption(keywords)))
 
 	capabilities, err := geoserverService.GetCapabilities("1.3.0")
 	assert.NilError(t, err)
@@ -73,5 +73,5 @@ func TestGetCapabilities(t *testing.T) {
 	assert.DeepEqual(t, expectedCapabilities.Capability.Layer.Layers[0], capabilities.Capability.Layer.Layers[0])
 
 	//DONT FORGET TO DELETE YOUR WORKSPACE AFTER TESTING
-	assert.NilError(t, geoserverService.DeleteWorkspace("init", utils.RecurseOption(true)))
+	assert.NilError(t, geoserverService.DeleteWorkspace("init", internal.RecurseOption(true)))
 }

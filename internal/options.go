@@ -1,9 +1,9 @@
-package utils
+package internal
 
 import (
 	"fmt"
-	"github.com/canghel3/go-geoserver/models/coverage/geotiff"
-	"github.com/canghel3/go-geoserver/models/misc"
+	"github.com/canghel3/go-geoserver/internal/coverage/geotiff"
+	"github.com/canghel3/go-geoserver/internal/misc"
 	"reflect"
 	"strings"
 )

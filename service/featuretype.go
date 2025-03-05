@@ -6,9 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/models/featuretype"
-	"github.com/canghel3/go-geoserver/models/misc"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/featuretype"
+	"github.com/canghel3/go-geoserver/internal/misc"
 	"io"
 	"net/http"
 	"net/url"
@@ -16,7 +16,7 @@ import (
 	"strings"
 )
 
-func (gs *GeoserverService) CreateFeatureType(workspace, store, layerName, sourceTableName, srs string, bbox [4]float64, options ...utils.Option) error {
+func (gs *GeoserverService) CreateFeatureType(workspace, store, layerName, sourceTableName, srs string, bbox [4]float64, options ...internal.Option) error {
 	_, err := gs.GetWorkspace(workspace)
 	if err != nil {
 		return err
@@ -41,7 +41,7 @@ func (gs *GeoserverService) CreateFeatureType(workspace, store, layerName, sourc
 			NativeName: sourceTableName,
 			Namespace: featuretype.Namespace{
 				Name: workspace,
-				Href: fmt.Sprintf("%s/geoserver/rest/namespaces/%s.json", gs.data.Connection.URL, workspace),
+				Href: fmt.Sprintf("%s/geoserver/rest/namespaces/%s.json", gs.data.connection.URL, workspace),
 			},
 			Srs: srs,
 			NativeBoundingBox: misc.BoundingBox{
@@ -56,12 +56,12 @@ func (gs *GeoserverService) CreateFeatureType(workspace, store, layerName, sourc
 			Store: featuretype.Store{
 				Class: "dataStore",
 				Name:  fmt.Sprintf("%s:%s", workspace, store),
-				Href:  fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s.json", gs.data.Connection.URL, workspace, store),
+				Href:  fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s.json", gs.data.connection.URL, workspace, store),
 			},
 		},
 	}
 
-	params := utils.ProcessOptions(options)
+	params := internal.ProcessOptions(options)
 
 	ftVal := reflect.ValueOf(&data.FeatureType).Elem()
 	for i := 0; i < ftVal.NumField(); i++ {
@@ -80,15 +80,15 @@ func (gs *GeoserverService) CreateFeatureType(workspace, store, layerName, sourc
 		return err
 	}
 
-	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes", gs.data.Connection.URL, url.PathEscape(workspace), url.PathEscape(store)), bytes.NewBuffer(content))
+	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes", gs.data.connection.URL, url.PathEscape(workspace), url.PathEscape(store)), bytes.NewBuffer(content))
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -108,7 +108,7 @@ func (gs *GeoserverService) CreateFeatureType(workspace, store, layerName, sourc
 }
 
 func (gs *GeoserverService) GetFeatureType(workspace, store, layer string) (*featuretype.GetFeatureType, error) {
-	err := utils.ValidateLayer(layer)
+	err := internal.ValidateLayer(layer)
 	if err != nil {
 		return nil, err
 	}
@@ -124,16 +124,16 @@ func (gs *GeoserverService) GetFeatureType(workspace, store, layer string) (*fea
 		return nil, err
 	}
 
-	target := fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes/%s.json", gs.data.Connection.URL, workspace, store, layer)
+	target := fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes/%s.json", gs.data.connection.URL, workspace, store, layer)
 	request, err := http.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 	request.Header.Add("Accept", "application/json")
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -163,7 +163,7 @@ func (gs *GeoserverService) GetFeatureType(workspace, store, layer string) (*fea
 /*
 DeleteFeatureType available options: RecurseOption
 */
-func (gs *GeoserverService) DeleteFeatureType(workspace, store, layer string, options ...utils.Option) error {
+func (gs *GeoserverService) DeleteFeatureType(workspace, store, layer string, options ...internal.Option) error {
 	_, err := gs.GetWorkspace(workspace)
 	if err != nil {
 		return err
@@ -179,22 +179,22 @@ func (gs *GeoserverService) DeleteFeatureType(workspace, store, layer string, op
 		return err
 	}
 
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes/%s", gs.data.Connection.URL, workspace, store, layer)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes/%s", gs.data.connection.URL, workspace, store, layer)
 	request, err := http.NewRequest(http.MethodDelete, target, nil)
 	if err != nil {
 		return err
 	}
 
-	params := utils.ProcessOptions(options)
+	params := internal.ProcessOptions(options)
 	if recurse, set := params["recurse"]; set {
 		q := request.URL.Query()
 		q.Add("recurse", fmt.Sprintf("%v", recurse.(bool)))
 		request.URL.RawQuery = q.Encode()
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}

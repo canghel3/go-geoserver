@@ -4,8 +4,8 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/models/wms"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/wms"
 	"io"
 	"net/http"
 )
@@ -26,26 +26,26 @@ Options: Workspace (namespace) option - limits response to layers in a given wor
 
 TODO implement rootLayer and format Option
 */
-func (gs *GeoserverService) GetCapabilities(version string, options ...utils.Option) (wms.Capabilities, error) {
+func (gs *GeoserverService) GetCapabilities(version string, options ...internal.Option) (wms.Capabilities, error) {
 	if len(version) == 0 {
 		version = "1.3.0"
 	}
 
-	var target = fmt.Sprintf("%s/geoserver/wms?service=wms&version=%s&request=GetCapabilities", gs.data.Connection.URL, version)
+	var target = fmt.Sprintf("%s/geoserver/wms?service=wms&version=%s&request=GetCapabilities", gs.data.connection.URL, version)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return wms.Capabilities{}, err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 
-	params := utils.ProcessOptions(options)
+	params := internal.ProcessOptions(options)
 	if wksp, set := params["workspace"]; set {
 		target = fmt.Sprintf("%s&namespace=%s", target, wksp.(string))
 	}
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return wms.Capabilities{}, err
 	}

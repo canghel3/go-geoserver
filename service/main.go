@@ -1,7 +1,8 @@
 package service
 
 import (
-	"github.com/canghel3/go-geoserver/models/datastore/postgis"
+	"fmt"
+	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
 	"github.com/rs/zerolog/log"
 )
 
@@ -21,6 +22,13 @@ func Foo() {
 	if err != nil {
 		log.Error().Err(err)
 	}
+
+	store, err := v.Stores().Get("ok")
+	if err != nil {
+		log.Error().Err(err)
+	}
+
+	fmt.Println(store)
 
 	err = v.Stores().Delete("ok", false)
 	if err != nil {

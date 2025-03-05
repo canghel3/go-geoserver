@@ -1,7 +1,7 @@
 package datastore
 
 import (
-	"github.com/canghel3/go-geoserver/models/workspace"
+	"github.com/canghel3/go-geoserver/internal/workspace"
 )
 
 type Storage interface {

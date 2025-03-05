@@ -6,14 +6,14 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/models/gwc"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/gwc"
 	"io"
 	"net/http"
 )
 
-func (gs *GeoserverService) GetTileCaching(layer string, options ...utils.Option) (*gwc.GeoServerLayer, error) {
-	params := utils.ProcessOptions(options)
+func (gs *GeoserverService) GetTileCaching(layer string, options ...internal.Option) (*gwc.GeoServerLayer, error) {
+	params := internal.ProcessOptions(options)
 
 	var target string
 	if wksp, set := params["workspace"]; set {
@@ -22,9 +22,9 @@ func (gs *GeoserverService) GetTileCaching(layer string, options ...utils.Option
 			return nil, err
 		}
 
-		target = fmt.Sprintf("%s/geoserver/gwc/rest/layers/%s:%s", gs.data.Connection.URL, wksp, layer)
+		target = fmt.Sprintf("%s/geoserver/gwc/rest/layers/%s:%s", gs.data.connection.URL, wksp, layer)
 	} else {
-		target = fmt.Sprintf("%s/geoserver/gwc/rest/layers/%s", gs.data.Connection.URL, layer)
+		target = fmt.Sprintf("%s/geoserver/gwc/rest/layers/%s", gs.data.connection.URL, layer)
 	}
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -33,9 +33,9 @@ func (gs *GeoserverService) GetTileCaching(layer string, options ...utils.Option
 	}
 
 	request.Header.Set("Accept", "application/xml")
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func (gs *GeoserverService) GetTileCaching(layer string, options ...utils.Option
 	}
 }
 
-func (gs *GeoserverService) UpdateTileCaching(layer string, updateData gwc.TileTabUpdateData, options ...utils.Option) error {
+func (gs *GeoserverService) UpdateTileCaching(layer string, updateData gwc.TileTabUpdateData, options ...internal.Option) error {
 	cachedLayer, err := gs.GetTileCaching(layer, options...)
 	if err != nil {
 		return err
@@ -89,7 +89,7 @@ func (gs *GeoserverService) UpdateTileCaching(layer string, updateData gwc.TileT
 		return err
 	}
 
-	params := utils.ProcessOptions(options)
+	params := internal.ProcessOptions(options)
 
 	var target string
 	if wksp, set := params["workspace"]; set {
@@ -98,9 +98,9 @@ func (gs *GeoserverService) UpdateTileCaching(layer string, updateData gwc.TileT
 			return err
 		}
 
-		target = fmt.Sprintf("%s/geoserver/gwc/rest/layers/%s:%s", gs.data.Connection.URL, wksp, layer)
+		target = fmt.Sprintf("%s/geoserver/gwc/rest/layers/%s:%s", gs.data.connection.URL, wksp, layer)
 	} else {
-		target = fmt.Sprintf("%s/geoserver/gwc/rest/layers/%s", gs.data.Connection.URL, layer)
+		target = fmt.Sprintf("%s/geoserver/gwc/rest/layers/%s", gs.data.connection.URL, layer)
 	}
 
 	request, err := http.NewRequest(http.MethodPut, target, bytes.NewReader(content))
@@ -109,9 +109,9 @@ func (gs *GeoserverService) UpdateTileCaching(layer string, updateData gwc.TileT
 	}
 
 	request.Header.Set("Content-Type", "application/xml")
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -149,15 +149,15 @@ func (gs *GeoserverService) Seed(workspace, layer, gridSetId, format string, zoo
 		return err
 	}
 
-	target := fmt.Sprintf("%s/geoserver/gwc/rest/seed/%s.json", gs.data.Connection.URL, fmt.Sprintf("%s:%s", workspace, layer))
+	target := fmt.Sprintf("%s/geoserver/gwc/rest/seed/%s.json", gs.data.connection.URL, fmt.Sprintf("%s:%s", workspace, layer))
 	request, err := http.NewRequest(http.MethodPost, target, bytes.NewBuffer(content))
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}

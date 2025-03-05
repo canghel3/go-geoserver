@@ -2,8 +2,8 @@ package service
 
 import (
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/models/datastore/postgis"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
 	"gotest.tools/v3/assert"
 	"testing"
 )
@@ -53,15 +53,15 @@ func TestFeatureType(t *testing.T) {
 		})
 
 		t.Run("WITH KEYWORDS OPTION", func(t *testing.T) {
-			assert.NilError(t, geoserverService.CreateFeatureType("init", "init", "with_keywords", "init", "EPSG:4326", bbox, utils.KeywordsOption([]string{"with", "keywords"})))
+			assert.NilError(t, geoserverService.CreateFeatureType("init", "init", "with_keywords", "init", "EPSG:4326", bbox, internal.KeywordsOption([]string{"with", "keywords"})))
 		})
 
 		t.Run("WITH TITLE OPTION", func(t *testing.T) {
-			assert.NilError(t, geoserverService.CreateFeatureType("init", "init", "with_title", "init", "EPSG:4326", bbox, utils.TitleOption("titlu misto")))
+			assert.NilError(t, geoserverService.CreateFeatureType("init", "init", "with_title", "init", "EPSG:4326", bbox, internal.TitleOption("titlu misto")))
 		})
 
 		t.Run("WITH PROJECTION POLICY OPTION", func(t *testing.T) {
-			assert.NilError(t, geoserverService.CreateFeatureType("init", "init", "with_projection", "init", "EPSG:4326", bbox, utils.ProjectionPolicyOption("FORCE_DECLARED")))
+			assert.NilError(t, geoserverService.CreateFeatureType("init", "init", "with_projection", "init", "EPSG:4326", bbox, internal.ProjectionPolicyOption("FORCE_DECLARED")))
 		})
 	})
 
@@ -116,13 +116,13 @@ func TestFeatureType(t *testing.T) {
 
 	t.Run("DELETE", func(t *testing.T) {
 		t.Run("WITHOUT RECURSE", func(t *testing.T) {
-			err := geoserverService.DeleteFeatureType("init", "init", "init", utils.RecurseOption(false))
+			err := geoserverService.DeleteFeatureType("init", "init", "init", internal.RecurseOption(false))
 			assert.ErrorType(t, err, &customerrors.GeoserverError{})
 			assert.Error(t, err, "layer is being referenced by other resources")
 		})
 
 		t.Run("WITH RECURSE", func(t *testing.T) {
-			assert.NilError(t, geoserverService.DeleteFeatureType("init", "init", "init", utils.RecurseOption(true)))
+			assert.NilError(t, geoserverService.DeleteFeatureType("init", "init", "init", internal.RecurseOption(true)))
 		})
 
 		t.Run("NON-EXISTENT", func(t *testing.T) {
@@ -132,5 +132,5 @@ func TestFeatureType(t *testing.T) {
 		})
 	})
 
-	assert.NilError(t, geoserverService.DeleteWorkspace("init", utils.RecurseOption(true)))
+	assert.NilError(t, geoserverService.DeleteWorkspace("init", internal.RecurseOption(true)))
 }

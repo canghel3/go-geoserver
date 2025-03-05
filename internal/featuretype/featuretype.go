@@ -1,7 +1,7 @@
 package featuretype
 
 import (
-	"github.com/canghel3/go-geoserver/models/misc"
+	"github.com/canghel3/go-geoserver/internal/misc"
 	"time"
 )
 

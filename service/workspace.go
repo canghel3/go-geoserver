@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/models/workspace"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/workspace"
 	"io"
 	"net/http"
 )
@@ -52,15 +52,15 @@ func (gs *GeoserverService) CreateWorkspace(name string) error {
 		return err
 	}
 
-	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces", gs.data.Connection.URL), bytes.NewBuffer(content))
+	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces", gs.data.connection.URL), bytes.NewBuffer(content))
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -87,17 +87,17 @@ GetWorkspaces retrieves information about all existing workspaces in the Geoserv
 - For other issues (like network or JSON parsing problems), it returns the respective Go error and a nil pointer.
 */
 func (gs *GeoserverService) GetWorkspaces() (*workspace.MultiWorkspaceRetrievalWrapper, error) {
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces", gs.data.Connection.URL)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces", gs.data.connection.URL)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 	request.Header.Add("Accept", "application/json")
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -133,22 +133,22 @@ GetWorkspace retrieves a single workspace from the Geoserver using the given wor
 - In case of network issues or JSON parsing problems, it returns the respective Go error and a nil pointer.
 */
 func (gs *GeoserverService) GetWorkspace(name string) (*workspace.SingleWorkspaceRetrievalWrapper, error) {
-	err := utils.ValidateWorkspace(name)
+	err := internal.ValidateWorkspace(name)
 	if err != nil {
 		return nil, err
 	}
 
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", gs.data.Connection.URL, name)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", gs.data.connection.URL, name)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 	request.Header.Add("Accept", "application/json")
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -179,28 +179,28 @@ func (gs *GeoserverService) UpdateWorkspace(name string) error {
 	return nil
 }
 
-func (gs *GeoserverService) DeleteWorkspace(name string, options ...utils.Option) error {
+func (gs *GeoserverService) DeleteWorkspace(name string, options ...internal.Option) error {
 	_, err := gs.GetWorkspace(name)
 	if err != nil {
 		return err
 	}
 
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", gs.data.Connection.URL, name)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", gs.data.connection.URL, name)
 	request, err := http.NewRequest(http.MethodDelete, target, nil)
 	if err != nil {
 		return err
 	}
 
-	params := utils.ProcessOptions(options)
+	params := internal.ProcessOptions(options)
 	if recurse, set := params["recurse"]; set {
 		q := request.URL.Query()
 		q.Add("recurse", fmt.Sprintf("%v", recurse.(bool)))
 		request.URL.RawQuery = q.Encode()
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}

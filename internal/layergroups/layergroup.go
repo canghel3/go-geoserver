@@ -1,8 +1,8 @@
 package layergroups
 
 import (
-	"github.com/canghel3/go-geoserver/models/misc"
-	"github.com/canghel3/go-geoserver/models/workspace"
+	"github.com/canghel3/go-geoserver/internal/misc"
+	"github.com/canghel3/go-geoserver/internal/workspace"
 )
 
 type GroupWrapper struct {

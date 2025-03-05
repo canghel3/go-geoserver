@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/models/coveragestore"
-	"github.com/canghel3/go-geoserver/models/workspace"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/coveragestore"
+	"github.com/canghel3/go-geoserver/internal/workspace"
 	"io"
 	"net/http"
 	"path/filepath"
@@ -15,7 +15,7 @@ import (
 )
 
 func (gs *GeoserverService) GetCoverageStore(workspace, store string) (*coveragestore.GetCoverageStore, error) {
-	err := utils.ValidateStore(store)
+	err := internal.ValidateStore(store)
 	if err != nil {
 		return nil, err
 	}
@@ -25,17 +25,17 @@ func (gs *GeoserverService) GetCoverageStore(workspace, store string) (*coverage
 		return nil, err
 	}
 
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s", gs.data.Connection.URL, workspace, store)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s", gs.data.connection.URL, workspace, store)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +104,7 @@ func (gs *GeoserverService) CreateCoverageStore(wksp, name, url, type_ string) e
 			Type: type_,
 			Workspace: workspace.MultiWorkspace{
 				Name: wksp,
-				Href: fmt.Sprintf("%s/geoserver/rest/namespaces/%s.json", gs.data.Connection.URL, wksp),
+				Href: fmt.Sprintf("%s/geoserver/rest/namespaces/%s.json", gs.data.connection.URL, wksp),
 			},
 			Enabled: true,
 			URL:     url,
@@ -124,7 +124,7 @@ DeleteCoverageStore deletes a coverage store from Geoserver.
 
 Available options: RecurseOption, PurgeOption
 */
-func (gs *GeoserverService) DeleteCoverageStore(wksp, store string, options ...utils.Option) error {
+func (gs *GeoserverService) DeleteCoverageStore(wksp, store string, options ...internal.Option) error {
 	_, err := gs.GetWorkspace(wksp)
 	if err != nil {
 		return err
@@ -135,12 +135,12 @@ func (gs *GeoserverService) DeleteCoverageStore(wksp, store string, options ...u
 		return err
 	}
 
-	request, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s", gs.data.Connection.URL, wksp, store), nil)
+	request, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s", gs.data.connection.URL, wksp, store), nil)
 	if err != nil {
 		return err
 	}
 
-	params := utils.ProcessOptions(options)
+	params := internal.ProcessOptions(options)
 	if recurse, set := params["recurse"]; set {
 		q := request.URL.Query()
 		q.Add("recurse", fmt.Sprintf("%v", recurse.(bool)))
@@ -153,9 +153,9 @@ func (gs *GeoserverService) DeleteCoverageStore(wksp, store string, options ...u
 		request.URL.RawQuery = q.Encode()
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -185,16 +185,16 @@ func (gs *GeoserverService) createCoverageStore(wksp, name string, body []byte) 
 		return customerrors.WrapConflictError(fmt.Errorf("coveragestore %s already exists", name))
 	}
 
-	target := fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores", gs.data.Connection.URL, wksp)
+	target := fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores", gs.data.connection.URL, wksp)
 	request, err := http.NewRequest(http.MethodPost, target, bytes.NewBuffer(body))
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}

@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/models/layers"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/layers"
 	"io"
 	"net/http"
 )
 
-func (gs *GeoserverService) GetLayer(name string, options ...utils.Option) (*layers.LayerWrapper, error) {
-	params := utils.ProcessOptions(options)
+func (gs *GeoserverService) GetLayer(name string, options ...internal.Option) (*layers.LayerWrapper, error) {
+	params := internal.ProcessOptions(options)
 
 	var target string
 	if wksp, set := params["workspace"]; set {
@@ -20,9 +20,9 @@ func (gs *GeoserverService) GetLayer(name string, options ...utils.Option) (*lay
 			return nil, err
 		}
 
-		target = fmt.Sprintf("%s/geoserver/rest/layers/%s:%s", gs.data.Connection.URL, wksp, name)
+		target = fmt.Sprintf("%s/geoserver/rest/layers/%s:%s", gs.data.connection.URL, wksp, name)
 	} else {
-		target = fmt.Sprintf("%s/geoserver/rest/layers/%s", gs.data.Connection.URL, name)
+		target = fmt.Sprintf("%s/geoserver/rest/layers/%s", gs.data.connection.URL, name)
 	}
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -30,10 +30,10 @@ func (gs *GeoserverService) GetLayer(name string, options ...utils.Option) (*lay
 		return nil, err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 	request.Header.Add("Accept", "application/json")
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -65,13 +65,13 @@ Deletes a layer from geoserver.
 
 Available options: WorkspaceOption, RecurseOption
 */
-func (gs *GeoserverService) DeleteLayer(name string, options ...utils.Option) error {
+func (gs *GeoserverService) DeleteLayer(name string, options ...internal.Option) error {
 	_, err := gs.GetLayer(name, options...)
 	if err != nil {
 		return err
 	}
 
-	params := utils.ProcessOptions(options)
+	params := internal.ProcessOptions(options)
 
 	var target string
 	if wksp, set := params["workspace"]; set {
@@ -80,9 +80,9 @@ func (gs *GeoserverService) DeleteLayer(name string, options ...utils.Option) er
 			return err
 		}
 
-		target = fmt.Sprintf("%s/geoserver/rest/layers/%s:%s", gs.data.Connection.URL, wksp, name)
+		target = fmt.Sprintf("%s/geoserver/rest/layers/%s:%s", gs.data.connection.URL, wksp, name)
 	} else {
-		target = fmt.Sprintf("%s/geoserver/rest/layers/%s", gs.data.Connection.URL, name)
+		target = fmt.Sprintf("%s/geoserver/rest/layers/%s", gs.data.connection.URL, name)
 	}
 
 	request, err := http.NewRequest(http.MethodDelete, target, nil)
@@ -96,9 +96,9 @@ func (gs *GeoserverService) DeleteLayer(name string, options ...utils.Option) er
 		request.URL.RawQuery = q.Encode()
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}

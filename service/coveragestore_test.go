@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
 	"gotest.tools/v3/assert"
 	"testing"
 )
@@ -54,16 +54,16 @@ func TestCoverageStore(t *testing.T) {
 		t.Run("DELETE", func(t *testing.T) {
 			t.Run("WITHOUT RECURSE", func(t *testing.T) {
 				assert.NilError(t, geoserverService.CreateCoverageStore("init", "init2", "shipments_2_geocoded.tif", "GeoTIFF"))
-				assert.NilError(t, geoserverService.DeleteCoverageStore("init", "init2", utils.RecurseOption(false)))
+				assert.NilError(t, geoserverService.DeleteCoverageStore("init", "init2", internal.RecurseOption(false)))
 			})
 
 			t.Run("WITH RECURSE", func(t *testing.T) {
-				assert.NilError(t, geoserverService.DeleteCoverageStore("init", "init", utils.RecurseOption(true)))
+				assert.NilError(t, geoserverService.DeleteCoverageStore("init", "init", internal.RecurseOption(true)))
 			})
 
 			//TODO: purge does not seem to delete the file from geoserver directory (this may be a geoserver bug)
 			t.Run("WITH RECURSE AND PURGE", func(t *testing.T) {
-				assert.NilError(t, geoserverService.DeleteCoverageStore("init", "init_with_option", utils.RecurseOption(true), utils.PurgeOption("all")))
+				assert.NilError(t, geoserverService.DeleteCoverageStore("init", "init_with_option", internal.RecurseOption(true), internal.PurgeOption("all")))
 			})
 
 			t.Run("NON-EXISTENT", func(t *testing.T) {
@@ -74,5 +74,5 @@ func TestCoverageStore(t *testing.T) {
 		})
 	})
 
-	assert.NilError(t, geoserverService.DeleteWorkspace("init", utils.RecurseOption(true)))
+	assert.NilError(t, geoserverService.DeleteWorkspace("init", internal.RecurseOption(true)))
 }

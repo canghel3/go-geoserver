@@ -2,8 +2,8 @@ package vector
 
 import (
 	"encoding/json"
-	"github.com/canghel3/go-geoserver/models/datastore"
-	"github.com/canghel3/go-geoserver/models/datastore/postgis"
+	"github.com/canghel3/go-geoserver/internal/datastore"
+	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
 )
 
 type PostGISStore struct {

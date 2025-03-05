@@ -2,8 +2,8 @@ package service
 
 import (
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/models/datastore/postgis"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
 	"gotest.tools/v3/assert"
 	"testing"
 )
@@ -75,7 +75,7 @@ func TestDataStore(t *testing.T) {
 
 		t.Run("DELETE", func(t *testing.T) {
 			t.Run("WITHOUT RECURSE", func(t *testing.T) {
-				assert.NilError(t, geoserverService.DeleteDataStore("init", "init", utils.RecurseOption(false)))
+				assert.NilError(t, geoserverService.DeleteDataStore("init", "init", internal.RecurseOption(false)))
 			})
 
 			t.Run("WITH RECURSE", func(t *testing.T) {
@@ -89,7 +89,7 @@ func TestDataStore(t *testing.T) {
 				}
 
 				assert.NilError(t, geoserverService.CreatePostGISDataStore("init", "init", connectionParams))
-				assert.NilError(t, geoserverService.DeleteDataStore("init", "init", utils.RecurseOption(false)))
+				assert.NilError(t, geoserverService.DeleteDataStore("init", "init", internal.RecurseOption(false)))
 			})
 
 			t.Run("NON-EXISTENT", func(t *testing.T) {
@@ -100,5 +100,5 @@ func TestDataStore(t *testing.T) {
 		})
 	})
 
-	assert.NilError(t, geoserverService.DeleteWorkspace("init", utils.RecurseOption(true)))
+	assert.NilError(t, geoserverService.DeleteWorkspace("init", internal.RecurseOption(true)))
 }

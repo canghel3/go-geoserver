@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/canghel3/go-geoserver/models/datastore/postgis"
-	"github.com/canghel3/go-geoserver/models/gwc"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
+	"github.com/canghel3/go-geoserver/internal/gwc"
 	"gotest.tools/v3/assert"
 	"testing"
 )
@@ -22,11 +22,11 @@ func TestGWC(t *testing.T) {
 		SSL:      "disable",
 	}
 	assert.NilError(t, geoserverService.CreatePostGISDataStore("init", "init", connectionParams))
-	assert.NilError(t, geoserverService.CreateFeatureType("init", "init", "init", "init", "EPSG:3857", bbox, utils.KeywordsOption([]string{"test", "marian"}), utils.TitleOption("titlu misto"), utils.ProjectionPolicyOption("FORCE_DECLARED")))
+	assert.NilError(t, geoserverService.CreateFeatureType("init", "init", "init", "init", "EPSG:3857", bbox, internal.KeywordsOption([]string{"test", "marian"}), internal.TitleOption("titlu misto"), internal.ProjectionPolicyOption("FORCE_DECLARED")))
 
 	t.Run("GET", func(t *testing.T) {
 		t.Run("GET FROM FEATURE TYPE", func(t *testing.T) {
-			tc, err := geoserverService.GetTileCaching("init", utils.WorkspaceOption("init"))
+			tc, err := geoserverService.GetTileCaching("init", internal.WorkspaceOption("init"))
 			assert.NilError(t, err)
 
 			assert.Equal(t, tc.Name, "init:init")
@@ -53,9 +53,9 @@ func TestGWC(t *testing.T) {
 		}
 
 		t.Run("OK", func(t *testing.T) {
-			assert.NilError(t, geoserverService.UpdateTileCaching("init", updateData, utils.WorkspaceOption("init")))
+			assert.NilError(t, geoserverService.UpdateTileCaching("init", updateData, internal.WorkspaceOption("init")))
 
-			tc, err := geoserverService.GetTileCaching("init", utils.WorkspaceOption("init"))
+			tc, err := geoserverService.GetTileCaching("init", internal.WorkspaceOption("init"))
 			assert.NilError(t, err)
 
 			assert.Equal(t, len(tc.GridSubsets), 1)
@@ -77,5 +77,5 @@ func TestGWC(t *testing.T) {
 		})
 	})
 
-	assert.NilError(t, geoserverService.DeleteWorkspace("init", utils.RecurseOption(true)))
+	assert.NilError(t, geoserverService.DeleteWorkspace("init", internal.RecurseOption(true)))
 }

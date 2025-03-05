@@ -6,9 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/models/layergroups"
-	"github.com/canghel3/go-geoserver/models/misc"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/layergroups"
+	"github.com/canghel3/go-geoserver/internal/misc"
 	"io"
 	"net/http"
 	"reflect"
@@ -22,33 +22,33 @@ func (gs *GeoserverService) GetLayerGroups() error {
 /*
 Available options: WorkspaceOption
 */
-func (gs *GeoserverService) GetLayerGroup(name string, opts ...utils.Option) (*layergroups.GetGroupWrapper, error) {
-	err := utils.ValidateLayer(name)
+func (gs *GeoserverService) GetLayerGroup(name string, opts ...internal.Option) (*layergroups.GetGroupWrapper, error) {
+	err := internal.ValidateLayer(name)
 	if err != nil {
 		return nil, err
 	}
 
 	var target string
 
-	params := utils.ProcessOptions(opts)
+	params := internal.ProcessOptions(opts)
 	if wksp, set := params["workspace"]; set {
 		_, err = gs.GetWorkspace(wksp.(string))
 		if err != nil {
 			return nil, err
 		}
 
-		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/layergroups/%s", gs.data.Connection.URL, wksp, name)
+		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/layergroups/%s", gs.data.connection.URL, wksp, name)
 	} else {
-		target = fmt.Sprintf("%s/geoserver/rest/layergroups/%s", gs.data.Connection.URL, name)
+		target = fmt.Sprintf("%s/geoserver/rest/layergroups/%s", gs.data.connection.URL, name)
 	}
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return nil, err
 	}
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -78,13 +78,13 @@ func (gs *GeoserverService) GetLayerGroup(name string, opts ...utils.Option) (*l
 /*
 Available options: WorkspaceOption
 */
-func (gs *GeoserverService) DeleteLayerGroup(name string, opts ...utils.Option) error {
+func (gs *GeoserverService) DeleteLayerGroup(name string, opts ...internal.Option) error {
 	_, err := gs.GetLayerGroup(name, opts...)
 	if err != nil {
 		return err
 	}
 
-	params := utils.ProcessOptions(opts)
+	params := internal.ProcessOptions(opts)
 
 	var target string
 	if wksp, set := params["workspace"]; set {
@@ -93,9 +93,9 @@ func (gs *GeoserverService) DeleteLayerGroup(name string, opts ...utils.Option) 
 			return err
 		}
 
-		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/layergroups/%s", gs.data.Connection.URL, wksp, name)
+		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/layergroups/%s", gs.data.connection.URL, wksp, name)
 	} else {
-		target = fmt.Sprintf("%s/geoserver/rest/layergroups/%s", gs.data.Connection.URL, name)
+		target = fmt.Sprintf("%s/geoserver/rest/layergroups/%s", gs.data.connection.URL, name)
 	}
 
 	request, err := http.NewRequest(http.MethodDelete, target, nil)
@@ -103,9 +103,9 @@ func (gs *GeoserverService) DeleteLayerGroup(name string, opts ...utils.Option) 
 		return err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -124,7 +124,7 @@ func (gs *GeoserverService) DeleteLayerGroup(name string, opts ...utils.Option) 
 	}
 }
 
-func (gs *GeoserverService) CreateLayerGroup(name, srs string, children []string, bbox [4]float64, opts ...utils.Option) error {
+func (gs *GeoserverService) CreateLayerGroup(name, srs string, children []string, bbox [4]float64, opts ...internal.Option) error {
 	var enf *customerrors.NotFoundError
 	_, err := gs.GetLayerGroup(name, opts...)
 	if err == nil {
@@ -152,14 +152,14 @@ func (gs *GeoserverService) CreateLayerGroup(name, srs string, children []string
 
 	var target string
 
-	params := utils.ProcessOptions(opts)
+	params := internal.ProcessOptions(opts)
 	if wksp, set := params["workspace"]; set {
 		_, err = gs.GetWorkspace(wksp.(string))
 		if err != nil {
 			return err
 		}
 
-		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/layergroups", gs.data.Connection.URL, wksp)
+		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/layergroups", gs.data.connection.URL, wksp)
 		groupContent.Group.Workspace.Name = wksp.(string)
 
 		publishables := make([]layergroups.Layer, 0, len(children))
@@ -167,18 +167,18 @@ func (gs *GeoserverService) CreateLayerGroup(name, srs string, children []string
 			publishables = append(publishables, layergroups.Layer{
 				Type: "layer",
 				Name: fmt.Sprintf("%s:%s", wksp.(string), child),
-				Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/layers/%s.json", gs.data.Connection.URL, wksp.(string), child),
+				Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/layers/%s.json", gs.data.connection.URL, wksp.(string), child),
 			})
 		}
 		groupContent.Group.Publishables = layergroups.Publishables{Published: publishables}
 	} else {
-		target = fmt.Sprintf("%s/geoserver/rest/layergroups", gs.data.Connection.URL)
+		target = fmt.Sprintf("%s/geoserver/rest/layergroups", gs.data.connection.URL)
 		publishables := make([]layergroups.Layer, 0, len(children))
 		for _, child := range children {
 			publishables = append(publishables, layergroups.Layer{
 				Type: "layer",
 				Name: child,
-				Link: fmt.Sprintf("%s/geoserver/rest/layers/%s.json", gs.data.Connection.URL, child),
+				Link: fmt.Sprintf("%s/geoserver/rest/layers/%s.json", gs.data.connection.URL, child),
 			})
 		}
 		groupContent.Group.Publishables = layergroups.Publishables{Published: publishables}
@@ -214,10 +214,10 @@ func (gs *GeoserverService) CreateLayerGroup(name, srs string, children []string
 		return err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -236,7 +236,7 @@ func (gs *GeoserverService) CreateLayerGroup(name, srs string, children []string
 	}
 }
 
-func (gs *GeoserverService) UpdateLayerGroup(name, srs string, layersToAdd []string, bbox [4]float64, opts ...utils.Option) error {
+func (gs *GeoserverService) UpdateLayerGroup(name, srs string, layersToAdd []string, bbox [4]float64, opts ...internal.Option) error {
 	var (
 		enf *customerrors.NotFoundError
 	)
@@ -269,14 +269,14 @@ func (gs *GeoserverService) UpdateLayerGroup(name, srs string, layersToAdd []str
 
 	var target string
 
-	params := utils.ProcessOptions(opts)
+	params := internal.ProcessOptions(opts)
 	if wksp, set := params["workspace"]; set {
 		_, err = gs.GetWorkspace(wksp.(string))
 		if err != nil {
 			return err
 		}
 
-		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/layergroups/%s", gs.data.Connection.URL, wksp, name)
+		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/layergroups/%s", gs.data.connection.URL, wksp, name)
 		groupContent.Group.Workspace.Name = wksp.(string)
 
 		publishables := make([]layergroups.Layer, len(lg.Group.Publishables.Published))
@@ -286,12 +286,12 @@ func (gs *GeoserverService) UpdateLayerGroup(name, srs string, layersToAdd []str
 			publishables = append(publishables, layergroups.Layer{
 				Type: "layer",
 				Name: fmt.Sprintf("%s:%s", wksp.(string), child),
-				Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/layers/%s.json", gs.data.Connection.URL, wksp.(string), child),
+				Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/layers/%s.json", gs.data.connection.URL, wksp.(string), child),
 			})
 		}
 		groupContent.Group.Publishables = layergroups.Publishables{Published: publishables}
 	} else {
-		target = fmt.Sprintf("%s/geoserver/rest/layergroups/%s", gs.data.Connection.URL, name)
+		target = fmt.Sprintf("%s/geoserver/rest/layergroups/%s", gs.data.connection.URL, name)
 		publishables := make([]layergroups.Layer, len(lg.Group.Publishables.Published))
 		copy(publishables, lg.Group.Publishables.Published)
 
@@ -299,7 +299,7 @@ func (gs *GeoserverService) UpdateLayerGroup(name, srs string, layersToAdd []str
 			publishables = append(publishables, layergroups.Layer{
 				Type: "layer",
 				Name: child,
-				Link: fmt.Sprintf("%s/geoserver/rest/layers/%s.json", gs.data.Connection.URL, child),
+				Link: fmt.Sprintf("%s/geoserver/rest/layers/%s.json", gs.data.connection.URL, child),
 			})
 		}
 		groupContent.Group.Publishables = layergroups.Publishables{Published: publishables}
@@ -335,11 +335,11 @@ func (gs *GeoserverService) UpdateLayerGroup(name, srs string, layersToAdd []str
 		return err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 	request.Header.Add("Accept", "application/json")
 	request.Header.Add("Content-Type", "application/json")
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}

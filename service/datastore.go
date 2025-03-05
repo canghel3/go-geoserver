@@ -6,9 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/models/datastore"
-	"github.com/canghel3/go-geoserver/models/datastore/postgis"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/datastore"
+	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
 	"io"
 	"net/http"
 	"reflect"
@@ -47,7 +47,7 @@ GetDataStore retrieves a datastore from a Geoserver workspace.
 - In case of network issues or JSON parsing problems, it returns the respective Go error and a nil pointer.
 */
 func (gs *GeoserverService) GetDataStore(workspace, store string) (*datastore.DataStoreRetrieval, error) {
-	err := utils.ValidateStore(store)
+	err := internal.ValidateStore(store)
 	if err != nil {
 		return nil, err
 	}
@@ -57,15 +57,15 @@ func (gs *GeoserverService) GetDataStore(workspace, store string) (*datastore.Da
 		return nil, err
 	}
 
-	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", gs.data.Connection.URL, workspace, store), nil)
+	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", gs.data.connection.URL, workspace, store), nil)
 	if err != nil {
 		return nil, err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 	request.Header.Add("Accept", "application/json")
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +101,7 @@ DeleteDataStore deletes a datastore from geoserver.
 
 Available options: RecurseOption
 */
-func (gs *GeoserverService) DeleteDataStore(workspace string, store string, opts ...utils.Option) error {
+func (gs *GeoserverService) DeleteDataStore(workspace string, store string, opts ...internal.Option) error {
 	_, err := gs.GetWorkspace(workspace)
 	var nfe *customerrors.NotFoundError
 	if err != nil && errors.Is(err, nfe) {
@@ -113,21 +113,21 @@ func (gs *GeoserverService) DeleteDataStore(workspace string, store string, opts
 		return err
 	}
 
-	request, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", gs.data.Connection.URL, workspace, store), nil)
+	request, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", gs.data.connection.URL, workspace, store), nil)
 	if err != nil {
 		return err
 	}
 
-	params := utils.ProcessOptions(opts)
+	params := internal.ProcessOptions(opts)
 	if recurse, set := params["recurse"]; set {
 		q := request.URL.Query()
 		q.Add("recurse", fmt.Sprintf("%v", recurse.(bool)))
 		request.URL.RawQuery = q.Encode()
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -177,15 +177,15 @@ func (gs *GeoserverService) createDataStore(workspace, store string, connectionP
 		return err
 	}
 
-	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores", gs.data.Connection.URL, workspace), bytes.NewBuffer(content))
+	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores", gs.data.connection.URL, workspace), bytes.NewBuffer(content))
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}

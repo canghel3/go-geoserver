@@ -1,6 +1,8 @@
 package coveragestore
 
-import "github.com/canghel3/go-geoserver/models/workspace"
+import (
+	"github.com/canghel3/go-geoserver/internal/workspace"
+)
 
 type CreateCoverageStoreWrapper struct {
 	CoverageStore CreateCoverageStore `json:"coverageStore"`

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
 	"gotest.tools/v3/assert"
 	"testing"
 )
@@ -20,5 +20,5 @@ func TestLayers(t *testing.T) {
 
 	t.Run("WITH SINGLE KEYWORD", func(t *testing.T) {})
 
-	assert.NilError(t, geoserverService.DeleteWorkspace("init", utils.RecurseOption(true)))
+	assert.NilError(t, geoserverService.DeleteWorkspace("init", internal.RecurseOption(true)))
 }

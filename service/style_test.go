@@ -3,9 +3,9 @@ package service
 import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/models/datastore/postgis"
-	"github.com/canghel3/go-geoserver/models/workspace"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
+	"github.com/canghel3/go-geoserver/internal/workspace"
 	"gotest.tools/v3/assert"
 	"testing"
 )
@@ -21,11 +21,11 @@ func TestStyle(t *testing.T) {
 		})
 
 		t.Run("CSS STYLE IN WORKSPACE", func(t *testing.T) {
-			assert.NilError(t, geoserverService.CreateStyle("init_css", "css", styleContent, utils.WorkspaceOption("init")))
+			assert.NilError(t, geoserverService.CreateStyle("init_css", "css", styleContent, internal.WorkspaceOption("init")))
 		})
 
 		t.Run("CSS STYLE IN NON-EXISTENT WORKSPACE", func(t *testing.T) {
-			assert.Error(t, geoserverService.CreateStyle("init_css", "css", styleContent, utils.WorkspaceOption("_")), "workspace _ does not exist")
+			assert.Error(t, geoserverService.CreateStyle("init_css", "css", styleContent, internal.WorkspaceOption("_")), "workspace _ does not exist")
 		})
 
 		t.Run("DUPLICATE STYLE", func(t *testing.T) {
@@ -46,7 +46,7 @@ func TestStyle(t *testing.T) {
 		})
 
 		t.Run("WITH WORKSPACE OPTION", func(t *testing.T) {
-			s, err := geoserverService.GetStyle("init_css", "css", utils.WorkspaceOption("init"))
+			s, err := geoserverService.GetStyle("init_css", "css", internal.WorkspaceOption("init"))
 			assert.NilError(t, err)
 
 			assert.Equal(t, s.Style.Content, string(styleContent))
@@ -86,7 +86,7 @@ func TestStyle(t *testing.T) {
 		}
 
 		assert.NilError(t, geoserverService.CreatePostGISDataStore("init", "init", connectionParams))
-		assert.NilError(t, geoserverService.CreateFeatureType("init", "init", "init", "init", "EPSG:4326", bbox, utils.KeywordsOption([]string{"test", "marian"}), utils.TitleOption("titlu misto"), utils.ProjectionPolicyOption("FORCE_DECLARED")))
+		assert.NilError(t, geoserverService.CreateFeatureType("init", "init", "init", "init", "EPSG:4326", bbox, internal.KeywordsOption([]string{"test", "marian"}), internal.TitleOption("titlu misto"), internal.ProjectionPolicyOption("FORCE_DECLARED")))
 
 		t.Run("WITHOUT WORKSPACE OPTION", func(t *testing.T) {
 			assert.NilError(t, geoserverService.StyleLayer("init", "init_css_no_workspace", "css", true))
@@ -102,9 +102,9 @@ func TestStyle(t *testing.T) {
 		})
 
 		t.Run("WITH WORKSPACE OPTION", func(t *testing.T) {
-			assert.NilError(t, geoserverService.StyleLayer("init", "init_css", "css", true, utils.WorkspaceOption("init")))
+			assert.NilError(t, geoserverService.StyleLayer("init", "init_css", "css", true, internal.WorkspaceOption("init")))
 
-			s, err := geoserverService.GetLayer("init", utils.WorkspaceOption("init"))
+			s, err := geoserverService.GetLayer("init", internal.WorkspaceOption("init"))
 			assert.NilError(t, err)
 
 			assert.Equal(t, s.Layer.Name, "init")
@@ -115,9 +115,9 @@ func TestStyle(t *testing.T) {
 		})
 
 		t.Run("DO NOT MAKE DEFAULT WITH WORKSPACE OPTION", func(t *testing.T) {
-			assert.NilError(t, geoserverService.StyleLayer("init", "init_css", "css", false, utils.WorkspaceOption("init")))
+			assert.NilError(t, geoserverService.StyleLayer("init", "init_css", "css", false, internal.WorkspaceOption("init")))
 
-			s, err := geoserverService.GetLayer("init", utils.WorkspaceOption("init"))
+			s, err := geoserverService.GetLayer("init", internal.WorkspaceOption("init"))
 			assert.NilError(t, err)
 
 			expected := []any{
@@ -146,7 +146,7 @@ func TestStyle(t *testing.T) {
 		t.Run("DO NOT MAKE DEFAULT WITHOUT WORKSPACE OPTION", func(t *testing.T) {
 			assert.NilError(t, geoserverService.StyleLayer("init", "init_css_no_workspace", "css", false))
 
-			s, err := geoserverService.GetLayer("init", utils.WorkspaceOption("init"))
+			s, err := geoserverService.GetLayer("init", internal.WorkspaceOption("init"))
 			assert.NilError(t, err)
 
 			expected := []any{
@@ -187,13 +187,13 @@ func TestStyle(t *testing.T) {
 
 	t.Run("DELETE", func(t *testing.T) {
 		t.Run("WITHOUT RECURSE", func(t *testing.T) {
-			err := geoserverService.DeleteStyle("init_css", utils.WorkspaceOption("init"))
+			err := geoserverService.DeleteStyle("init_css", internal.WorkspaceOption("init"))
 			assert.ErrorType(t, err, &customerrors.GeoserverError{})
 			assert.Error(t, err, "style is referenced by other layers and recurse option is missing or set to false")
 		})
 
 		t.Run("WITH RECURSE AND PURGE", func(t *testing.T) {
-			assert.NilError(t, geoserverService.DeleteStyle("init_css", utils.WorkspaceOption("init"), utils.RecurseOption(true), utils.PurgeOption("true")))
+			assert.NilError(t, geoserverService.DeleteStyle("init_css", internal.WorkspaceOption("init"), internal.RecurseOption(true), internal.PurgeOption("true")))
 		})
 
 		t.Run("NON-EXISTENT STYLE", func(t *testing.T) {
@@ -203,11 +203,11 @@ func TestStyle(t *testing.T) {
 		})
 
 		t.Run("NON-EXISTENT WORKSPACE", func(t *testing.T) {
-			err := geoserverService.DeleteStyle("init_css_no_workspace", utils.WorkspaceOption("none"))
+			err := geoserverService.DeleteStyle("init_css_no_workspace", internal.WorkspaceOption("none"))
 			assert.ErrorType(t, err, &customerrors.NotFoundError{})
 			assert.Error(t, err, "workspace none does not exist")
 		})
 	})
 
-	assert.NilError(t, geoserverService.DeleteWorkspace("init", utils.RecurseOption(true)))
+	assert.NilError(t, geoserverService.DeleteWorkspace("init", internal.RecurseOption(true)))
 }

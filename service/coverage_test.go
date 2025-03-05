@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
 	"gotest.tools/v3/assert"
 	"math"
 	"testing"
@@ -18,7 +18,7 @@ func TestCoverage(t *testing.T) {
 		t.Run("CREATE", func(t *testing.T) {
 			t.Run("BASIC", func(t *testing.T) {
 				bbox := [4]float64{-13625746.1231970004737377, -5661864.1336409999057651, 19523253.8768029995262623, 8287135.8663590000942349}
-				assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, utils.ProjectionPolicyOption("FORCE_DECLARED")))
+				assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, internal.ProjectionPolicyOption("FORCE_DECLARED")))
 				c, err := geoserverService.GetCoverage("init", "init", "init")
 				assert.NilError(t, err)
 
@@ -27,13 +27,13 @@ func TestCoverage(t *testing.T) {
 				assert.Equal(t, c.Coverage.NativeBoundingBox.MinX, -13625746.1231970004737377)
 				assert.Equal(t, c.Coverage.Title, "init")
 
-				assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", utils.RecurseOption(true)))
+				assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", internal.RecurseOption(true)))
 			})
 
 			t.Run("WITH KEYWORDS", func(t *testing.T) {
 				keywords := []string{"adu", "telefonul", "marian"}
 				bbox := [4]float64{-13625746.1231970004737377, -5661864.1336409999057651, 19523253.8768029995262623, 8287135.8663590000942349}
-				assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, utils.ProjectionPolicyOption("FORCE_DECLARED"), utils.KeywordsOption(keywords)))
+				assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, internal.ProjectionPolicyOption("FORCE_DECLARED"), internal.KeywordsOption(keywords)))
 
 				c, err := geoserverService.GetCoverage("init", "init", "init")
 				assert.NilError(t, err)
@@ -44,12 +44,12 @@ func TestCoverage(t *testing.T) {
 				assert.Equal(t, c.Coverage.Title, "init")
 				assert.DeepEqual(t, c.Coverage.Keywords.Keywords, keywords)
 
-				assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", utils.RecurseOption(true)))
+				assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", internal.RecurseOption(true)))
 			})
 
 			t.Run("WITH TITLE", func(t *testing.T) {
 				bbox := [4]float64{-13625746.1231970004737377, -5661864.1336409999057651, 19523253.8768029995262623, 8287135.8663590000942349}
-				assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, utils.ProjectionPolicyOption("FORCE_DECLARED"), utils.TitleOption("MARIAN")))
+				assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, internal.ProjectionPolicyOption("FORCE_DECLARED"), internal.TitleOption("MARIAN")))
 
 				c, err := geoserverService.GetCoverage("init", "init", "init")
 				assert.NilError(t, err)
@@ -59,12 +59,12 @@ func TestCoverage(t *testing.T) {
 				assert.Equal(t, c.Coverage.NativeBoundingBox.MinX, -13625746.1231970004737377)
 				assert.Equal(t, c.Coverage.Title, "MARIAN")
 
-				assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", utils.RecurseOption(true)))
+				assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", internal.RecurseOption(true)))
 			})
 
 			t.Run("WITHOUT PROJECTION POLICY OPTION", func(t *testing.T) {
 				bbox := [4]float64{-13625746.1231970004737377, -5661864.1336409999057651, 19523253.8768029995262623, 8287135.8663590000942349}
-				assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, utils.TitleOption("MARIAN")))
+				assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, internal.TitleOption("MARIAN")))
 
 				c, err := geoserverService.GetCoverage("init", "init", "init")
 				assert.NilError(t, err)
@@ -74,12 +74,12 @@ func TestCoverage(t *testing.T) {
 				assert.Equal(t, c.Coverage.NativeBoundingBox.MinX, -13625746.1231970004737377)
 				assert.Equal(t, c.Coverage.Title, "MARIAN")
 
-				assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", utils.RecurseOption(true)))
+				assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", internal.RecurseOption(true)))
 			})
 
 			t.Run("WITH REPROJECTION POLICY", func(t *testing.T) {
 				bbox := [4]float64{-13625746.1231970004737377, -5661864.1336409999057651, 19523253.8768029995262623, 8287135.8663590000942349}
-				assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, utils.ProjectionPolicyOption("REPROJECT_TO_DECLARED")))
+				assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, internal.ProjectionPolicyOption("REPROJECT_TO_DECLARED")))
 
 				c, err := geoserverService.GetCoverage("init", "init", "init")
 				assert.NilError(t, err)
@@ -89,15 +89,15 @@ func TestCoverage(t *testing.T) {
 				assert.Equal(t, c.Coverage.NativeBoundingBox.MinX, -13625746.1231970004737377)
 				assert.Equal(t, c.Coverage.Title, "init")
 
-				assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", utils.RecurseOption(true)))
+				assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", internal.RecurseOption(true)))
 			})
 
 			t.Run("WITH COVERAGE DIMENSION OPTION", func(t *testing.T) {
 				t.Run("W/O DESCRIPTION", func(t *testing.T) {
 					bbox := [4]float64{-13625746.1231970004737377, -5661864.1336409999057651, 19523253.8768029995262623, 8287135.8663590000942349}
 
-					coverage := utils.MakeCoverageDimension("BANDA", "REAL_64BITS", 0, 0, math.MaxFloat64)
-					assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, utils.ProjectionPolicyOption("FORCE_DECLARED"), utils.TitleOption("MARIAN"), utils.CoverageDimensionsOption(coverage)))
+					coverage := internal.MakeCoverageDimension("BANDA", "REAL_64BITS", 0, 0, math.MaxFloat64)
+					assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, internal.ProjectionPolicyOption("FORCE_DECLARED"), internal.TitleOption("MARIAN"), internal.CoverageDimensionsOption(coverage)))
 
 					c, err := geoserverService.GetCoverage("init", "init", "init")
 					assert.NilError(t, err)
@@ -112,14 +112,14 @@ func TestCoverage(t *testing.T) {
 					assert.Equal(t, c.Coverage.Dimensions.CoverageDimension.Range.Min, float64(0))
 					assert.Equal(t, c.Coverage.Dimensions.CoverageDimension.Range.Max, math.MaxFloat64)
 
-					assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", utils.RecurseOption(true)))
+					assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", internal.RecurseOption(true)))
 				})
 
 				t.Run("W/ DESCRIPTION", func(t *testing.T) {
 					bbox := [4]float64{-13625746.1231970004737377, -5661864.1336409999057651, 19523253.8768029995262623, 8287135.8663590000942349}
 
-					coverage := utils.MakeCoverageDimension("BANDA", "REAL_32BITS", 0, 0, math.MaxFloat32, "a simple description goes a long way")
-					assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, utils.ProjectionPolicyOption("FORCE_DECLARED"), utils.TitleOption("MARIAN"), utils.CoverageDimensionsOption(coverage)))
+					coverage := internal.MakeCoverageDimension("BANDA", "REAL_32BITS", 0, 0, math.MaxFloat32, "a simple description goes a long way")
+					assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, internal.ProjectionPolicyOption("FORCE_DECLARED"), internal.TitleOption("MARIAN"), internal.CoverageDimensionsOption(coverage)))
 
 					c, err := geoserverService.GetCoverage("init", "init", "init")
 					assert.NilError(t, err)
@@ -135,14 +135,14 @@ func TestCoverage(t *testing.T) {
 					assert.Equal(t, c.Coverage.Dimensions.CoverageDimension.NullValues.Double, float64(0))
 					assert.Equal(t, c.Coverage.Dimensions.CoverageDimension.Description, "a simple description goes a long way")
 
-					assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", utils.RecurseOption(true)))
+					assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", internal.RecurseOption(true)))
 				})
 
 				t.Run("W/ MULTILINE DESCRIPTION", func(t *testing.T) {
 					bbox := [4]float64{-13625746.1231970004737377, -5661864.1336409999057651, 19523253.8768029995262623, 8287135.8663590000942349}
 
-					coverage := utils.MakeCoverageDimension("AVE CESAR", "REAL_64BITS", 0, 0, math.MaxFloat64, "a simple description goes a long way", "especially when written in hungarian")
-					assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, utils.ProjectionPolicyOption("FORCE_DECLARED"), utils.TitleOption("MARIAN"), utils.CoverageDimensionsOption(coverage)))
+					coverage := internal.MakeCoverageDimension("AVE CESAR", "REAL_64BITS", 0, 0, math.MaxFloat64, "a simple description goes a long way", "especially when written in hungarian")
+					assert.NilError(t, geoserverService.CreateCoverage("init", "init", "init", "EPSG:3857", bbox, internal.ProjectionPolicyOption("FORCE_DECLARED"), internal.TitleOption("MARIAN"), internal.CoverageDimensionsOption(coverage)))
 
 					c, err := geoserverService.GetCoverage("init", "init", "init")
 					assert.NilError(t, err)
@@ -158,7 +158,7 @@ func TestCoverage(t *testing.T) {
 					assert.Equal(t, c.Coverage.Dimensions.CoverageDimension.NullValues.Double, float64(0))
 					assert.Equal(t, c.Coverage.Dimensions.CoverageDimension.Description, "a simple description goes a long way\nespecially when written in hungarian")
 
-					assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", utils.RecurseOption(true)))
+					assert.NilError(t, geoserverService.DeleteCoverage("init", "init", "init", internal.RecurseOption(true)))
 				})
 			})
 
@@ -185,5 +185,5 @@ func TestCoverage(t *testing.T) {
 		})
 	})
 
-	assert.NilError(t, geoserverService.DeleteWorkspace("init", utils.RecurseOption(true)))
+	assert.NilError(t, geoserverService.DeleteWorkspace("init", internal.RecurseOption(true)))
 }

@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/canghel3/go-geoserver/models"
-	"github.com/canghel3/go-geoserver/service/raster"
-	"github.com/canghel3/go-geoserver/service/vector"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/raster"
+	"github.com/canghel3/go-geoserver/vector"
 	"net/http"
 )
 
@@ -14,12 +14,12 @@ Sets the data directory field of the GeoserverService
 */
 func GeoserverServiceDataDirOption(datadir string) GeoserverServiceOption {
 	return func(gs *GeoserverService) {
-		gs.data.DataDir = datadir
+		gs.data.dataDir = datadir
 	}
 }
 
 type GeoserverService struct {
-	data *models.GeoserverInfo
+	data *internal.GeoserverInfo
 }
 
 /*
@@ -35,11 +35,11 @@ options - GeoserverServiceDataDirOption
 */
 func NewGeoserverService(url, username, password string, options ...GeoserverServiceOption) *GeoserverService {
 	gs := &GeoserverService{
-		data: &models.GeoserverInfo{
-			Client: &http.Client{},
-			Connection: models.GeoserverConnection{
+		data: &internal.GeoserverInfo{
+			client: &http.Client{},
+			connection: internal.GeoserverConnection{
 				URL: url,
-				Credentials: models.GeoserverCredentials{
+				Credentials: internal.GeoserverCredentials{
 					Username: username,
 					Password: password,
 				},
@@ -68,9 +68,9 @@ func (gs *GeoserverService) Rasters() *raster.Service {
 }
 
 func (gs *GeoserverService) isDataDirectorySet() bool {
-	return len(gs.data.DataDir) > 0
+	return len(gs.data.dataDir) > 0
 }
 
 func (gs *GeoserverService) getDataDirectory() string {
-	return gs.data.DataDir
+	return gs.data.dataDir
 }

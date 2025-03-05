@@ -6,9 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/models/style"
-	"github.com/canghel3/go-geoserver/models/workspace"
-	"github.com/canghel3/go-geoserver/utils"
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/style"
+	"github.com/canghel3/go-geoserver/internal/workspace"
 	"io"
 	"net/http"
 )
@@ -28,7 +28,7 @@ import (
 // err := gs.CreateStyle("myStyle", "css", []byte(cssContent))
 //
 // Note: "sld" and "zip" formats are currently not supported for creating styles.
-func (gs *GeoserverService) CreateStyle(name, format string, content []byte, options ...utils.Option) error {
+func (gs *GeoserverService) CreateStyle(name, format string, content []byte, options ...internal.Option) error {
 	var enf *customerrors.NotFoundError
 
 	_, err := gs.GetStyle(name, format, options...)
@@ -38,7 +38,7 @@ func (gs *GeoserverService) CreateStyle(name, format string, content []byte, opt
 		return err
 	}
 
-	params := utils.ProcessOptions(options)
+	params := internal.ProcessOptions(options)
 
 	var target string
 	if wksp, set := params["workspace"]; set {
@@ -47,9 +47,9 @@ func (gs *GeoserverService) CreateStyle(name, format string, content []byte, opt
 			return err
 		}
 
-		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/styles", gs.data.Connection.URL, wksp)
+		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/styles", gs.data.connection.URL, wksp)
 	} else {
-		target = fmt.Sprintf("%s/geoserver/rest/styles", gs.data.Connection.URL)
+		target = fmt.Sprintf("%s/geoserver/rest/styles", gs.data.connection.URL)
 	}
 
 	request, err := http.NewRequest(http.MethodPost, target, bytes.NewReader(content))
@@ -57,7 +57,7 @@ func (gs *GeoserverService) CreateStyle(name, format string, content []byte, opt
 		return err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 
 	switch format {
 	case "css":
@@ -72,7 +72,7 @@ func (gs *GeoserverService) CreateStyle(name, format string, content []byte, opt
 	q.Add("name", name)
 	request.URL.RawQuery = q.Encode()
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -92,13 +92,13 @@ func (gs *GeoserverService) CreateStyle(name, format string, content []byte, opt
 	}
 }
 
-func (gs *GeoserverService) GetStyle(name, format string, options ...utils.Option) (*style.GetStyleWrapper, error) {
-	err := utils.ValidateStyle(name)
+func (gs *GeoserverService) GetStyle(name, format string, options ...internal.Option) (*style.GetStyleWrapper, error) {
+	err := internal.ValidateStyle(name)
 	if err != nil {
 		return nil, err
 	}
 
-	params := utils.ProcessOptions(options)
+	params := internal.ProcessOptions(options)
 
 	var target string
 	wksp, set := params["workspace"]
@@ -108,9 +108,9 @@ func (gs *GeoserverService) GetStyle(name, format string, options ...utils.Optio
 			return nil, err
 		}
 
-		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/styles/%s", gs.data.Connection.URL, wksp, name)
+		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/styles/%s", gs.data.connection.URL, wksp, name)
 	} else {
-		target = fmt.Sprintf("%s/geoserver/rest/styles/%s", gs.data.Connection.URL, name)
+		target = fmt.Sprintf("%s/geoserver/rest/styles/%s", gs.data.connection.URL, name)
 	}
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -118,7 +118,7 @@ func (gs *GeoserverService) GetStyle(name, format string, options ...utils.Optio
 		return nil, err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 
 	switch format {
 	case "css":
@@ -133,7 +133,7 @@ func (gs *GeoserverService) GetStyle(name, format string, options ...utils.Optio
 		request.Header.Add("Accept", "application/json")
 	}
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -196,13 +196,13 @@ func (gs *GeoserverService) GetStyle(name, format string, options ...utils.Optio
 /*
 Available options: WorkspaceOption, PurgeOption (only "true" works in this case), RecurseOption
 */
-func (gs *GeoserverService) DeleteStyle(name string, options ...utils.Option) error {
+func (gs *GeoserverService) DeleteStyle(name string, options ...internal.Option) error {
 	_, err := gs.GetStyle(name, "json", options...)
 	if err != nil {
 		return err
 	}
 
-	params := utils.ProcessOptions(options)
+	params := internal.ProcessOptions(options)
 	var target string
 	wksp, set := params["workspace"]
 	if set {
@@ -211,9 +211,9 @@ func (gs *GeoserverService) DeleteStyle(name string, options ...utils.Option) er
 			return err
 		}
 
-		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/styles/%s", gs.data.Connection.URL, wksp, name)
+		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/styles/%s", gs.data.connection.URL, wksp, name)
 	} else {
-		target = fmt.Sprintf("%s/geoserver/rest/styles/%s", gs.data.Connection.URL, name)
+		target = fmt.Sprintf("%s/geoserver/rest/styles/%s", gs.data.connection.URL, name)
 	}
 
 	request, err := http.NewRequest(http.MethodDelete, target, nil)
@@ -233,9 +233,9 @@ func (gs *GeoserverService) DeleteStyle(name string, options ...utils.Option) er
 		request.URL.RawQuery = q.Encode()
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -259,8 +259,8 @@ func (gs *GeoserverService) DeleteStyle(name string, options ...utils.Option) er
 /*
 Available options: WorkspaceOption
 */
-func (gs *GeoserverService) StyleLayer(layer, style_, format string, default_ bool, options ...utils.Option) error {
-	params := utils.ProcessOptions(options)
+func (gs *GeoserverService) StyleLayer(layer, style_, format string, default_ bool, options ...internal.Option) error {
+	params := internal.ProcessOptions(options)
 
 	_, err := gs.GetLayer(layer, options...)
 	if err != nil {
@@ -280,9 +280,9 @@ func (gs *GeoserverService) StyleLayer(layer, style_, format string, default_ bo
 			return err
 		}
 
-		target = fmt.Sprintf("%s/geoserver/rest/layers/%s:%s/styles?default=%v", gs.data.Connection.URL, wksp, layer, default_)
+		target = fmt.Sprintf("%s/geoserver/rest/layers/%s:%s/styles?default=%v", gs.data.connection.URL, wksp, layer, default_)
 	} else {
-		target = fmt.Sprintf("%s/geoserver/rest/layers/%s/styles?default=%v", gs.data.Connection.URL, layer, default_)
+		target = fmt.Sprintf("%s/geoserver/rest/layers/%s/styles?default=%v", gs.data.connection.URL, layer, default_)
 	}
 
 	var styleContent style.StyleWrapper
@@ -311,10 +311,10 @@ func (gs *GeoserverService) StyleLayer(layer, style_, format string, default_ bo
 		return err
 	}
 
-	request.SetBasicAuth(gs.data.Connection.Credentials.Username, gs.data.Connection.Credentials.Password)
+	request.SetBasicAuth(gs.data.connection.Credentials.Username, gs.data.connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	response, err := gs.data.Client.Do(request)
+	response, err := gs.data.client.Do(request)
 	if err != nil {
 		return err
 	}
