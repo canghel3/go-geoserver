@@ -2,7 +2,7 @@ package style
 
 import (
 	"github.com/canghel3/go-geoserver/internal/misc"
-	"github.com/canghel3/go-geoserver/internal/workspace"
+	"github.com/canghel3/go-geoserver/pkg"
 )
 
 type StyleWrapper struct {
@@ -19,12 +19,12 @@ type GetStyleWrapper struct {
 }
 
 type GetStyleDetails struct {
-	Name            any                          `json:"name"`
-	Content         string                       `json:"content"`
-	Workspace       *workspace.WorkspaceCreation `json:"workspace,omitempty"`
-	Format          string                       `json:"format,omitempty"`
-	LanguageVersion *misc.LanguageVersion        `json:"languageVersion,omitempty"`
-	Filename        any                          `json:"filename"`
-	DateCreate      string                       `json:"dateCreate,omitempty"`
-	DateModified    string                       `json:"dateModified,omitempty"`
+	Name            any                    `json:"name"`
+	Content         string                 `json:"content"`
+	Workspace       *pkg.WorkspaceCreation `json:"workspace,omitempty"`
+	Format          string                 `json:"format,omitempty"`
+	LanguageVersion *misc.LanguageVersion  `json:"languageVersion,omitempty"`
+	Filename        any                    `json:"filename"`
+	DateCreate      string                 `json:"dateCreate,omitempty"`
+	DateModified    string                 `json:"dateModified,omitempty"`
 }

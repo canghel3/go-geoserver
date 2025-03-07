@@ -9,7 +9,7 @@ import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/coverage/geotiff"
 	"github.com/canghel3/go-geoserver/internal/misc"
-	"github.com/canghel3/go-geoserver/internal/workspace"
+	"github.com/canghel3/go-geoserver/pkg"
 	"io"
 	"net/http"
 	"reflect"
@@ -102,7 +102,7 @@ func (gs *GeoserverService) CreateCoverage(wksp, store, layerName, srs string, b
 		Coverage: geotiff.CoverageDetails{
 			Enabled: true,
 			Name:    layerName,
-			Namespace: workspace.MultiWorkspace{
+			Namespace: pkg.MultiWorkspace{
 				Name: wksp,
 				Href: fmt.Sprintf("%s/geoserver/rest/namespaces/%s.json", gs.data.connection.URL, wksp),
 			},

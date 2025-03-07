@@ -1,179 +1,32 @@
 package vector
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/datastore"
 	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
-	"io"
-	"net/http"
+	"github.com/canghel3/go-geoserver/internal/requester"
 )
 
 type Storage interface {
-	MarshalJSON() ([]byte, error)
+	Create() error
+	Update() error
 }
 
 type storageParams map[string]string
 
-type Stores struct {
-	info *internal.GeoserverInfo
+type StoreManager struct {
+	requester *requester.Requester
 }
 
-func newStores(info *internal.GeoserverInfo) Stores {
-	return Stores{
-		info: info,
-	}
+func (s StoreManager) Get(name string) (*datastore.DataStoreRetrieval, error) {
+	return s.requester.DataStores().Get(name)
 }
 
-func (s Stores) Get(name string) (*datastore.DataStoreRetrieval, error) {
-	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", s.info.Connection.URL, s.info.Workspace, name), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	request.SetBasicAuth(s.info.Connection.Credentials.Username, s.info.Connection.Credentials.Password)
-	request.Header.Add("Accept", "application/json")
-
-	response, err := s.info.Client.Do(request)
-	if err != nil {
-		return nil, err
-	}
-	defer response.Body.Close()
-
-	switch response.StatusCode {
-	case http.StatusOK:
-		var dts *datastore.DataStoreRetrievalWrapper
-		err = json.NewDecoder(response.Body).Decode(&dts)
-		if err != nil {
-			return nil, err
-		}
-
-		return &dts.DataStore, nil
-	default:
-		body, err := io.ReadAll(response.Body)
-		if err != nil {
-			return nil, err
-		}
-
-		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
-	}
+func (s StoreManager) Delete(store string, recurse bool) error {
+	return s.requester.DataStores().Delete(store, recurse)
 }
 
-func (s Stores) Delete(store string, recurse bool) error {
-	request, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s?recurse=%v", s.info.connection.URL, s.info.Workspace, store, recurse), nil)
-	if err != nil {
-		return err
-	}
-
-	request.SetBasicAuth(s.info.connection.Credentials.Username, s.info.connection.Credentials.Password)
-
-	response, err := s.info.client.Do(request)
-	if err != nil {
-		return err
-	}
-	defer response.Body.Close()
-
-	switch response.StatusCode {
-	case http.StatusOK:
-		return nil
-	default:
-		body, err := io.ReadAll(response.Body)
-		if err != nil {
-			return err
-		}
-
-		return customerrors.NewGeoserverError(fmt.Sprintf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
-	}
-}
-
-func (s Stores) Create(store Storage) error {
-	content, err := store.MarshalJSON()
-	if err != nil {
-		return err
-	}
-
-	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores", s.info.Connection.URL, s.info.Workspace), bytes.NewBuffer(content))
-	if err != nil {
-		return err
-	}
-
-	request.SetBasicAuth(s.info.Connection.Credentials.Username, s.info.Connection.Credentials.Password)
-	request.Header.Add("Content-Type", "application/json")
-
-	response, err := s.info.client.Do(request)
-	if err != nil {
-		return err
-	}
-	defer response.Body.Close()
-
-	switch response.StatusCode {
-	case http.StatusCreated:
-		return nil
-	default:
-		body, err := io.ReadAll(response.Body)
-		if err != nil {
-			return err
-		}
-
-		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
-	}
-}
-
-func (s Stores) Update(store Storage) error {
-	return fmt.Errorf("not implemented")
-}
-
-func (s Stores) PostGIS(name string, connectionParams postgis.ConnectionParams) Storage {
-	return newPostGISStore(name, connectionParams)
-}
-
-func (s Stores) createGenericDataStore(store string, connectionParams storageParams) error {
-	data := datastore.GenericDataStoreCreationWrapper{
-		DataStore: datastore.GenericDataStoreCreationModel{
-			Name: store,
-			ConnectionParameters: datastore.ConnectionParameters{
-				Entry: connectionParams.toDatastoreEntries(),
-			},
-		},
-	}
-
-	content, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
-	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores", s.info.connection.URL, s.info.Workspace), bytes.NewBuffer(content))
-	if err != nil {
-		return err
-	}
-
-	request.SetBasicAuth(s.info.connection.Credentials.Username, s.info.connection.Credentials.Password)
-	request.Header.Add("Content-Type", "application/json")
-
-	if s.info.client == nil {
-		s.info.client = &http.Client{}
-	}
-
-	response, err := s.info.client.Do(request)
-	if err != nil {
-		return err
-	}
-	defer response.Body.Close()
-
-	switch response.StatusCode {
-	case http.StatusCreated:
-		return nil
-	default:
-		body, err := io.ReadAll(response.Body)
-		if err != nil {
-			return err
-		}
-
-		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
-	}
+func (s StoreManager) PostGIS(name string, connectionParams postgis.ConnectionParams) Storage {
+	return newPostGISStore(name, connectionParams, s.requester)
 }
 
 func (params storageParams) toDatastoreEntries() []datastore.Entry {

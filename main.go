@@ -6,6 +6,7 @@ import (
 
 func main() {
 	w := workspace.NewService()
-	vectors := w.
-		vectors.Stores().Get("some")
+	v := w.Use("sample").Vectors()
+	v.Stores().PostGIS().Create()
+	v.Store("s")
 }

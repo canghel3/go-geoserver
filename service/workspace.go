@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/internal/workspace"
+	"github.com/canghel3/go-geoserver/pkg"
 	"io"
 	"net/http"
 )
@@ -41,8 +41,8 @@ func (gs *GeoserverService) CreateWorkspace(name string) error {
 		return err
 	}
 
-	data := workspace.WorkspaceCreationWrapper{
-		Workspace: workspace.WorkspaceCreation{
+	data := pkg.WorkspaceCreationWrapper{
+		Workspace: pkg.WorkspaceCreation{
 			Name: name,
 		},
 	}
@@ -86,7 +86,7 @@ GetWorkspaces retrieves information about all existing workspaces in the Geoserv
 - If the Geoserver responds with a non-successful status code, it returns a nil pointer and a GeoserverError with a message providing the status code and server response.
 - For other issues (like network or JSON parsing problems), it returns the respective Go error and a nil pointer.
 */
-func (gs *GeoserverService) GetWorkspaces() (*workspace.MultiWorkspaceRetrievalWrapper, error) {
+func (gs *GeoserverService) GetWorkspaces() (*pkg.MultiWorkspaceRetrievalWrapper, error) {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces", gs.data.connection.URL)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -104,7 +104,7 @@ func (gs *GeoserverService) GetWorkspaces() (*workspace.MultiWorkspaceRetrievalW
 
 	switch response.StatusCode {
 	case http.StatusOK:
-		var workspace workspace.MultiWorkspaceRetrievalWrapper
+		var workspace pkg.MultiWorkspaceRetrievalWrapper
 		err = json.NewDecoder(response.Body).Decode(&workspace)
 		if err != nil {
 			return nil, err
@@ -132,7 +132,7 @@ GetWorkspace retrieves a single workspace from the Geoserver using the given wor
 
 - In case of network issues or JSON parsing problems, it returns the respective Go error and a nil pointer.
 */
-func (gs *GeoserverService) GetWorkspace(name string) (*workspace.SingleWorkspaceRetrievalWrapper, error) {
+func (gs *GeoserverService) GetWorkspace(name string) (*pkg.SingleWorkspaceRetrievalWrapper, error) {
 	err := internal.ValidateWorkspace(name)
 	if err != nil {
 		return nil, err
@@ -155,7 +155,7 @@ func (gs *GeoserverService) GetWorkspace(name string) (*workspace.SingleWorkspac
 
 	switch response.StatusCode {
 	case http.StatusOK:
-		var workspace workspace.SingleWorkspaceRetrievalWrapper
+		var workspace pkg.SingleWorkspaceRetrievalWrapper
 		err = json.NewDecoder(response.Body).Decode(&workspace)
 		if err != nil {
 			return nil, err

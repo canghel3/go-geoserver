@@ -1,7 +1,7 @@
 package coveragestore
 
 import (
-	"github.com/canghel3/go-geoserver/internal/workspace"
+	"github.com/canghel3/go-geoserver/pkg"
 )
 
 type CreateCoverageStoreWrapper struct {
@@ -9,22 +9,22 @@ type CreateCoverageStoreWrapper struct {
 }
 
 type CreateCoverageStore struct {
-	Name        string                   `json:"name"`
-	Description string                   `json:"description"`
-	Type        string                   `json:"type"`
-	Workspace   workspace.MultiWorkspace `json:"workspace"`
-	Enabled     bool                     `json:"enabled"`
-	URL         string                   `json:"url"`
+	Name        string             `json:"name"`
+	Description string             `json:"description"`
+	Type        string             `json:"type"`
+	Workspace   pkg.MultiWorkspace `json:"workspace"`
+	Enabled     bool               `json:"enabled"`
+	URL         string             `json:"url"`
 }
 
 type GetCoverageStore struct {
-	Name        string                   `json:"name"`
-	Description string                   `json:"description"`
-	Type        string                   `json:"type"`
-	Enabled     bool                     `json:"enabled"`
-	Workspace   workspace.MultiWorkspace `json:"workspace"`
-	URL         string                   `json:"url"`
-	Coverages   string                   `json:"coverages"`
+	Name        string             `json:"name"`
+	Description string             `json:"description"`
+	Type        string             `json:"type"`
+	Enabled     bool               `json:"enabled"`
+	Workspace   pkg.MultiWorkspace `json:"workspace"`
+	URL         string             `json:"url"`
+	Coverages   string             `json:"coverages"`
 }
 
 type GetCoverageStoreWrapper struct {

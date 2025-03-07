@@ -4,21 +4,24 @@ import (
 	"encoding/json"
 	"github.com/canghel3/go-geoserver/internal/datastore"
 	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
+	"github.com/canghel3/go-geoserver/internal/requester"
 )
 
 type PostGISStore struct {
 	name             string
 	connectionParams postgis.ConnectionParams
+	requester        *requester.Requester
 }
 
-func newPostGISStore(name string, connectionParams postgis.ConnectionParams) *PostGISStore {
+func newPostGISStore(name string, connectionParams postgis.ConnectionParams, requester *requester.Requester) *PostGISStore {
 	return &PostGISStore{
 		name:             name,
 		connectionParams: connectionParams,
+		requester:        requester,
 	}
 }
 
-func (pgs *PostGISStore) MarshalJSON() ([]byte, error) {
+func (pgs *PostGISStore) Create() error {
 	cp := storageParams{
 		"host":     pgs.connectionParams.Host,
 		"database": pgs.connectionParams.Database,
@@ -37,5 +40,14 @@ func (pgs *PostGISStore) MarshalJSON() ([]byte, error) {
 		},
 	}
 
-	return json.Marshal(&data)
+	content, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	return pgs.requester.DataStores().Create(content)
+}
+
+func (pgs *PostGISStore) Update() error {
+	return nil
 }

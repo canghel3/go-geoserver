@@ -7,7 +7,7 @@ import (
 	"github.com/canghel3/go-geoserver/customerrors"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/coveragestore"
-	"github.com/canghel3/go-geoserver/internal/workspace"
+	"github.com/canghel3/go-geoserver/pkg"
 	"io"
 	"net/http"
 	"path/filepath"
@@ -102,7 +102,7 @@ func (gs *GeoserverService) CreateCoverageStore(wksp, name, url, type_ string) e
 		CoverageStore: coveragestore.CreateCoverageStore{
 			Name: name,
 			Type: type_,
-			Workspace: workspace.MultiWorkspace{
+			Workspace: pkg.MultiWorkspace{
 				Name: wksp,
 				Href: fmt.Sprintf("%s/geoserver/rest/namespaces/%s.json", gs.data.connection.URL, wksp),
 			},

@@ -8,7 +8,7 @@ import (
 	"github.com/canghel3/go-geoserver/customerrors"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/style"
-	"github.com/canghel3/go-geoserver/internal/workspace"
+	"github.com/canghel3/go-geoserver/pkg"
 	"io"
 	"net/http"
 )
@@ -149,7 +149,7 @@ func (gs *GeoserverService) GetStyle(name, format string, options ...internal.Op
 		}
 
 		if set {
-			s.Style.Workspace = &workspace.WorkspaceCreation{Name: wksp.(string)}
+			s.Style.Workspace = &pkg.WorkspaceCreation{Name: wksp.(string)}
 		}
 
 		switch format {
