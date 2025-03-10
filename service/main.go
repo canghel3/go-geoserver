@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
+	"github.com/canghel3/go-geoserver/datastore/postgis"
 	"github.com/rs/zerolog/log"
 )
 

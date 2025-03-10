@@ -18,3 +18,12 @@ type GeoserverCredentials struct {
 	Username string
 	Password string
 }
+
+func (gi *GeoserverInfo) Clone() *GeoserverInfo {
+	return &GeoserverInfo{
+		Client:     gi.Client,
+		Connection: gi.Connection,
+		DataDir:    gi.DataDir,
+		Workspace:  gi.Workspace,
+	}
+}

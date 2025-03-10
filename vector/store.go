@@ -1,8 +1,9 @@
 package vector
 
 import (
-	"github.com/canghel3/go-geoserver/internal/datastore"
-	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
+	"github.com/canghel3/go-geoserver/datastore"
+	"github.com/canghel3/go-geoserver/datastore/postgis"
+	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
 )
 
@@ -13,19 +14,17 @@ type Storage interface {
 
 type storageParams map[string]string
 
-type StoreManager struct {
+type StoreList struct {
 	requester *requester.Requester
 }
 
-func (s StoreManager) Get(name string) (*datastore.DataStoreRetrieval, error) {
-	return s.requester.DataStores().Get(name)
+func newStoreList(info *internal.GeoserverInfo) StoreList {
+	return StoreList{
+		requester: requester.NewRequester(info),
+	}
 }
 
-func (s StoreManager) Delete(store string, recurse bool) error {
-	return s.requester.DataStores().Delete(store, recurse)
-}
-
-func (s StoreManager) PostGIS(name string, connectionParams postgis.ConnectionParams) Storage {
+func (s StoreList) PostGIS(name string, connectionParams postgis.ConnectionParams) Storage {
 	return newPostGISStore(name, connectionParams, s.requester)
 }
 

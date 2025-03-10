@@ -1,8 +1,8 @@
 package service
 
 import (
+	"github.com/canghel3/go-geoserver/datastore/postgis"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
 	"gotest.tools/v3/assert"
 	"testing"
 )

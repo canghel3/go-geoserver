@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/pkg"
+	"github.com/canghel3/go-geoserver/internal/workspace"
 	"io"
 	"net/http"
 )
@@ -16,8 +16,8 @@ type WorkspaceRequester struct {
 }
 
 func (wr *WorkspaceRequester) Create(name string, _default bool) error {
-	data := pkg.WorkspaceCreationWrapper{
-		Workspace: pkg.WorkspaceCreation{
+	data := workspace.WorkspaceCreationWrapper{
+		Workspace: workspace.WorkspaceCreation{
 			Name: name,
 		},
 	}
@@ -57,7 +57,7 @@ func (wr *WorkspaceRequester) Create(name string, _default bool) error {
 	}
 }
 
-func (wr *WorkspaceRequester) Get(name string) (*pkg.SingleWorkspaceRetrievalWrapper, error) {
+func (wr *WorkspaceRequester) Get(name string) (*workspace.SingleWorkspaceRetrievalWrapper, error) {
 	err := internal.ValidateWorkspace(name)
 	if err != nil {
 		return nil, err
@@ -80,7 +80,7 @@ func (wr *WorkspaceRequester) Get(name string) (*pkg.SingleWorkspaceRetrievalWra
 
 	switch response.StatusCode {
 	case http.StatusOK:
-		var wksp pkg.SingleWorkspaceRetrievalWrapper
+		var wksp workspace.SingleWorkspaceRetrievalWrapper
 		err = json.NewDecoder(response.Body).Decode(&wksp)
 		if err != nil {
 			return nil, err
@@ -99,7 +99,7 @@ func (wr *WorkspaceRequester) Get(name string) (*pkg.SingleWorkspaceRetrievalWra
 	}
 }
 
-func (wr *WorkspaceRequester) GetAll() (*pkg.MultiWorkspaceRetrievalWrapper, error) {
+func (wr *WorkspaceRequester) GetAll() (*workspace.MultiWorkspaceRetrievalWrapper, error) {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces", wr.info.Connection.URL)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -117,7 +117,7 @@ func (wr *WorkspaceRequester) GetAll() (*pkg.MultiWorkspaceRetrievalWrapper, err
 
 	switch response.StatusCode {
 	case http.StatusOK:
-		var workspace pkg.MultiWorkspaceRetrievalWrapper
+		var workspace workspace.MultiWorkspaceRetrievalWrapper
 		err = json.NewDecoder(response.Body).Decode(&workspace)
 		if err != nil {
 			return nil, err

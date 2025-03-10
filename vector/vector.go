@@ -1,27 +1,27 @@
 package vector
 
-import "github.com/canghel3/go-geoserver/internal/requester"
+import (
+	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/requester"
+)
 
 type Service struct {
-	layers Layers
-	stores StoreManager
+	info            *internal.GeoserverInfo
+	storeOperations StoreOperations
+	storeList       StoreList
 }
 
-func NewService(requester *requester.Requester) *Service {
+func NewService(info *internal.GeoserverInfo) *Service {
 	return &Service{
-		layers: Layers{},
-		stores: StoreManager{requester: requester},
+		info:      info,
+		storeList: StoreList{requester: requester.NewRequester(info)},
 	}
 }
 
-func (s *Service) Store(name string) Layers {
-	return s.layers
+func (s *Service) Store(name string) StoreOperations {
+	return newStoreOperations(name, s.info)
 }
 
-func (s *Service) Layers() Layers {
-	return s.layers
-}
-
-func (s *Service) Stores() StoreManager {
-	return s.stores
+func (s *Service) Stores() StoreList {
+	return newStoreList(s.info)
 }

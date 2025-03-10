@@ -1,4 +1,4 @@
-package pkg
+package workspace
 
 type MultiWorkspaceRetrievalWrapper struct {
 	Workspaces MultiWorkspaceRetrieval `json:"workspaces" xml:"workspaces"`

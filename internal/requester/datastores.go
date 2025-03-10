@@ -3,10 +3,11 @@ package requester
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
+	"github.com/canghel3/go-geoserver/datastore"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/internal/datastore"
 	"io"
 	"net/http"
 )
@@ -31,7 +32,7 @@ func (dr *DataStoreRequester) Create(content []byte) error {
 	defer response.Body.Close()
 
 	switch response.StatusCode {
-	case http.StatusCreated, http.StatusOK:
+	case http.StatusCreated:
 		return nil
 	default:
 		body, err := io.ReadAll(response.Body)
@@ -75,6 +76,10 @@ func (dr *DataStoreRequester) Get(name string) (*datastore.DataStoreRetrieval, e
 
 		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
+}
+
+func (dr *DataStoreRequester) Update() error {
+	return errors.New("not implemented")
 }
 
 func (dr *DataStoreRequester) Delete(name string, recurse bool) error {

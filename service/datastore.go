@@ -6,9 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
+	datastore2 "github.com/canghel3/go-geoserver/datastore"
+	"github.com/canghel3/go-geoserver/datastore/postgis"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/internal/datastore"
-	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
 	"io"
 	"net/http"
 	"reflect"
@@ -46,7 +46,7 @@ GetDataStore retrieves a datastore from a Geoserver workspace.
 
 - In case of network issues or JSON parsing problems, it returns the respective Go error and a nil pointer.
 */
-func (gs *GeoserverService) GetDataStore(workspace, store string) (*datastore.DataStoreRetrieval, error) {
+func (gs *GeoserverService) GetDataStore(workspace, store string) (*datastore2.DataStoreRetrieval, error) {
 	err := internal.ValidateStore(store)
 	if err != nil {
 		return nil, err
@@ -73,7 +73,7 @@ func (gs *GeoserverService) GetDataStore(workspace, store string) (*datastore.Da
 
 	switch response.StatusCode {
 	case http.StatusOK:
-		var dts *datastore.DataStoreRetrievalWrapper
+		var dts *datastore2.DataStoreRetrievalWrapper
 		err = json.NewDecoder(response.Body).Decode(&dts)
 		if err != nil {
 			return nil, err
@@ -163,10 +163,10 @@ func (gs *GeoserverService) createDataStore(workspace, store string, connectionP
 		return err
 	}
 
-	data := datastore.GenericDataStoreCreationWrapper{
-		DataStore: datastore.GenericDataStoreCreationModel{
+	data := datastore2.GenericDataStoreCreationWrapper{
+		DataStore: datastore2.GenericDataStoreCreationModel{
 			Name: store,
-			ConnectionParameters: datastore.ConnectionParameters{
+			ConnectionParameters: datastore2.ConnectionParameters{
 				Entry: gs.connectionParamsToEntries(connectionParams),
 			},
 		},
@@ -204,10 +204,10 @@ func (gs *GeoserverService) createDataStore(workspace, store string, connectionP
 	}
 }
 
-func (gs *GeoserverService) connectionParamsToEntries(params map[string]string) []datastore.Entry {
-	entries := make([]datastore.Entry, 0)
+func (gs *GeoserverService) connectionParamsToEntries(params map[string]string) []datastore2.Entry {
+	entries := make([]datastore2.Entry, 0)
 	for k, v := range params {
-		entries = append(entries, datastore.Entry{Key: k, Value: v})
+		entries = append(entries, datastore2.Entry{Key: k, Value: v})
 	}
 
 	return entries

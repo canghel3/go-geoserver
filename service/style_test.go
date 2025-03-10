@@ -3,9 +3,9 @@ package service
 import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
+	"github.com/canghel3/go-geoserver/datastore/postgis"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/internal/datastore/postgis"
-	"github.com/canghel3/go-geoserver/pkg"
+	"github.com/canghel3/go-geoserver/internal/workspace"
 	"gotest.tools/v3/assert"
 	"testing"
 )
@@ -41,7 +41,7 @@ func TestStyle(t *testing.T) {
 			assert.Equal(t, s.Style.Content, string(styleContent))
 			assert.Equal(t, s.Style.Format, "css")
 			assert.Equal(t, s.Style.Name, "init_css_no_workspace")
-			var w *pkg.WorkspaceCreation
+			var w *workspace.WorkspaceCreation
 			assert.Equal(t, s.Style.Workspace, w)
 		})
 
@@ -63,7 +63,7 @@ func TestStyle(t *testing.T) {
 			assert.Equal(t, s.Style.Format, "css")
 			assert.Equal(t, s.Style.Name, "init_css_no_workspace")
 
-			var w *pkg.WorkspaceCreation
+			var w *workspace.WorkspaceCreation
 			assert.Equal(t, s.Style.Workspace, w)
 		})
 
