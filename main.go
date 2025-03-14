@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/canghel3/go-geoserver/workspace"
+	"github.com/canghel3/go-geoserver/pkg/models/wms"
+	"github.com/canghel3/go-geoserver/pkg/services"
 )
 
 func main() {
-	w := workspace.NewService()
-	v := w.Use("sample").Vectors()
-	v.Stores().PostGIS().Create()
-	v.Store("s")
+	geosvc := services.NewService()
+	//geosvc.Workspaces().Use("sample").Vectors().Store()
+	//geosvc.Workspaces().Use().Vectors().Store()
 }

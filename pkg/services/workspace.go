@@ -1,9 +1,9 @@
-package main
+package services
 
 import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
-	"github.com/canghel3/go-geoserver/internal/workspace"
+	"github.com/canghel3/go-geoserver/pkg/models/workspace"
 	"github.com/canghel3/go-geoserver/vector"
 )
 
@@ -49,3 +49,5 @@ func (w *Workspaces) Use(workspace string) *WorkspaceServiceSelector {
 func (ss *WorkspaceServiceSelector) Vectors() *vector.Service {
 	return vector.NewService(ss.info.Clone())
 }
+
+//TODO: add raster service and layers service for handling layers without specifying store

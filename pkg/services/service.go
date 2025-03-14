@@ -1,4 +1,4 @@
-package main
+package services
 
 import (
 	"github.com/canghel3/go-geoserver/internal"
@@ -30,6 +30,10 @@ func NewService(url, username, password, datadir string) *Service {
 
 func (s *Service) Workspaces() *Workspaces {
 	return newWorkspaceOperations(s.info.Clone())
+}
+
+func (s *Service) WMS() *WMS {
+	return newWMS(s.info.Clone())
 }
 
 //TODO: implement wms, wfs and others
