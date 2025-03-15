@@ -35,11 +35,11 @@ type Store struct {
 	Href  string `json:"href"`
 }
 
-type GetFeatureType struct {
-	FeatureType GetFeatureTypeWrapper `json:"featureType"`
+type GetFeatureTypeWrapper struct {
+	FeatureType GetFeatureType `json:"featureType"`
 }
 
-type GetFeatureTypeWrapper struct {
+type GetFeatureType struct {
 	Name                   string           `json:"name"`
 	NativeName             string           `json:"nativeName"`
 	Namespace              Namespace        `json:"namespace"`

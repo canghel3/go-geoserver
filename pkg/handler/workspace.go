@@ -82,8 +82,8 @@ func (ss *WorkspaceServiceSelector) DataStore(name string) *FeatureTypes {
 	return newDataStores(ss.info.Clone()).Use(name)
 }
 
-//func (ss *WorkspaceServiceSelector) FeatureTypes() *FeatureTypes {
-//	return NewFeatureTypes(ss.info.Clone())
-//}
+func (ss *WorkspaceServiceSelector) FeatureTypes() *FeatureTypes {
+	return newFeatureTypes("", ss.info.Clone())
+}
 
 //TODO: add raster service and layers service for handling layers without specifying store

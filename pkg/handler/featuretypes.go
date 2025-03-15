@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
 	"github.com/canghel3/go-geoserver/pkg/featuretypes"
@@ -19,13 +20,18 @@ func newFeatureTypes(store string, info *internal.GeoserverInfo) *FeatureTypes {
 }
 
 func (ft *FeatureTypes) PublishFeature(featureType featuretypes.FeatureType) error {
-	return nil
+	content, err := json.Marshal(featureType)
+	if err != nil {
+		return err
+	}
+
+	return ft.requester.FeatureTypes().Create(ft.store, content)
 }
 
-func (ft *FeatureTypes) GetFeature(name string) (*featuretypes.FeatureType, error) {
-	return nil, nil
+func (ft *FeatureTypes) GetFeature(name string) (*featuretypes.GetFeatureTypeWrapper, error) {
+	return ft.requester.FeatureTypes().Get(ft.store, name)
 }
 
-func (ft *FeatureTypes) DeleteFeature(name string) error {
-	return nil
+func (ft *FeatureTypes) DeleteFeature(name string, recurse bool) error {
+	return ft.requester.FeatureTypes().Delete(ft.store, name, recurse)
 }

@@ -35,5 +35,4 @@ func main() {
 		Title:             "",
 		Store:             featuretypes.Store{},
 	})
-
 }
