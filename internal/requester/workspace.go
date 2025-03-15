@@ -58,11 +58,6 @@ func (wr *WorkspaceRequester) Create(name string, _default bool) error {
 }
 
 func (wr *WorkspaceRequester) Get(name string) (*workspace.SingleWorkspaceRetrievalWrapper, error) {
-	err := internal.ValidateWorkspace(name)
-	if err != nil {
-		return nil, err
-	}
-
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", wr.info.Connection.URL, name)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -117,13 +112,23 @@ func (wr *WorkspaceRequester) GetAll() (*workspace.MultiWorkspaceRetrievalWrappe
 
 	switch response.StatusCode {
 	case http.StatusOK:
-		var workspace workspace.MultiWorkspaceRetrievalWrapper
-		err = json.NewDecoder(response.Body).Decode(&workspace)
+		var wksp workspace.MultiWorkspaceRetrievalWrapper
+		err = json.NewDecoder(response.Body).Decode(&wksp)
 		if err != nil {
+			var noWorkspacesExistResponse workspace.NoWorkspacesExist
+			noWorkspacesExistError := json.NewDecoder(response.Body).Decode(&noWorkspacesExistResponse)
+			if noWorkspacesExistError == nil {
+				return &workspace.MultiWorkspaceRetrievalWrapper{
+					Workspaces: workspace.MultiWorkspaceRetrieval{
+						Workspace: nil,
+					},
+				}, nil
+			}
+
 			return nil, err
 		}
 
-		return &workspace, nil
+		return &wksp, nil
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
@@ -152,6 +157,8 @@ func (wr *WorkspaceRequester) Delete(name string, recurse bool) error {
 	switch response.StatusCode {
 	case http.StatusOK:
 		return nil
+	case http.StatusNotFound:
+		return customerrors.WrapNotFoundError(fmt.Errorf("workspace %s does not exist", name))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {

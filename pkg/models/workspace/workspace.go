@@ -4,6 +4,10 @@ type MultiWorkspaceRetrievalWrapper struct {
 	Workspaces MultiWorkspaceRetrieval `json:"workspaces" xml:"workspaces"`
 }
 
+type NoWorkspacesExist struct {
+	Workspaces string `json:"workspaces" xml:"workspaces"`
+}
+
 type MultiWorkspaceRetrieval struct {
 	Workspace []MultiWorkspace `json:"workspace" xml:"workspace"`
 }

@@ -20,10 +20,20 @@ func newWorkspaceOperations(info *internal.GeoserverInfo) *Workspaces {
 }
 
 func (w *Workspaces) Create(name string, _default bool) error {
+	err := internal.ValidateWorkspace(name)
+	if err != nil {
+		return err
+	}
+
 	return w.requester.Workspaces().Create(name, _default)
 }
 
 func (w *Workspaces) Get(name string) (*workspace.SingleWorkspaceRetrievalWrapper, error) {
+	err := internal.ValidateWorkspace(name)
+	if err != nil {
+		return nil, err
+	}
+
 	return w.requester.Workspaces().Get(name)
 }
 
@@ -32,6 +42,11 @@ func (w *Workspaces) GetAll() (*workspace.MultiWorkspaceRetrievalWrapper, error)
 }
 
 func (w *Workspaces) Delete(name string, recurse bool) error {
+	err := internal.ValidateWorkspace(name)
+	if err != nil {
+		return err
+	}
+
 	return w.requester.Workspaces().Delete(name, recurse)
 }
 

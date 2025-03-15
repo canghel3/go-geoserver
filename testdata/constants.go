@@ -9,5 +9,6 @@ const (
 )
 
 const (
-	WORKSPACE = "PLAYGROUND"
+	WORKSPACE              = "PLAYGROUND"
+	INVALID_WORKSPACE_NAME = "SO_!@#MEINVALIDNAME"
 )
