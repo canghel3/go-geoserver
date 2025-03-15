@@ -139,6 +139,47 @@ func (wr *WorkspaceRequester) GetAll() (*workspace.MultiWorkspaceRetrievalWrappe
 	}
 }
 
+func (wr *WorkspaceRequester) Update(oldName, newName string) error {
+	data := workspace.WorkspaceUpdateWrapper{
+		Workspace: workspace.WorkspaceUpdate{
+			Name: newName,
+		},
+	}
+
+	content, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", wr.info.Connection.URL, oldName)
+	request, err := http.NewRequest(http.MethodPut, target, bytes.NewReader(content))
+	if err != nil {
+		return err
+	}
+
+	request.SetBasicAuth(wr.info.Connection.Credentials.Username, wr.info.Connection.Credentials.Password)
+
+	response, err := wr.info.Client.Do(request)
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
+
+	switch response.StatusCode {
+	case http.StatusOK:
+		return nil
+	case http.StatusNotFound:
+		return customerrors.WrapNotFoundError(fmt.Errorf("workspace %s does not exist", oldName))
+	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return err
+		}
+
+		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+	}
+}
+
 func (wr *WorkspaceRequester) Delete(name string, recurse bool) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s?recurse=%v", wr.info.Connection.URL, name, recurse)
 	request, err := http.NewRequest(http.MethodDelete, target, nil)

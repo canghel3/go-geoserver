@@ -37,3 +37,11 @@ type WorkspaceCreation struct {
 type WorkspaceCreationWrapper struct {
 	Workspace WorkspaceCreation `json:"workspace" xml:"workspace"`
 }
+
+type WorkspaceUpdateWrapper struct {
+	Workspace WorkspaceUpdate `json:"workspace" xml:"workspace"`
+}
+
+type WorkspaceUpdate struct {
+	Name string `json:"name" xml:"name"`
+}

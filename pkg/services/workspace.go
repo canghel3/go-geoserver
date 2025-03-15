@@ -41,6 +41,20 @@ func (w *Workspaces) GetAll() (*workspace.MultiWorkspaceRetrievalWrapper, error)
 	return w.requester.Workspaces().GetAll()
 }
 
+func (w *Workspaces) Update(oldName, newName string) error {
+	err := internal.ValidateWorkspace(oldName)
+	if err != nil {
+		return err
+	}
+
+	err = internal.ValidateWorkspace(newName)
+	if err != nil {
+		return err
+	}
+
+	return w.requester.Workspaces().Update(oldName, newName)
+}
+
 func (w *Workspaces) Delete(name string, recurse bool) error {
 	err := internal.ValidateWorkspace(name)
 	if err != nil {
