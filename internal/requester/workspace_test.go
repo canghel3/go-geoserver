@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
 	"github.com/canghel3/go-geoserver/internal/mocks"
-	"github.com/canghel3/go-geoserver/pkg/models/workspace"
+	"github.com/canghel3/go-geoserver/pkg/workspace"
 	"github.com/canghel3/go-geoserver/testdata"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"

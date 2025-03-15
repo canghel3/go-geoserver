@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/pkg/models/wms"
+	"github.com/canghel3/go-geoserver/pkg/wms"
 	"io"
 	"net/http"
 )
