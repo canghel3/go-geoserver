@@ -1,8 +1,6 @@
 package datastore
 
-import (
-	"github.com/canghel3/go-geoserver/internal/workspace"
-)
+import "github.com/canghel3/go-geoserver/pkg/models/workspace"
 
 type DataStoreRetrievalWrapper struct {
 	DataStore DataStoreRetrieval `json:"dataStore"`

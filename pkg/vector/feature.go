@@ -1,9 +1,9 @@
 package vector
 
 import (
-	"github.com/canghel3/go-geoserver/datastore"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
+	"github.com/canghel3/go-geoserver/pkg/models/datastore"
 )
 
 type StoreOperations struct {

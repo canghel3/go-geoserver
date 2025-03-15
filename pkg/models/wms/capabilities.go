@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 )
 
-type Capabilities struct {
+type Capabilities1_3_0 struct {
 	XMLName    xml.Name   `xml:"WMS_Capabilities" json:"-"`
 	Service    Service    `xml:"Service" json:"service"`
 	Capability Capability `xml:"Capability" json:"capability"`

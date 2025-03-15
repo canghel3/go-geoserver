@@ -14,7 +14,7 @@ type WMSRequester struct {
 	info *internal.GeoserverInfo
 }
 
-func (wmsR *WMSRequester) GetCapabilities(version string) (*wms.Capabilities, error) {
+func (wmsR *WMSRequester) GetCapabilities(version string) (*wms.Capabilities1_3_0, error) {
 	var target = fmt.Sprintf("%s/geoserver/wms?service=wms&version=%s&request=GetCapabilities", wmsR.info.Connection.URL, version)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -33,7 +33,7 @@ func (wmsR *WMSRequester) GetCapabilities(version string) (*wms.Capabilities, er
 
 	switch response.StatusCode {
 	case http.StatusOK:
-		var capabilities wms.Capabilities
+		var capabilities wms.Capabilities1_3_0
 		err = xml.NewDecoder(response.Body).Decode(&capabilities)
 		if err != nil {
 			return nil, err

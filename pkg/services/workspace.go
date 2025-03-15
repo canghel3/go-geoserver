@@ -4,7 +4,7 @@ import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
 	"github.com/canghel3/go-geoserver/pkg/models/workspace"
-	"github.com/canghel3/go-geoserver/vector"
+	"github.com/canghel3/go-geoserver/pkg/vector"
 )
 
 type Workspaces struct {

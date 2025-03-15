@@ -7,14 +7,13 @@ import (
 )
 
 type Service struct {
-	client    *http.Client
 	info      *internal.GeoserverInfo
 	requester *requester.Requester
 }
 
-func NewService(url, username, password, datadir string) *Service {
+func NewGeoserverService(url, username, password, datadir string) *Service {
 	return &Service{
-		requester: requester.NewRequester(&internal.GeoserverInfo{
+		info: &internal.GeoserverInfo{
 			Client: &http.Client{},
 			Connection: internal.GeoserverConnection{
 				URL: url,
@@ -24,7 +23,7 @@ func NewService(url, username, password, datadir string) *Service {
 				},
 			},
 			DataDir: datadir,
-		}),
+		},
 	}
 }
 

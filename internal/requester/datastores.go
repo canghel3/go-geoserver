@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/datastore"
 	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/pkg/models/datastore"
 	"io"
 	"net/http"
 )
