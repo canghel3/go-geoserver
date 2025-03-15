@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/pkg/datastore"
+	"github.com/canghel3/go-geoserver/pkg/datastores"
 	"io"
 	"net/http"
 )
@@ -44,7 +44,7 @@ func (dr *DataStoreRequester) Create(content []byte) error {
 	}
 }
 
-func (dr *DataStoreRequester) Get(name string) (*datastore.DataStoreRetrieval, error) {
+func (dr *DataStoreRequester) Get(name string) (*datastores.DataStoreRetrieval, error) {
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", dr.info.Connection.URL, dr.info.Workspace, name), nil)
 	if err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ func (dr *DataStoreRequester) Get(name string) (*datastore.DataStoreRetrieval, e
 
 	switch response.StatusCode {
 	case http.StatusOK:
-		var dts *datastore.DataStoreRetrievalWrapper
+		var dts *datastores.DataStoreRetrievalWrapper
 		err = json.NewDecoder(response.Body).Decode(&dts)
 		if err != nil {
 			return nil, err

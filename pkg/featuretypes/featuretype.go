@@ -1,4 +1,4 @@
-package featuretype
+package featuretypes
 
 import (
 	"github.com/canghel3/go-geoserver/internal/misc"

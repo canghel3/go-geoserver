@@ -28,10 +28,12 @@ func New(url, username, password, datadir string) *GeoserverClient {
 	}
 }
 
+// Workspaces displays available actions inside a workspace.
 func (s *GeoserverClient) Workspaces() *handler.Workspaces {
 	return handler.NewWorkspaceHandler(s.info.Clone())
 }
 
+// Workspace is shorthand for Workspaces().Use(name)
 func (s *GeoserverClient) Workspace(name string) *handler.WorkspaceServiceSelector {
 	return handler.NewWorkspaceHandler(s.info.Clone()).Use(name)
 }

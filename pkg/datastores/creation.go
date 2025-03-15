@@ -1,4 +1,4 @@
-package datastore
+package datastores
 
 type GenericDataStoreCreationWrapper struct {
 	DataStore GenericDataStoreCreationModel `json:"dataStore"`

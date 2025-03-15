@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
-	"github.com/canghel3/go-geoserver/pkg/datastore"
-	"github.com/canghel3/go-geoserver/pkg/datastore/postgis"
+	"github.com/canghel3/go-geoserver/pkg/datastores"
+	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
 )
 
 type storageParams map[string]string
 
-func NewDataStores(info *internal.GeoserverInfo) *DataStores {
+func newDataStores(info *internal.GeoserverInfo) *DataStores {
 	r := requester.NewRequester(info)
 	return &DataStores{
 		info:      info,
@@ -27,11 +27,15 @@ type DataStores struct {
 	requester *requester.Requester
 }
 
+func (ds *DataStores) Use(name string) *FeatureTypes {
+	return newFeatureTypes(name, ds.info.Clone())
+}
+
 func (ds *DataStores) Create() DataStoreList {
 	return DataStoreList{requester: ds.requester}
 }
 
-func (ds *DataStores) Get(name string) (*datastore.DataStoreRetrieval, error) {
+func (ds *DataStores) Get(name string) (*datastores.DataStoreRetrieval, error) {
 	return ds.requester.DataStores().Get(name)
 }
 
@@ -49,10 +53,10 @@ func (dsl DataStoreList) PostGIS(name string, connection postgis.ConnectionParam
 		"dbtype":   "postgis",
 	}
 
-	data := datastore.GenericDataStoreCreationWrapper{
-		DataStore: datastore.GenericDataStoreCreationModel{
+	data := datastores.GenericDataStoreCreationWrapper{
+		DataStore: datastores.GenericDataStoreCreationModel{
 			Name: name,
-			ConnectionParameters: datastore.ConnectionParameters{
+			ConnectionParameters: datastores.ConnectionParameters{
 				Entry: cp.toDatastoreEntries(),
 			},
 		},
@@ -66,10 +70,10 @@ func (dsl DataStoreList) PostGIS(name string, connection postgis.ConnectionParam
 	return dsl.requester.DataStores().Create(content)
 }
 
-func (params storageParams) toDatastoreEntries() []datastore.Entry {
-	entries := make([]datastore.Entry, 0)
+func (params storageParams) toDatastoreEntries() []datastores.Entry {
+	entries := make([]datastores.Entry, 0)
 	for k, v := range params {
-		entries = append(entries, datastore.Entry{Key: k, Value: v})
+		entries = append(entries, datastores.Entry{Key: k, Value: v})
 	}
 
 	return entries
