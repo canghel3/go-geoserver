@@ -3,10 +3,11 @@ package requester
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
+	"github.com/canghel3/go-geoserver/featuretypes"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/pkg/featuretypes"
 	"io"
 	"net/http"
 )
@@ -126,4 +127,42 @@ func (ftr *FeatureTypeRequester) Get(store, feature string) (*featuretypes.GetFe
 
 		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
+}
+
+func (ftr *FeatureTypeRequester) Update(store, name string, content []byte) error {
+	var target string
+	if len(store) == 0 {
+		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/featuretypes/%s", ftr.info.Connection.URL, ftr.info.Workspace, name)
+	} else {
+		target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes/%s", ftr.info.Connection.URL, ftr.info.Workspace, store, name)
+	}
+
+	request, err := http.NewRequest(http.MethodPut, target, bytes.NewReader(content))
+	if err != nil {
+		return err
+	}
+
+	request.SetBasicAuth(ftr.info.Connection.Credentials.Username, ftr.info.Connection.Credentials.Password)
+	request.Header.Add("Accept", "application/json")
+
+	response, err := ftr.info.Client.Do(request)
+	if err != nil {
+		return err
+	}
+
+	switch response.StatusCode {
+	case http.StatusCreated:
+		return nil
+	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return err
+		}
+
+		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+	}
+}
+
+func (ftr *FeatureTypeRequester) Reset(name string) error {
+	return errors.New("not implemented")
 }

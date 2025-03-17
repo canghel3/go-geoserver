@@ -19,4 +19,4 @@ services:
     command: run
     volumes:
       - /opt/geoserver/data:/opt/geoserver/data
-    restart: on-failure
+    restart: always

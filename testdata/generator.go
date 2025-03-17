@@ -13,6 +13,6 @@ func GeoserverInfo(client internal.HTTPClient) *internal.GeoserverInfo {
 			},
 		},
 		DataDir:   GEOSERVER_DATADIR,
-		Workspace: GEOSERVER_WORKSPACE,
+		Workspace: WORKSPACE,
 	}
 }

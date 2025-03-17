@@ -1,9 +1,9 @@
 package client
 
 import (
+	"github.com/canghel3/go-geoserver/handler"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
-	"github.com/canghel3/go-geoserver/pkg/handler"
 	"net/http"
 )
 

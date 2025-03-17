@@ -1,14 +1,14 @@
 package main
 
 import (
+	"github.com/canghel3/go-geoserver/client"
+	"github.com/canghel3/go-geoserver/datastores/postgis"
+	"github.com/canghel3/go-geoserver/featuretypes"
 	"github.com/canghel3/go-geoserver/internal/misc"
-	"github.com/canghel3/go-geoserver/pkg/client"
-	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
-	"github.com/canghel3/go-geoserver/pkg/featuretypes"
 )
 
 func main() {
-	geoclient := client.New()
+	geoclient := client.New("", "", "", "")
 	sampleWksp := geoclient.Workspaces().Use("sample")
 	geoclient.Workspace("").DataStores()
 	//sampleWksp.DataStores().Get()

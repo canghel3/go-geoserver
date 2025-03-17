@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/customerrors"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/pkg/workspace"
+	"github.com/canghel3/go-geoserver/workspace"
 	"io"
 	"net/http"
 )
@@ -110,13 +110,18 @@ func (wr *WorkspaceRequester) GetAll() (*workspace.MultiWorkspaceRetrievalWrappe
 		return nil, err
 	}
 
+	body, err := io.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+
+	}
 	switch response.StatusCode {
 	case http.StatusOK:
 		var wksp workspace.MultiWorkspaceRetrievalWrapper
-		err = json.NewDecoder(response.Body).Decode(&wksp)
+		err = json.Unmarshal(body, &wksp)
 		if err != nil {
 			var noWorkspacesExistResponse workspace.NoWorkspacesExist
-			noWorkspacesExistError := json.NewDecoder(response.Body).Decode(&noWorkspacesExistResponse)
+			noWorkspacesExistError := json.Unmarshal(body, &noWorkspacesExistResponse)
 			if noWorkspacesExistError == nil {
 				return &workspace.MultiWorkspaceRetrievalWrapper{
 					Workspaces: workspace.MultiWorkspaceRetrieval{
@@ -158,6 +163,7 @@ func (wr *WorkspaceRequester) Update(oldName, newName string) error {
 	}
 
 	request.SetBasicAuth(wr.info.Connection.Credentials.Username, wr.info.Connection.Credentials.Password)
+	request.Header.Add("Content-Type", "application/json")
 
 	response, err := wr.info.Client.Do(request)
 	if err != nil {

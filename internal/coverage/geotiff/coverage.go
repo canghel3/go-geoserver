@@ -2,7 +2,7 @@ package geotiff
 
 import (
 	"github.com/canghel3/go-geoserver/internal/misc"
-	"github.com/canghel3/go-geoserver/pkg/workspace"
+	"github.com/canghel3/go-geoserver/workspace"
 )
 
 type CoverageWrapper struct {

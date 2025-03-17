@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
-	"github.com/canghel3/go-geoserver/pkg/workspace"
+	"github.com/canghel3/go-geoserver/workspace"
 )
 
 type Workspaces struct {
