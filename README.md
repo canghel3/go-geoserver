@@ -1,21 +1,17 @@
-### This library is meant to be a wrapper for GeoServer REST API
+### GeoServer Go Client
 
-```go
-go get github.com/canghel3/go-geoserver
-```
+### Overview
 
-Define a geoserver service instance and use it to manage GeoServer resources (CRUD).
+GeoServer Go Client is a Go library designed to simplify interactions with GeoServer. It provides an easy-to-use API wrapper for managing workspaces, layers, styles, and other GeoServer resources through its REST and WMS services.
 
-```go
-package main
+### Features
 
-import "github.com/canghel3/go-geoserver/service"
+✅ Manage Workspaces, Stores, and Layers
 
-func main() {
-	geosvc := service.NewGeoserverService("http://localhost:8080", "admin", "geoserver")
-	
-	geosvc.CreateWorkspace("my first workspace")
-	geosvc.CreateCoverageStore("my first workspace", "coveragestore", "/opt/geoserver/data/myfile.tif", "GeoTIFF")
-	geosvc.CreateCoverage("coverage", "coveragestore", "layer", "EPSG:3857", [4]float64{0, 0, 0, 0})
-}
-```
+✅ Interact with WMS, WFS, and WCS services
+
+✅ CRUD operations for GeoServer resources
+
+✅ Supports authentication
+
+✅ Error handling for API responses
