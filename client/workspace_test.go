@@ -13,6 +13,8 @@ import (
 func TestWorkspaceClient_Create(t *testing.T) {
 	geoserverClient := New(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
 
+	geoserverClient.Workspaces().Delete(testdata.WORKSPACE, true)
+
 	t.Run("201 CREATED", func(t *testing.T) {
 		err := geoserverClient.Workspaces().Create(testdata.WORKSPACE, false)
 		assert.NoError(t, err)
@@ -33,8 +35,7 @@ func TestWorkspaceClient_Get(t *testing.T) {
 	geoserverClient := New(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
 
 	//create required resources
-	err := geoserverClient.Workspaces().Create(testdata.WORKSPACE, false)
-	assert.NoError(t, err)
+	geoserverClient.Workspaces().Create(testdata.WORKSPACE, false)
 
 	t.Run("200 OK", func(t *testing.T) {
 		wksp, err := geoserverClient.Workspaces().Get(testdata.WORKSPACE)
@@ -51,7 +52,7 @@ func TestWorkspaceClient_Get(t *testing.T) {
 	})
 
 	//revert changes made in the test
-	err = geoserverClient.Workspaces().Delete(testdata.WORKSPACE, false)
+	err := geoserverClient.Workspaces().Delete(testdata.WORKSPACE, false)
 	assert.NoError(t, err)
 }
 
@@ -59,9 +60,7 @@ func TestWorkspaceClient_Update(t *testing.T) {
 	geoserverClient := New(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
 
 	//create required resources
-	err := geoserverClient.Workspaces().Create(testdata.WORKSPACE, false)
-	assert.NoError(t, err)
-
+	geoserverClient.Workspaces().Create(testdata.WORKSPACE, false)
 	var toRemove string
 
 	t.Run("200 OK", func(t *testing.T) {
@@ -79,7 +78,7 @@ func TestWorkspaceClient_Update(t *testing.T) {
 	})
 
 	//revert changes made in the test
-	err = geoserverClient.Workspaces().Delete(toRemove, false)
+	err := geoserverClient.Workspaces().Delete(toRemove, false)
 	assert.NoError(t, err)
 }
 
@@ -87,8 +86,7 @@ func TestWorkspaceClient_Delete(t *testing.T) {
 	geoserverClient := New(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
 
 	//create required resources
-	err := geoserverClient.Workspaces().Create(testdata.WORKSPACE, false)
-	assert.NoError(t, err)
+	geoserverClient.Workspaces().Create(testdata.WORKSPACE, false)
 
 	t.Run("200 OK", func(t *testing.T) {
 		err := geoserverClient.Workspaces().Delete(testdata.WORKSPACE, false)

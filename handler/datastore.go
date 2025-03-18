@@ -2,13 +2,12 @@ package handler
 
 import (
 	"encoding/json"
-	datastores2 "github.com/canghel3/go-geoserver/datastores"
+	"github.com/canghel3/go-geoserver/datastores"
 	"github.com/canghel3/go-geoserver/datastores/postgis"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
+	"github.com/canghel3/go-geoserver/options"
 )
-
-type storageParams map[string]string
 
 func newDataStores(info *internal.GeoserverInfo) *DataStores {
 	r := requester.NewRequester(info)
@@ -35,7 +34,7 @@ func (ds *DataStores) Create() DataStoreList {
 	return DataStoreList{requester: ds.requester}
 }
 
-func (ds *DataStores) Get(name string) (*datastores2.DataStoreRetrieval, error) {
+func (ds *DataStores) Get(name string) (*datastores.DataStoreRetrieval, error) {
 	return ds.requester.DataStores().Get(name)
 }
 
@@ -43,8 +42,8 @@ func (ds *DataStores) Delete(name string, recurse bool) error {
 	return ds.requester.DataStores().Delete(name, recurse)
 }
 
-func (dsl DataStoreList) PostGIS(name string, connection postgis.ConnectionParams) error {
-	cp := storageParams{
+func (dsl DataStoreList) PostGIS(name string, connection postgis.ConnectionParams, options ...options.PostGISOptionFunc) error {
+	cp := internal.ConnectionParams{
 		"host":     connection.Host,
 		"database": connection.Database,
 		"user":     connection.User,
@@ -53,11 +52,15 @@ func (dsl DataStoreList) PostGIS(name string, connection postgis.ConnectionParam
 		"dbtype":   "postgis",
 	}
 
-	data := datastores2.GenericDataStoreCreationWrapper{
-		DataStore: datastores2.GenericDataStoreCreationModel{
+	for _, option := range options {
+		option(&cp)
+	}
+
+	data := datastores.GenericDataStoreCreationWrapper{
+		DataStore: datastores.GenericDataStoreCreationModel{
 			Name: name,
-			ConnectionParameters: datastores2.ConnectionParameters{
-				Entry: cp.toDatastoreEntries(),
+			ConnectionParameters: datastores.ConnectionParameters{
+				Entry: cp.ToDatastoreEntries(),
 			},
 		},
 	}
@@ -68,13 +71,4 @@ func (dsl DataStoreList) PostGIS(name string, connection postgis.ConnectionParam
 	}
 
 	return dsl.requester.DataStores().Create(content)
-}
-
-func (params storageParams) toDatastoreEntries() []datastores2.Entry {
-	entries := make([]datastores2.Entry, 0)
-	for k, v := range params {
-		entries = append(entries, datastores2.Entry{Key: k, Value: v})
-	}
-
-	return entries
 }
