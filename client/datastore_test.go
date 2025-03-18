@@ -3,6 +3,8 @@
 package client
 
 import (
+	"fmt"
+	"github.com/canghel3/go-geoserver/customerrors"
 	"github.com/canghel3/go-geoserver/datastores/postgis"
 	"github.com/canghel3/go-geoserver/options"
 	"github.com/canghel3/go-geoserver/testdata"
@@ -50,8 +52,22 @@ func TestDataStoreClient_Create(t *testing.T) {
 					assert.Equal(t, "true", v)
 				})
 			})
-			//geoserverClient.Workspace(testdata.WORKSPACE).DataStore(testdata.DATASTORE_POSTGIS).PublishFeature()
 		})
+	})
+
+	t.Run("500 INTERNAL SERVER ERROR", func(t *testing.T) {
+		err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create().PostGIS(testdata.DATASTORE_POSTGIS, postgis.ConnectionParams{
+			Host:     testdata.POSTGIS_HOST,
+			Database: testdata.POSTGIS_DB,
+			User:     testdata.POSTGIS_USERNAME,
+			Password: testdata.POSTGIS_PASSWORD,
+			Port:     testdata.POSTGIS_PORT,
+			SSL:      testdata.POSTGIS_SSL,
+		})
+		assert.Error(t, err)
+		assert.IsType(t, err, &customerrors.GeoserverError{})
+		//yes, geoserver actually responds with 500 for a conflict error
+		assert.ErrorContains(t, err, fmt.Sprintf(`Store '%s' already exists in workspace '%s'`, testdata.DATASTORE_POSTGIS, testdata.WORKSPACE))
 	})
 
 	err := geoserverClient.Workspaces().Delete(testdata.WORKSPACE, true)
