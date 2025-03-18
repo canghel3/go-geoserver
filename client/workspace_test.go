@@ -62,8 +62,11 @@ func TestWorkspaceClient_Update(t *testing.T) {
 	err := geoserverClient.Workspaces().Create(testdata.WORKSPACE, false)
 	assert.NoError(t, err)
 
+	var toRemove string
+
 	t.Run("200 OK", func(t *testing.T) {
 		var suffix = "_UPDATED"
+		toRemove = testdata.WORKSPACE + suffix
 		err := geoserverClient.Workspaces().Update(testdata.WORKSPACE, testdata.WORKSPACE+suffix)
 		assert.NoError(t, err)
 	})
@@ -76,7 +79,7 @@ func TestWorkspaceClient_Update(t *testing.T) {
 	})
 
 	//revert changes made in the test
-	err = geoserverClient.Workspaces().Delete(testdata.WORKSPACE, false)
+	err = geoserverClient.Workspaces().Delete(toRemove, false)
 	assert.NoError(t, err)
 }
 
@@ -97,10 +100,6 @@ func TestWorkspaceClient_Delete(t *testing.T) {
 		assert.EqualError(t, err, fmt.Sprintf("workspace %s does not exist", testdata.WORKSPACE))
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 	})
-
-	//revert changes made in the test
-	err = geoserverClient.Workspaces().Delete(testdata.WORKSPACE, false)
-	assert.NoError(t, err)
 }
 
 func TestWorkspaceClient_GetAll(t *testing.T) {
