@@ -68,6 +68,8 @@ func (dr *DataStoreRequester) Get(name string) (*datastores.DataStoreRetrieval, 
 		}
 
 		return &dts.DataStore, nil
+	case http.StatusNotFound:
+		return nil, customerrors.WrapNotFoundError(fmt.Errorf("datastore %s not found", name))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {

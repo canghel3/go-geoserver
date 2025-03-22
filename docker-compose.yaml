@@ -7,10 +7,23 @@ services:
       - POSTGRES_USER=geoserver
       - POSTGRES_PASSWORD=geoserver
       - POSTGRES_DB=vectors
+  geoserver-for-tests:
+    image: kartoza/geoserver:2.22.2
+    ports:
+      - "1112:8080"
+    environment:
+      - GEOSERVER_ADMIN_USER=admin
+      - GEOSERVER_ADMIN_PASSWORD=geoserver
+      - GEOSERVER_DATA_DIR=/opt/geoserver/data
+      - STABLE_EXTENSIONS=css-plugin
+    command: run
+    volumes:
+      - /opt/geoserver-for-tests/data:/opt/geoserver/data
+    restart: always
   geoserver:
     image: kartoza/geoserver:2.22.2
     ports:
-      - "8080:8080"
+      - "1111:8080"
     environment:
       - GEOSERVER_ADMIN_USER=admin
       - GEOSERVER_ADMIN_PASSWORD=geoserver

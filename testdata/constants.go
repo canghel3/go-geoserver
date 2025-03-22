@@ -1,10 +1,10 @@
 package testdata
 
 const (
-	GEOSERVER_URL      = "http://localhost:8080"
+	GEOSERVER_URL      = "http://localhost:1112"
 	GEOSERVER_USERNAME = "admin"
 	GEOSERVER_PASSWORD = "geoserver"
-	GEOSERVER_DATADIR  = ""
+	GEOSERVER_DATADIR  = "/opt/geoserver-for-tests/data"
 
 	WORKSPACE              = "PLAYGROUND"
 	INVALID_WORKSPACE_NAME = "SO_!@#MEINVALIDNAME"

@@ -135,11 +135,6 @@ func (wr *WorkspaceRequester) GetAll() (*workspace.MultiWorkspaceRetrievalWrappe
 
 		return &wksp, nil
 	default:
-		body, err := io.ReadAll(response.Body)
-		if err != nil {
-			return nil, err
-		}
-
 		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }

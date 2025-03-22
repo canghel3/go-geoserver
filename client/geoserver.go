@@ -3,13 +3,11 @@ package client
 import (
 	"github.com/canghel3/go-geoserver/handler"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/internal/requester"
 	"net/http"
 )
 
 type GeoserverClient struct {
-	info      *internal.GeoserverInfo
-	requester *requester.Requester
+	info *internal.GeoserverInfo
 }
 
 func New(url, username, password, datadir string) *GeoserverClient {

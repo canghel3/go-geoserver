@@ -73,3 +73,40 @@ func TestDataStoreClient_Create(t *testing.T) {
 	err := geoserverClient.Workspaces().Delete(testdata.WORKSPACE, true)
 	assert.NoError(t, err)
 }
+
+func TestDataStoreClient_Get(t *testing.T) {
+	geoserverClient := New(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
+
+	//create workspace
+	geoserverClient.Workspaces().Create(testdata.WORKSPACE, true)
+	err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create().PostGIS(testdata.DATASTORE_POSTGIS, postgis.ConnectionParams{
+		Host:     testdata.POSTGIS_HOST,
+		Database: testdata.POSTGIS_DB,
+		User:     testdata.POSTGIS_USERNAME,
+		Password: testdata.POSTGIS_PASSWORD,
+		Port:     testdata.POSTGIS_PORT,
+		SSL:      testdata.POSTGIS_SSL,
+	})
+	assert.NoError(t, err)
+
+	t.Run("200 OK", func(t *testing.T) {
+		t.Run("POSTGIS", func(t *testing.T) {
+			ds, err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Get(testdata.DATASTORE_POSTGIS)
+			assert.NoError(t, err)
+			assert.NotNil(t, ds)
+			assert.Equal(t, ds.Name, testdata.DATASTORE_POSTGIS)
+			assert.Equal(t, ds.Workspace.Name, testdata.WORKSPACE)
+		})
+	})
+
+	t.Run("404 NOT FOUND", func(t *testing.T) {
+		ds, err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Get(testdata.DATASTORE_POSTGIS + "_DOES_NOT_EXIST")
+		assert.Error(t, err)
+		assert.Nil(t, ds)
+		assert.IsType(t, err, &customerrors.NotFoundError{})
+		assert.EqualError(t, err, fmt.Sprintf("datastore %s not found", testdata.DATASTORE_POSTGIS+"_DOES_NOT_EXIST"))
+	})
+
+	err = geoserverClient.Workspaces().Delete(testdata.WORKSPACE, true)
+	assert.NoError(t, err)
+}
