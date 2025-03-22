@@ -85,6 +85,7 @@ func (dr *DataStoreRequester) Get(name string) (*datastores.DataStoreRetrieval, 
 	}
 }
 
+// TODO: implement
 func (dr *DataStoreRequester) Update() error {
 	return errors.New("not implemented")
 }
@@ -116,4 +117,8 @@ func (dr *DataStoreRequester) Delete(name string, recurse bool) error {
 
 		return customerrors.NewGeoserverError(fmt.Sprintf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
+}
+
+func (dr *DataStoreRequester) Reset(name string) error {
+	return errors.New("not implemented")
 }

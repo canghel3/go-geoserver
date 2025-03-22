@@ -63,26 +63,26 @@ func (w *Workspaces) Delete(name string, recurse bool) error {
 	return w.requester.Workspaces().Delete(name, recurse)
 }
 
-type WorkspaceServiceSelector struct {
+type Workspace struct {
 	info *internal.GeoserverInfo
 }
 
-func (w *Workspaces) Use(workspace string) *WorkspaceServiceSelector {
+func (w *Workspaces) Use(workspace string) *Workspace {
 	w.info.Workspace = workspace
-	return &WorkspaceServiceSelector{
+	return &Workspace{
 		info: w.info,
 	}
 }
 
-func (ss *WorkspaceServiceSelector) DataStores() *DataStores {
+func (ss *Workspace) DataStores() *DataStores {
 	return newDataStores(ss.info.Clone())
 }
 
-func (ss *WorkspaceServiceSelector) DataStore(name string) *FeatureTypes {
+func (ss *Workspace) DataStore(name string) *FeatureTypes {
 	return newDataStores(ss.info.Clone()).Use(name)
 }
 
-func (ss *WorkspaceServiceSelector) FeatureTypes() *FeatureTypes {
+func (ss *Workspace) FeatureTypes() *FeatureTypes {
 	return newFeatureTypes("", ss.info.Clone())
 }
 

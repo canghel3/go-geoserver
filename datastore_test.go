@@ -1,6 +1,6 @@
 //go:build integration
 
-package client
+package main
 
 import (
 	"fmt"
@@ -12,8 +12,8 @@ import (
 	"testing"
 )
 
-func TestDataStoreClient_Create(t *testing.T) {
-	geoserverClient := New(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
+func TestDataStoreIntegration_Create(t *testing.T) {
+	geoserverClient := NewGeoserverClient(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
 
 	//create workspace
 	geoserverClient.Workspaces().Create(testdata.WORKSPACE, true)
@@ -37,10 +37,26 @@ func TestDataStoreClient_Create(t *testing.T) {
 				assert.NoError(t, err)
 				assert.NotNil(t, ds)
 				assert.Equal(t, ds.Description, description)
+				assert.Equal(t, ds.DisableConnectionOnFailure, false)
 			})
 
 			t.Run("DISABLE CONNECTION ON FAILURE", func(t *testing.T) {
+				var name = testdata.DATASTORE_POSTGIS + "WITH_DISABLE_CONNECTION_ON_FAILURE"
+				err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create(options.Datastore.DisableConnectionOnFailure(true)).PostGIS(name, postgis.ConnectionParams{
+					Host:     testdata.POSTGIS_HOST,
+					Database: testdata.POSTGIS_DB,
+					User:     testdata.POSTGIS_USERNAME,
+					Password: testdata.POSTGIS_PASSWORD,
+					Port:     testdata.POSTGIS_PORT,
+					SSL:      testdata.POSTGIS_SSL,
+				})
+				assert.NoError(t, err)
 
+				ds, err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Get(name)
+				assert.NoError(t, err)
+				assert.NotNil(t, ds)
+				assert.Equal(t, ds.Description, "")
+				assert.Equal(t, ds.DisableConnectionOnFailure, true)
 			})
 		})
 
@@ -56,8 +72,6 @@ func TestDataStoreClient_Create(t *testing.T) {
 			assert.NoError(t, err)
 
 			t.Run("WITH OPTIONS", func(t *testing.T) {
-				//TODO: test with description and disable on connection failure options
-
 				t.Run("VALIDATE CONNECTIONS", func(t *testing.T) {
 					var suffix = "_WITH_VALIDATE_CONNECTIONS"
 					err = geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create().PostGIS(testdata.DATASTORE_POSTGIS+suffix, postgis.ConnectionParams{
@@ -103,8 +117,8 @@ func TestDataStoreClient_Create(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestDataStoreClient_Get(t *testing.T) {
-	geoserverClient := New(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
+func TestDataStoreIntegration_Get(t *testing.T) {
+	geoserverClient := NewGeoserverClient(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
 
 	//create workspace
 	geoserverClient.Workspaces().Create(testdata.WORKSPACE, true)
@@ -140,12 +154,12 @@ func TestDataStoreClient_Get(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestDataStoreClient_GetAll(t *testing.T) {
+func TestDataStoreIntegration_GetAll(t *testing.T) {
 	//TODO: implement and test functionality
 }
 
-func TestDataStoreClient_Delete(t *testing.T) {
-	geoserverClient := New(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
+func TestDataStoreIntegration_Delete(t *testing.T) {
+	geoserverClient := NewGeoserverClient(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
 
 	//create workspace
 	geoserverClient.Workspaces().Create(testdata.WORKSPACE, true)
@@ -182,4 +196,15 @@ func TestDataStoreClient_Delete(t *testing.T) {
 	t.Run("500 INTERNAL SERVER ERROR", func(t *testing.T) {
 		//TODO: try to delete store that contains a feature inside with recurse set to false
 	})
+
+	err = geoserverClient.Workspaces().Delete(testdata.WORKSPACE, true)
+	assert.NoError(t, err)
+}
+
+func TestDataStoreIntegration_Update(t *testing.T) {
+	//TODO: implement
+}
+
+func TestDataStoreIntegration_Reset(t *testing.T) {
+	//TODO: implement
 }

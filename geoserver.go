@@ -1,4 +1,4 @@
-package client
+package main
 
 import (
 	"github.com/canghel3/go-geoserver/handler"
@@ -10,7 +10,7 @@ type GeoserverClient struct {
 	info *internal.GeoserverInfo
 }
 
-func New(url, username, password, datadir string) *GeoserverClient {
+func NewGeoserverClient(url, username, password, datadir string) *GeoserverClient {
 	return &GeoserverClient{
 		info: &internal.GeoserverInfo{
 			Client: &http.Client{},
@@ -32,7 +32,7 @@ func (s *GeoserverClient) Workspaces() *handler.Workspaces {
 }
 
 // Workspace is shorthand for Workspaces().Use(name)
-func (s *GeoserverClient) Workspace(name string) *handler.WorkspaceServiceSelector {
+func (s *GeoserverClient) Workspace(name string) *handler.Workspace {
 	return handler.NewWorkspaceHandler(s.info.Clone()).Use(name)
 }
 

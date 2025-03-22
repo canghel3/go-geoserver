@@ -27,6 +27,11 @@ type DataStores struct {
 	requester *requester.Requester
 }
 
+// Reset the caches related to the specified datastore.
+func (ds *DataStores) Reset(name string) error {
+	return ds.requester.DataStores().Reset(name)
+}
+
 func (ds *DataStores) Use(name string) *FeatureTypes {
 	return newFeatureTypes(name, ds.info.Clone())
 }
