@@ -19,6 +19,31 @@ func TestDataStoreClient_Create(t *testing.T) {
 	geoserverClient.Workspaces().Create(testdata.WORKSPACE, true)
 
 	t.Run("200 OK", func(t *testing.T) {
+		t.Run("GENERIC OPTIONS", func(t *testing.T) {
+			t.Run("DESCRIPTION", func(t *testing.T) {
+				var description = "generic description"
+				var name = testdata.DATASTORE_POSTGIS + "WITH_DESCRIPTION"
+				err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create(options.Datastore.Description(description)).PostGIS(name, postgis.ConnectionParams{
+					Host:     testdata.POSTGIS_HOST,
+					Database: testdata.POSTGIS_DB,
+					User:     testdata.POSTGIS_USERNAME,
+					Password: testdata.POSTGIS_PASSWORD,
+					Port:     testdata.POSTGIS_PORT,
+					SSL:      testdata.POSTGIS_SSL,
+				})
+				assert.NoError(t, err)
+
+				ds, err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Get(name)
+				assert.NoError(t, err)
+				assert.NotNil(t, ds)
+				assert.Equal(t, ds.Description, description)
+			})
+
+			t.Run("DISABLE CONNECTION ON FAILURE", func(t *testing.T) {
+
+			})
+		})
+
 		t.Run("POSTGIS", func(t *testing.T) {
 			err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create().PostGIS(testdata.DATASTORE_POSTGIS, postgis.ConnectionParams{
 				Host:     testdata.POSTGIS_HOST,
@@ -56,6 +81,8 @@ func TestDataStoreClient_Create(t *testing.T) {
 			})
 		})
 	})
+
+	//NOTE: there is no 409 test because geoserver responds with 500 for a conflict error (:
 
 	t.Run("500 INTERNAL SERVER ERROR", func(t *testing.T) {
 		err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create().PostGIS(testdata.DATASTORE_POSTGIS, postgis.ConnectionParams{
@@ -134,7 +161,25 @@ func TestDataStoreClient_Delete(t *testing.T) {
 
 	t.Run("200 OK", func(t *testing.T) {
 		t.Run("POSTGIS", func(t *testing.T) {
-			err = geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Delete(testdata.DATASTORE_POSTGIS, false)
+			err = geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Delete(testdata.DATASTORE_POSTGIS, true)
+			assert.NoError(t, err)
+
+			//try to retrieve the workspace
+			ds, err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Get(testdata.DATASTORE_POSTGIS)
+			assert.Nil(t, ds)
+			assert.Error(t, err)
+			assert.IsType(t, err, &customerrors.NotFoundError{})
 		})
+	})
+
+	t.Run("404 NOT FOUND", func(t *testing.T) {
+		err = geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Delete(testdata.DATASTORE_POSTGIS, true)
+		assert.Error(t, err)
+		assert.IsType(t, err, &customerrors.NotFoundError{})
+		assert.EqualError(t, err, fmt.Sprintf("datastore %s not found", testdata.DATASTORE_POSTGIS))
+	})
+
+	t.Run("500 INTERNAL SERVER ERROR", func(t *testing.T) {
+		//TODO: try to delete store that contains a feature inside with recurse set to false
 	})
 }

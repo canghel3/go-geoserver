@@ -106,6 +106,8 @@ func (dr *DataStoreRequester) Delete(name string, recurse bool) error {
 	switch response.StatusCode {
 	case http.StatusOK:
 		return nil
+	case http.StatusNotFound:
+		return customerrors.WrapNotFoundError(fmt.Errorf("datastore %s not found", name))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
