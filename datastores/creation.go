@@ -5,8 +5,10 @@ type GenericDataStoreCreationWrapper struct {
 }
 
 type GenericDataStoreCreationModel struct {
-	Name                 string               `json:"name"`
-	ConnectionParameters ConnectionParameters `json:"connectionParameters"`
+	Name                       string               `json:"name"`
+	Description                string               `json:"description"`
+	DisableOnConnectionFailure bool                 `json:"disableOnConnFailure"`
+	ConnectionParameters       ConnectionParameters `json:"connectionParameters"`
 }
 
 type ConnectionParameters struct {

@@ -16,3 +16,6 @@ type DataStoreRetrieval struct {
 	Default              bool                     `json:"_default,omitempty"`
 	FeatureTypes         string                   `json:"featureTypes,omitempty"`
 }
+
+type AllDataStoreRetrievalWrapper struct {
+}

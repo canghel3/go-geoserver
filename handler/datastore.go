@@ -18,6 +18,7 @@ func newDataStores(info *internal.GeoserverInfo) *DataStores {
 }
 
 type DataStoreList struct {
+	options   *internal.DatastoreOptions
 	requester *requester.Requester
 }
 
@@ -30,8 +31,17 @@ func (ds *DataStores) Use(name string) *FeatureTypes {
 	return newFeatureTypes(name, ds.info.Clone())
 }
 
-func (ds *DataStores) Create() DataStoreList {
-	return DataStoreList{requester: ds.requester}
+func (ds *DataStores) Create(options ...options.DatastoreOptionFunc) DataStoreList {
+	dsl := DataStoreList{
+		requester: ds.requester,
+		options:   &internal.DatastoreOptions{},
+	}
+
+	for _, option := range options {
+		option(dsl.options)
+	}
+
+	return dsl
 }
 
 func (ds *DataStores) Get(name string) (*datastores.DataStoreRetrieval, error) {
@@ -42,13 +52,13 @@ func (ds *DataStores) Delete(name string, recurse bool) error {
 	return ds.requester.DataStores().Delete(name, recurse)
 }
 
-func (dsl DataStoreList) PostGIS(name string, connection postgis.ConnectionParams, options ...options.PostGISOptionFunc) error {
+func (dsl DataStoreList) PostGIS(name string, connectionParams postgis.ConnectionParams, options ...options.PostGISOptionFunc) error {
 	cp := internal.ConnectionParams{
-		"host":     connection.Host,
-		"database": connection.Database,
-		"user":     connection.User,
-		"passwd":   connection.Password,
-		"port":     connection.Port,
+		"host":     connectionParams.Host,
+		"database": connectionParams.Database,
+		"user":     connectionParams.User,
+		"passwd":   connectionParams.Password,
+		"port":     connectionParams.Port,
 		"dbtype":   "postgis",
 	}
 
@@ -58,7 +68,9 @@ func (dsl DataStoreList) PostGIS(name string, connection postgis.ConnectionParam
 
 	data := datastores.GenericDataStoreCreationWrapper{
 		DataStore: datastores.GenericDataStoreCreationModel{
-			Name: name,
+			Name:                       name,
+			Description:                dsl.options.Description,
+			DisableOnConnectionFailure: dsl.options.DisableOnConnectionFailure,
 			ConnectionParameters: datastores.ConnectionParameters{
 				Entry: cp.ToDatastoreEntries(),
 			},

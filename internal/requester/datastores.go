@@ -44,6 +44,11 @@ func (dr *DataStoreRequester) Create(content []byte) error {
 	}
 }
 
+// TODO: implement
+func (dr *DataStoreRequester) GetAll() (*datastores.AllDataStoreRetrievalWrapper, error) {
+	return nil, errors.New("not implemented")
+}
+
 func (dr *DataStoreRequester) Get(name string) (*datastores.DataStoreRetrieval, error) {
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", dr.info.Connection.URL, dr.info.Workspace, name), nil)
 	if err != nil {
