@@ -23,4 +23,9 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 		SSL:      testdata.POSTGIS_SSL,
 	})
 	assert.NoError(t, err)
+
+	t.Run("200 OK", func(t *testing.T) {
+		err = geoserverClient.Workspace(testdata.WORKSPACE).DataStore(testdata.DATASTORE_POSTGIS).PublishFeature()
+		assert.NoError(t, err)
+	})
 }

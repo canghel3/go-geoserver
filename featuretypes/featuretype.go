@@ -5,22 +5,27 @@ import (
 	"time"
 )
 
-type FeatureTypeWrapper struct {
-	FeatureType FeatureType `json:"featureType"`
-}
-
 type FeatureType struct {
 	Name string `json:"name"`
 	//The native Name of the resource. This Name corresponds to the physical resource that feature type is derived from -- a shapefile Name, a database table, etc...
-	NativeName        string           `json:"nativeName"`
-	Namespace         Namespace        `json:"namespace"`
-	Srs               string           `json:"srs"`
-	NativeBoundingBox misc.BoundingBox `json:"nativeBoundingBox"`
-	ProjectionPolicy  string           `json:"projectionPolicy"`
-	Keywords          *misc.Keywords   `json:"keywords,omitempty"`
-	Title             string           `json:"title"`
-	Store             Store            `json:"store"`
+	NativeName string `json:"nativeName"`
+	Title      string `json:"title"`
 }
+
+func New(name, nativeName, title string) *FeatureType {
+	return &FeatureType{
+		Name:       name,
+		NativeName: nativeName,
+		Title:      title,
+	}
+}
+
+//TODO: for FeatureType implement the following options:
+// SRS
+// BBOX
+// PROJ POLICY
+// KEYWORDS
+// STORE
 
 // Namespace holds workspace configuration details when creating a layer in GeoServer.
 type Namespace struct {

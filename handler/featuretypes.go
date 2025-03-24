@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/canghel3/go-geoserver/featuretypes"
 	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/misc"
 	"github.com/canghel3/go-geoserver/internal/requester"
 )
 
@@ -21,7 +22,21 @@ func newFeatureTypes(store string, info *internal.GeoserverInfo) *FeatureTypes {
 }
 
 func (ft *FeatureTypes) PublishFeature(featureType featuretypes.FeatureType) error {
-	content, err := json.Marshal(featureType)
+	//TODO: decide how to automatically infer bbox
+
+	completeFeatureType := internal.CreateFeatureType{
+		Name:              featureType.Name,
+		NativeName:        featureType.NativeName,
+		Namespace:         internal.Namespace{},
+		Srs:               "",
+		NativeBoundingBox: misc.BoundingBox{},
+		ProjectionPolicy:  "",
+		Keywords:          nil,
+		Title:             featureType.Title,
+		Store:             internal.Store{},
+	}
+
+	content, err := json.Marshal(completeFeatureType)
 	if err != nil {
 		return err
 	}
