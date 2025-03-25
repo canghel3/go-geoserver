@@ -13,7 +13,7 @@ func TestWorkspaces(t *testing.T) {
 			ws := &Workspaces{}
 
 			var inputError *customerrors.InputError
-			err := ws.Create(testdata.INVALID_WORKSPACE_NAME, false)
+			err := ws.Create(testdata.InvalidWorkspaceName, false)
 			assert.Error(t, err)
 			assert.EqualError(t, err, "name can only contain alphanumerical characters")
 			assert.ErrorAs(t, err, &inputError)
@@ -25,7 +25,7 @@ func TestWorkspaces(t *testing.T) {
 			ws := &Workspaces{}
 
 			var inputError *customerrors.InputError
-			_, err := ws.Get(testdata.INVALID_WORKSPACE_NAME)
+			_, err := ws.Get(testdata.InvalidWorkspaceName)
 			assert.Error(t, err)
 			assert.EqualError(t, err, "name can only contain alphanumerical characters")
 			assert.ErrorAs(t, err, &inputError)
@@ -37,7 +37,7 @@ func TestWorkspaces(t *testing.T) {
 			ws := &Workspaces{}
 
 			var inputError *customerrors.InputError
-			err := ws.Update(testdata.INVALID_WORKSPACE_NAME, "")
+			err := ws.Update(testdata.InvalidWorkspaceName, "")
 			assert.Error(t, err)
 			assert.EqualError(t, err, "name can only contain alphanumerical characters")
 			assert.ErrorAs(t, err, &inputError)
@@ -47,7 +47,7 @@ func TestWorkspaces(t *testing.T) {
 			ws := &Workspaces{}
 
 			var inputError *customerrors.InputError
-			err := ws.Update(testdata.WORKSPACE, testdata.INVALID_WORKSPACE_NAME)
+			err := ws.Update(testdata.WORKSPACE, testdata.InvalidWorkspaceName)
 			assert.Error(t, err)
 			assert.EqualError(t, err, "name can only contain alphanumerical characters")
 			assert.ErrorAs(t, err, &inputError)
@@ -59,7 +59,7 @@ func TestWorkspaces(t *testing.T) {
 			ws := &Workspaces{}
 
 			var inputError *customerrors.InputError
-			err := ws.Delete(testdata.INVALID_WORKSPACE_NAME, false)
+			err := ws.Delete(testdata.InvalidWorkspaceName, false)
 			assert.Error(t, err)
 			assert.EqualError(t, err, "name can only contain alphanumerical characters")
 			assert.ErrorAs(t, err, &inputError)

@@ -30,7 +30,7 @@ func (ftr *FeatureTypeRequester) Create(store string, content []byte) error {
 	}
 
 	request.SetBasicAuth(ftr.info.Connection.Credentials.Username, ftr.info.Connection.Credentials.Password)
-	request.Header.Add("Accept", "application/json")
+	request.Header.Add("Content-Type", "application/json")
 
 	response, err := ftr.info.Client.Do(request)
 	if err != nil {
@@ -64,7 +64,7 @@ func (ftr *FeatureTypeRequester) Delete(store, feature string, recurse bool) err
 	}
 
 	request.SetBasicAuth(ftr.info.Connection.Credentials.Username, ftr.info.Connection.Credentials.Password)
-	request.Header.Add("Accept", "application/json")
+	request.Header.Add("Content-Type", "application/json")
 
 	response, err := ftr.info.Client.Do(request)
 	if err != nil {
@@ -100,7 +100,7 @@ func (ftr *FeatureTypeRequester) Get(store, feature string) (*featuretypes.GetFe
 	}
 
 	request.SetBasicAuth(ftr.info.Connection.Credentials.Username, ftr.info.Connection.Credentials.Password)
-	request.Header.Add("Accept", "application/json")
+	request.Header.Add("Content-Type", "application/json")
 
 	response, err := ftr.info.Client.Do(request)
 	if err != nil {
@@ -143,7 +143,7 @@ func (ftr *FeatureTypeRequester) Update(store, name string, content []byte) erro
 	}
 
 	request.SetBasicAuth(ftr.info.Connection.Credentials.Username, ftr.info.Connection.Credentials.Password)
-	request.Header.Add("Accept", "application/json")
+	request.Header.Add("Content-Type", "application/json")
 
 	response, err := ftr.info.Client.Do(request)
 	if err != nil {

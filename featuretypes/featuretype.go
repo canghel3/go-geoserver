@@ -5,22 +5,20 @@ import (
 	"time"
 )
 
-type FeatureType struct {
-	Name string `json:"name"`
-	//The native Name of the resource. This Name corresponds to the physical resource that feature type is derived from -- a shapefile Name, a database table, etc...
-	NativeName string `json:"nativeName"`
-	Title      string `json:"title"`
+type CreateFeatureType struct {
+	Name string
+	//The native name of the resource. This name corresponds to the physical resource that feature type is derived from -- a shapefile Name, a database table, etc...
+	NativeName string
+	Title      string
+
+	Bbox             []float64
+	Srs              string
+	ProjectionPolicy string
+	Keywords         []string
+	Store            string
 }
 
-func New(name, nativeName, title string) *FeatureType {
-	return &FeatureType{
-		Name:       name,
-		NativeName: nativeName,
-		Title:      title,
-	}
-}
-
-//TODO: for FeatureType implement the following options:
+//TODO: for CreateFeatureType implement the following options:
 // SRS
 // BBOX
 // PROJ POLICY

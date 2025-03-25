@@ -6,13 +6,13 @@ func GeoserverInfo(client internal.HTTPClient) *internal.GeoserverInfo {
 	return &internal.GeoserverInfo{
 		Client: client,
 		Connection: internal.GeoserverConnection{
-			URL: GEOSERVER_URL,
+			URL: GeoserverUrl,
 			Credentials: internal.GeoserverCredentials{
-				Username: GEOSERVER_USERNAME,
-				Password: GEOSERVER_PASSWORD,
+				Username: GeoserverUsername,
+				Password: GeoserverPassword,
 			},
 		},
-		DataDir:   GEOSERVER_DATADIR,
+		DataDir:   GeoserverDatadir,
 		Workspace: WORKSPACE,
 	}
 }

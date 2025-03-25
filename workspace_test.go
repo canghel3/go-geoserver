@@ -11,7 +11,7 @@ import (
 )
 
 func TestWorkspaceIntegration_Create(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
+	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.GeoserverDatadir)
 
 	geoserverClient.Workspaces().Delete(testdata.WORKSPACE, true)
 
@@ -32,7 +32,7 @@ func TestWorkspaceIntegration_Create(t *testing.T) {
 }
 
 func TestWorkspaceIntegration_Get(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
+	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.GeoserverDatadir)
 
 	//create required resources
 	geoserverClient.Workspaces().Create(testdata.WORKSPACE, false)
@@ -57,7 +57,7 @@ func TestWorkspaceIntegration_Get(t *testing.T) {
 }
 
 func TestWorkspaceIntegration_Update(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
+	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.GeoserverDatadir)
 
 	//create required resources
 	geoserverClient.Workspaces().Create(testdata.WORKSPACE, false)
@@ -83,7 +83,7 @@ func TestWorkspaceIntegration_Update(t *testing.T) {
 }
 
 func TestWorkspaceIntegration_Delete(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
+	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.GeoserverDatadir)
 
 	//create required resources
 	geoserverClient.Workspaces().Create(testdata.WORKSPACE, false)
@@ -101,7 +101,7 @@ func TestWorkspaceIntegration_Delete(t *testing.T) {
 }
 
 func TestWorkspaceIntegration_GetAll(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
+	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.GeoserverDatadir)
 
 	t.Run("200 OK", func(t *testing.T) {
 		t.Run("EMPTY", func(t *testing.T) {

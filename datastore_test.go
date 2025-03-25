@@ -13,7 +13,7 @@ import (
 )
 
 func TestDataStoreIntegration_Create(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
+	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.GeoserverDatadir)
 
 	//create workspace
 	geoserverClient.Workspaces().Create(testdata.WORKSPACE, true)
@@ -118,7 +118,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 }
 
 func TestDataStoreIntegration_Get(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
+	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.GeoserverDatadir)
 
 	//create workspace
 	geoserverClient.Workspaces().Create(testdata.WORKSPACE, true)
@@ -159,7 +159,7 @@ func TestDataStoreIntegration_GetAll(t *testing.T) {
 }
 
 func TestDataStoreIntegration_Delete(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GEOSERVER_URL, testdata.GEOSERVER_USERNAME, testdata.GEOSERVER_PASSWORD, testdata.GEOSERVER_DATADIR)
+	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.GeoserverDatadir)
 
 	//create workspace
 	geoserverClient.Workspaces().Create(testdata.WORKSPACE, true)

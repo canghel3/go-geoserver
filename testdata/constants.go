@@ -1,20 +1,24 @@
 package testdata
 
 const (
-	GEOSERVER_URL      = "http://localhost:1111"
-	GEOSERVER_USERNAME = "admin"
-	GEOSERVER_PASSWORD = "geoserver"
-	GEOSERVER_DATADIR  = "/opt/geoserver-for-tests/data"
+	GeoserverUrl      = "http://localhost:1111"
+	GeoserverUsername = "admin"
+	GeoserverPassword = "geoserver"
+	GeoserverDatadir  = "/opt/geoserver-for-tests/data"
 
-	WORKSPACE              = "PLAYGROUND"
-	INVALID_WORKSPACE_NAME = "SO_!@#MEINVALIDNAME"
+	WORKSPACE            = "PLAYGROUND"
+	InvalidWorkspaceName = "SO_!@#MEINVALIDNAME"
 
 	DATASTORE_POSTGIS = "POSTGIS"
 
-	POSTGIS_HOST     = "localhost"
+	FEATURE_TYPE_NAME        = "init"
+	FEATURE_TYPE_NATIVE_NAME = "init"
+	FEATURE_TYPE_TITLE       = "sample"
+
+	POSTGIS_HOST     = "postgis"
 	POSTGIS_PORT     = "5432"
 	POSTGIS_USERNAME = "geoserver"
 	POSTGIS_PASSWORD = "geoserver"
-	POSTGIS_DB       = "vector"
+	POSTGIS_DB       = "vectors"
 	POSTGIS_SSL      = "disable"
 )
