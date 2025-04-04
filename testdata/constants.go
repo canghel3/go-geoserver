@@ -1,7 +1,7 @@
 package testdata
 
 const (
-	GeoserverUrl      = "http://localhost:1111"
+	GeoserverUrl      = "http://localhost:1112"
 	GeoserverUsername = "admin"
 	GeoserverPassword = "geoserver"
 	GeoserverDatadir  = "/opt/geoserver-for-tests/data"

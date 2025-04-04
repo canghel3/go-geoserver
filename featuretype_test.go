@@ -27,10 +27,21 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 
 	t.Run("200 OK", func(t *testing.T) {
 		t.Run("WITHOUT ANY OPTIONS", func(t *testing.T) {
-			feature := featuretypes.New(testdata.FEATURE_TYPE_NAME, testdata.FEATURE_TYPE_NATIVE_NAME, testdata.FEATURE_TYPE_TITLE)
+			feature := featuretypes.New(testdata.FEATURE_TYPE_NAME, testdata.FEATURE_TYPE_NATIVE_NAME)
 
 			err = geoserverClient.Workspace(testdata.WORKSPACE).DataStore(testdata.DATASTORE_POSTGIS).PublishFeature(feature)
 			assert.NoError(t, err)
+
+			get, err := geoserverClient.Workspace(testdata.WORKSPACE).FeatureTypes().GetFeature(testdata.FEATURE_TYPE_NAME)
+			assert.NoError(t, err)
+			assert.Equal(t, get.FeatureType.Name, testdata.FEATURE_TYPE_NAME)
+			assert.Equal(t, get.FeatureType.NativeName, testdata.FEATURE_TYPE_NATIVE_NAME)
+			assert.Equal(t, get.FeatureType.Srs, "EPSG:4326")
+			assert.Equal(t, get.FeatureType.Keywords.Keywords, []string{"features", "init"})
+		})
+
+		t.Run("WITH BBOX OPTION", func(t *testing.T) {
+
 		})
 	})
 
