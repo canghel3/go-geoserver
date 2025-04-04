@@ -26,14 +26,12 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 	assert.NoError(t, err)
 
 	t.Run("200 OK", func(t *testing.T) {
-		feature := featuretypes.CreateFeatureType{
-			Name:       testdata.FEATURE_TYPE_NAME,
-			NativeName: testdata.FEATURE_TYPE_NATIVE_NAME,
-			Title:      testdata.FEATURE_TYPE_TITLE,
-		}
+		t.Run("WITHOUT ANY OPTIONS", func(t *testing.T) {
+			feature := featuretypes.New(testdata.FEATURE_TYPE_NAME, testdata.FEATURE_TYPE_NATIVE_NAME, testdata.FEATURE_TYPE_TITLE)
 
-		err = geoserverClient.Workspace(testdata.WORKSPACE).DataStore(testdata.DATASTORE_POSTGIS).PublishFeature(feature)
-		assert.NoError(t, err)
+			err = geoserverClient.Workspace(testdata.WORKSPACE).DataStore(testdata.DATASTORE_POSTGIS).PublishFeature(feature)
+			assert.NoError(t, err)
+		})
 	})
 
 	err = geoserverClient.Workspaces().Delete(testdata.WORKSPACE, true)

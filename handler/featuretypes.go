@@ -6,9 +6,12 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/featuretypes"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/internal/misc"
 	"github.com/canghel3/go-geoserver/internal/requester"
 )
+
+func ptr[T any](v T) *T {
+	return &v
+}
 
 type FeatureTypes struct {
 	store     string
@@ -24,9 +27,7 @@ func newFeatureTypes(store string, info *internal.GeoserverInfo) *FeatureTypes {
 	}
 }
 
-// TODO: can this be so smart that it computes the bbox from data? decide how to automatically infer bbox
 func (ft *FeatureTypes) PublishFeature(featureType featuretypes.CreateFeatureType) error {
-
 	completeFeatureType := internal.CreateFeatureType{
 		Name:       featureType.Name,
 		NativeName: featureType.NativeName,
@@ -34,17 +35,11 @@ func (ft *FeatureTypes) PublishFeature(featureType featuretypes.CreateFeatureTyp
 			Name: ft.info.Workspace,
 			Href: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", ft.info.Connection.URL, ft.info.Workspace),
 		},
-		Srs: "EPSG:4326",
-		NativeBoundingBox: misc.BoundingBox{
-			MinX: -180,
-			MaxX: 180,
-			MinY: -90,
-			MaxY: 90,
-			CRS:  "EPSG:4326",
-		},
-		ProjectionPolicy: "FORCE_DECLARED",
-		Keywords:         nil,
-		Title:            featureType.Title,
+		Srs:               featureType.Srs,
+		NativeBoundingBox: featureType.Bbox,
+		ProjectionPolicy:  featureType.ProjectionPolicy,
+		Keywords:          featureType.Keywords,
+		Title:             featureType.Title,
 		Store: internal.Store{
 			Class: "dataStore",
 			Name:  fmt.Sprintf("%s:%s", ft.info.Workspace, ft.store),
