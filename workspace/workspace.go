@@ -19,10 +19,10 @@ type MultiWorkspace struct {
 
 // SingleWorkspaceRetrievalWrapper defines the model for retrieving a single workspace.
 type SingleWorkspaceRetrievalWrapper struct {
-	Workspace SingleWorkspaceRetrieval `json:"workspace" xml:"workspace"`
+	Workspace WorkspaceRetrieval `json:"workspace" xml:"workspace"`
 }
 
-type SingleWorkspaceRetrieval struct {
+type WorkspaceRetrieval struct {
 	Name           string `json:"name,omitempty" xml:"name"`
 	DataStores     string `json:"dataStores,omitempty" xml:"dataStores"`
 	CoverageStores string `json:"coverageStores,omitempty" xml:"coverageStores"`

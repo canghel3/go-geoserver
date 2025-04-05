@@ -1,4 +1,4 @@
-package main
+package client
 
 import (
 	"github.com/canghel3/go-geoserver/datastores/postgis"
@@ -9,7 +9,7 @@ import (
 )
 
 func TestFeatureTypeIntegration_Create(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.GeoserverDatadir)
+	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
 
 	//create workspace
 	geoserverClient.Workspaces().Create(testdata.WORKSPACE, true)

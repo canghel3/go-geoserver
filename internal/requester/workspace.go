@@ -57,7 +57,7 @@ func (wr *WorkspaceRequester) Create(name string, _default bool) error {
 	}
 }
 
-func (wr *WorkspaceRequester) Get(name string) (*workspace.SingleWorkspaceRetrievalWrapper, error) {
+func (wr *WorkspaceRequester) Get(name string) (*workspace.WorkspaceRetrieval, error) {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", wr.info.Connection.URL, name)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -81,7 +81,7 @@ func (wr *WorkspaceRequester) Get(name string) (*workspace.SingleWorkspaceRetrie
 			return nil, err
 		}
 
-		return &wksp, nil
+		return &wksp.Workspace, nil
 	case http.StatusNotFound:
 		return nil, customerrors.WrapNotFoundError(fmt.Errorf("workspace %s does not exist", name))
 	default:
@@ -94,7 +94,7 @@ func (wr *WorkspaceRequester) Get(name string) (*workspace.SingleWorkspaceRetrie
 	}
 }
 
-func (wr *WorkspaceRequester) GetAll() (*workspace.MultiWorkspaceRetrievalWrapper, error) {
+func (wr *WorkspaceRequester) GetAll() ([]workspace.MultiWorkspace, error) {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces", wr.info.Connection.URL)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -123,17 +123,13 @@ func (wr *WorkspaceRequester) GetAll() (*workspace.MultiWorkspaceRetrievalWrappe
 			var noWorkspacesExistResponse workspace.NoWorkspacesExist
 			noWorkspacesExistError := json.Unmarshal(body, &noWorkspacesExistResponse)
 			if noWorkspacesExistError == nil {
-				return &workspace.MultiWorkspaceRetrievalWrapper{
-					Workspaces: workspace.MultiWorkspaceRetrieval{
-						Workspace: nil,
-					},
-				}, nil
+				return nil, nil
 			}
 
 			return nil, err
 		}
 
-		return &wksp, nil
+		return wksp.Workspaces.Workspace, nil
 	default:
 		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}

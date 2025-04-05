@@ -1,6 +1,6 @@
 //go:build integration
 
-package main
+package client
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 )
 
 func TestWorkspaceIntegration_Create(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.GeoserverDatadir)
+	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
 
 	geoserverClient.Workspaces().Delete(testdata.WORKSPACE, true)
 
@@ -32,7 +32,7 @@ func TestWorkspaceIntegration_Create(t *testing.T) {
 }
 
 func TestWorkspaceIntegration_Get(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.GeoserverDatadir)
+	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
 
 	//create required resources
 	geoserverClient.Workspaces().Create(testdata.WORKSPACE, false)
@@ -40,7 +40,7 @@ func TestWorkspaceIntegration_Get(t *testing.T) {
 	t.Run("200 OK", func(t *testing.T) {
 		wksp, err := geoserverClient.Workspaces().Get(testdata.WORKSPACE)
 		assert.NoError(t, err)
-		assert.Equal(t, testdata.WORKSPACE, wksp.Workspace.Name)
+		assert.Equal(t, testdata.WORKSPACE, wksp.Name)
 	})
 
 	t.Run("404 NOT FOUND", func(t *testing.T) {
@@ -57,7 +57,7 @@ func TestWorkspaceIntegration_Get(t *testing.T) {
 }
 
 func TestWorkspaceIntegration_Update(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.GeoserverDatadir)
+	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
 
 	//create required resources
 	geoserverClient.Workspaces().Create(testdata.WORKSPACE, false)
@@ -83,7 +83,7 @@ func TestWorkspaceIntegration_Update(t *testing.T) {
 }
 
 func TestWorkspaceIntegration_Delete(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.GeoserverDatadir)
+	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
 
 	//create required resources
 	geoserverClient.Workspaces().Create(testdata.WORKSPACE, false)
@@ -101,12 +101,12 @@ func TestWorkspaceIntegration_Delete(t *testing.T) {
 }
 
 func TestWorkspaceIntegration_GetAll(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.GeoserverDatadir)
+	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
 
 	t.Run("200 OK", func(t *testing.T) {
 		t.Run("EMPTY", func(t *testing.T) {
 			wksp, err := geoserverClient.Workspaces().GetAll()
-			assert.Nil(t, wksp.Workspaces.Workspace)
+			assert.Nil(t, wksp)
 			assert.NoError(t, err)
 		})
 
@@ -117,8 +117,8 @@ func TestWorkspaceIntegration_GetAll(t *testing.T) {
 
 			wksp, err := geoserverClient.Workspaces().GetAll()
 			assert.NoError(t, err)
-			assert.Len(t, wksp.Workspaces.Workspace, 1)
-			assert.Equal(t, testdata.WORKSPACE, wksp.Workspaces.Workspace[0].Name)
+			assert.Len(t, wksp, 1)
+			assert.Equal(t, testdata.WORKSPACE, wksp[0].Name)
 		})
 
 		t.Run("MULTIPLE WORKSPACES", func(t *testing.T) {
@@ -128,9 +128,9 @@ func TestWorkspaceIntegration_GetAll(t *testing.T) {
 
 			wksp, err := geoserverClient.Workspaces().GetAll()
 			assert.NoError(t, err)
-			assert.Len(t, wksp.Workspaces.Workspace, 2)
-			assert.Equal(t, testdata.WORKSPACE+"_2", wksp.Workspaces.Workspace[0].Name)
-			assert.Equal(t, testdata.WORKSPACE, wksp.Workspaces.Workspace[1].Name)
+			assert.Len(t, wksp, 2)
+			assert.Equal(t, testdata.WORKSPACE+"_2", wksp[0].Name)
+			assert.Equal(t, testdata.WORKSPACE, wksp[1].Name)
 		})
 	})
 

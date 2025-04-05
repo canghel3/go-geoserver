@@ -27,7 +27,7 @@ func (w *Workspaces) Create(name string, _default bool) error {
 	return w.requester.Workspaces().Create(name, _default)
 }
 
-func (w *Workspaces) Get(name string) (*workspace.SingleWorkspaceRetrievalWrapper, error) {
+func (w *Workspaces) Get(name string) (*workspace.WorkspaceRetrieval, error) {
 	err := internal.ValidateWorkspace(name)
 	if err != nil {
 		return nil, err
@@ -36,7 +36,7 @@ func (w *Workspaces) Get(name string) (*workspace.SingleWorkspaceRetrievalWrappe
 	return w.requester.Workspaces().Get(name)
 }
 
-func (w *Workspaces) GetAll() (*workspace.MultiWorkspaceRetrievalWrapper, error) {
+func (w *Workspaces) GetAll() ([]workspace.MultiWorkspace, error) {
 	return w.requester.Workspaces().GetAll()
 }
 
