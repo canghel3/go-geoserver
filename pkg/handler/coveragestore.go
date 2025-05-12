@@ -71,23 +71,114 @@ func (csl CoverageStoreList) GeoTIFF(name string, filepath string, options ...op
 		return err
 	}
 
-	cp := internal.ConnectionParams{
-		"url":  filepath,
-		"type": "GeoTIFF",
+	data := coveragestores.GenericCoverageStoreCreationWrapper{
+		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+			Name:        name,
+			Description: csl.options.Description,
+			Type:        "GeoTIFF",
+			Default:     csl.options.Default,
+			Enabled:     csl.options.Enabled,
+			URL:         filepath,
+		},
 	}
 
-	for _, option := range options {
-		option(&cp)
+	content, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	return csl.requester.CoverageStores().Create(content)
+}
+
+func (csl CoverageStoreList) WorldImage(name string, filepath string, options ...options.WorldImageOptions) error {
+	err := internal.ValidateWorldImage(filepath)
+	if err != nil {
+		return err
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
-			Name:                       name,
-			Description:                csl.options.Description,
-			Type:                       "GeoTIFF",
-			Enabled:                    true,
-			URL:                        filepath,
-			DisableOnConnectionFailure: csl.options.DisableOnConnectionFailure,
+			Name:        name,
+			Description: csl.options.Description,
+			Type:        "WorldImage",
+			Default:     csl.options.Default,
+			Enabled:     csl.options.Enabled,
+			URL:         filepath,
+		},
+	}
+
+	content, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	return csl.requester.CoverageStores().Create(content)
+}
+
+func (csl CoverageStoreList) ImageMosaic(name string, dirpath string, options ...options.ImageMosaicOptions) error {
+	err := internal.ValidateImageMosaic(dirpath)
+	if err != nil {
+		return err
+	}
+
+	data := coveragestores.GenericCoverageStoreCreationWrapper{
+		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+			Name:        name,
+			Description: csl.options.Description,
+			Type:        "ImageMosaic",
+			Default:     csl.options.Default,
+			Enabled:     csl.options.Enabled,
+			URL:         dirpath,
+		},
+	}
+
+	content, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	return csl.requester.CoverageStores().Create(content)
+}
+
+func (csl CoverageStoreList) ArcGrid(name string, filepath string, options ...options.ArcGridOptions) error {
+	err := internal.ValidateArcGrid(filepath)
+	if err != nil {
+		return err
+	}
+
+	data := coveragestores.GenericCoverageStoreCreationWrapper{
+		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+			Name:        name,
+			Description: csl.options.Description,
+			Type:        "ArcGrid",
+			Default:     csl.options.Default,
+			Enabled:     csl.options.Enabled,
+			URL:         filepath,
+		},
+	}
+
+	content, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	return csl.requester.CoverageStores().Create(content)
+}
+
+func (csl CoverageStoreList) GeoPackageRaster(name string, filepath string, options ...options.GeoPackageRasterOptions) error {
+	err := internal.ValidateGeoPackage(filepath)
+	if err != nil {
+		return err
+	}
+
+	data := coveragestores.GenericCoverageStoreCreationWrapper{
+		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+			Name:        name,
+			Description: csl.options.Description,
+			Type:        "GeoPackage (mosaic)",
+			Default:     csl.options.Default,
+			Enabled:     csl.options.Enabled,
+			URL:         filepath,
 		},
 	}
 

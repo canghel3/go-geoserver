@@ -5,13 +5,19 @@ type GenericCoverageStoreCreationWrapper struct {
 }
 
 type GenericCoverageStoreCreationModel struct {
-	Name                       string               `json:"name"`
-	Description                string               `json:"description"`
-	Type                       string               `json:"type"`
-	Enabled                    bool                 `json:"enabled"`
-	URL                        string               `json:"url"`
-	DisableOnConnectionFailure bool                 `json:"disableOnConnFailure"`
-	ConnectionParameters       ConnectionParameters `json:"connectionParameters,omitempty"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Type        string `json:"type"`
+	Enabled     bool   `json:"enabled"`
+	Default     bool   `json:"__default__"`
+	Workspace   struct {
+		Name string `json:"name"`
+		Link string `json:"link"`
+	} `json:"workspace"`
+	URL       string `json:"url"`
+	Coverages struct {
+		Link string `json:"link"`
+	} `json:"coverages"`
 }
 
 type ConnectionParameters struct {

@@ -164,8 +164,7 @@ func (dsl DataStoreList) Shapefiles(name string, dir string, options ...options.
 	}
 
 	cp := internal.ConnectionParams{
-		"url":    dir,
-		"dbtype": "directory of shapefiles",
+		"url": dir,
 	}
 
 	for _, option := range options {
@@ -200,6 +199,35 @@ func (dsl DataStoreList) CSV(name string, filepath string, options ...options.CS
 	cp := internal.ConnectionParams{
 		"url":    filepath,
 		"dbtype": "csv",
+	}
+
+	for _, option := range options {
+		option(&cp)
+	}
+
+	data := datastores.GenericDataStoreCreationWrapper{
+		DataStore: datastores.GenericDataStoreCreationModel{
+			Name:                       name,
+			Description:                dsl.options.Description,
+			DisableOnConnectionFailure: dsl.options.DisableOnConnectionFailure,
+			ConnectionParameters: datastores.ConnectionParameters{
+				Entry: cp.ToDatastoreEntries(),
+			},
+		},
+	}
+
+	content, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	return dsl.requester.DataStores().Create(content)
+}
+
+func (dsl DataStoreList) WebFeatureService(name, getCapabilitiesUrl string, options ...options.WFSOptions) error {
+	cp := internal.ConnectionParams{
+		"WFSDataStoreFactory:GET_CAPABILITIES_URL": getCapabilitiesUrl,
+		"dbtype": "wfs",
 	}
 
 	for _, option := range options {
