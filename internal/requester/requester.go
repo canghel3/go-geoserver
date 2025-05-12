@@ -11,13 +11,13 @@ type Requester struct {
 	wms          *WMSRequester
 }
 
-func NewRequester(info *internal.GeoserverInfo) *Requester {
+func NewRequester(info *internal.GeoserverData) *Requester {
 	return &Requester{
 		workspaces: &WorkspaceRequester{
 			info: info,
 		},
 		datastores: &DataStoreRequester{
-			info: info,
+			data: info,
 		},
 		featuretypes: &FeatureTypeRequester{
 			info: info,

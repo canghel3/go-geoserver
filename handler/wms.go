@@ -10,7 +10,7 @@ type WMS struct {
 	requester *requester.Requester
 }
 
-func NewWMSHandler(info *internal.GeoserverInfo) *WMS {
+func NewWMSHandler(info *internal.GeoserverData) *WMS {
 	return &WMS{
 		requester: requester.NewRequester(info),
 	}

@@ -9,7 +9,7 @@ import (
 	"github.com/canghel3/go-geoserver/options"
 )
 
-func newDataStores(info *internal.GeoserverInfo) *DataStores {
+func newDataStores(info *internal.GeoserverData) *DataStores {
 	r := requester.NewRequester(info)
 	return &DataStores{
 		info:      info,
@@ -23,7 +23,7 @@ type DataStoreList struct {
 }
 
 type DataStores struct {
-	info      *internal.GeoserverInfo
+	info      *internal.GeoserverData
 	requester *requester.Requester
 }
 

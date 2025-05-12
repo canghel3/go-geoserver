@@ -17,8 +17,8 @@ type MultiWorkspace struct {
 	Href string `json:"href,omitempty"`
 }
 
-// SingleWorkspaceRetrievalWrapper defines the model for retrieving a single workspace.
-type SingleWorkspaceRetrievalWrapper struct {
+// GetSingleWorkspaceWrapper defines the model for retrieving a single workspace.
+type GetSingleWorkspaceWrapper struct {
 	Workspace WorkspaceRetrieval `json:"workspace" xml:"workspace"`
 }
 

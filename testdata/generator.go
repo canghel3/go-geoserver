@@ -2,8 +2,8 @@ package testdata
 
 import "github.com/canghel3/go-geoserver/internal"
 
-func GeoserverInfo(client internal.HTTPClient) *internal.GeoserverInfo {
-	return &internal.GeoserverInfo{
+func GeoserverInfo(client internal.HTTPClient) *internal.GeoserverData {
+	return &internal.GeoserverData{
 		Client: client,
 		Connection: internal.GeoserverConnection{
 			URL: GeoserverUrl,

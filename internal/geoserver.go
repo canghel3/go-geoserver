@@ -6,7 +6,7 @@ type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
 
-type GeoserverInfo struct {
+type GeoserverData struct {
 	Client     HTTPClient
 	Connection GeoserverConnection
 	DataDir    string
@@ -23,8 +23,8 @@ type GeoserverCredentials struct {
 	Password string
 }
 
-func (gi *GeoserverInfo) Clone() *GeoserverInfo {
-	return &GeoserverInfo{
+func (gi *GeoserverData) Clone() *GeoserverData {
+	return &GeoserverData{
 		Client:     gi.Client,
 		Connection: gi.Connection,
 		DataDir:    gi.DataDir,

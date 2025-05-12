@@ -12,7 +12,7 @@ import (
 )
 
 type WorkspaceRequester struct {
-	info *internal.GeoserverInfo
+	info *internal.GeoserverData
 }
 
 func (wr *WorkspaceRequester) Create(name string, _default bool) error {
@@ -75,7 +75,7 @@ func (wr *WorkspaceRequester) Get(name string) (*workspace.WorkspaceRetrieval, e
 
 	switch response.StatusCode {
 	case http.StatusOK:
-		var wksp workspace.SingleWorkspaceRetrievalWrapper
+		var wksp workspace.GetSingleWorkspaceWrapper
 		err = json.NewDecoder(response.Body).Decode(&wksp)
 		if err != nil {
 			return nil, err

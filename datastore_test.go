@@ -61,20 +61,10 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 		})
 
 		t.Run("POSTGIS", func(t *testing.T) {
-			err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create().PostGIS(testdata.DATASTORE_POSTGIS, postgis.ConnectionParams{
-				Host:     testdata.POSTGIS_HOST,
-				Database: testdata.POSTGIS_DB,
-				User:     testdata.POSTGIS_USERNAME,
-				Password: testdata.POSTGIS_PASSWORD,
-				Port:     testdata.POSTGIS_PORT,
-				SSL:      testdata.POSTGIS_SSL,
-			})
-			assert.NoError(t, err)
-
 			t.Run("WITH OPTIONS", func(t *testing.T) {
 				t.Run("VALIDATE CONNECTIONS", func(t *testing.T) {
 					var suffix = "_WITH_VALIDATE_CONNECTIONS"
-					err = geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create().PostGIS(testdata.DATASTORE_POSTGIS+suffix, postgis.ConnectionParams{
+					err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create().PostGIS(testdata.DATASTORE_POSTGIS+suffix, postgis.ConnectionParams{
 						Host:     testdata.POSTGIS_HOST,
 						Database: testdata.POSTGIS_DB,
 						User:     testdata.POSTGIS_USERNAME,
@@ -99,6 +89,14 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 	//NOTE: there is no 409 test because geoserver responds with 500 for a conflict error (:
 
 	t.Run("500 INTERNAL SERVER ERROR", func(t *testing.T) {
+		geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create().PostGIS(testdata.DATASTORE_POSTGIS, postgis.ConnectionParams{
+			Host:     testdata.POSTGIS_HOST,
+			Database: testdata.POSTGIS_DB,
+			User:     testdata.POSTGIS_USERNAME,
+			Password: testdata.POSTGIS_PASSWORD,
+			Port:     testdata.POSTGIS_PORT,
+			SSL:      testdata.POSTGIS_SSL,
+		})
 		err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create().PostGIS(testdata.DATASTORE_POSTGIS, postgis.ConnectionParams{
 			Host:     testdata.POSTGIS_HOST,
 			Database: testdata.POSTGIS_DB,

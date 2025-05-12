@@ -1,4 +1,4 @@
-# GeoServer GoLang Client
+# Geoserver Go Client
 
 Making interactions with [GeoServer](https://geoserver.org/) frustration-less in Go.
 

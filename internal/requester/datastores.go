@@ -13,19 +13,19 @@ import (
 )
 
 type DataStoreRequester struct {
-	info *internal.GeoserverInfo
+	data *internal.GeoserverData
 }
 
 func (dr *DataStoreRequester) Create(content []byte) error {
-	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores", dr.info.Connection.URL, dr.info.Workspace), bytes.NewBuffer(content))
+	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores", dr.data.Connection.URL, dr.data.Workspace), bytes.NewBuffer(content))
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(dr.info.Connection.Credentials.Username, dr.info.Connection.Credentials.Password)
+	request.SetBasicAuth(dr.data.Connection.Credentials.Username, dr.data.Connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	response, err := dr.info.Client.Do(request)
+	response, err := dr.data.Client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -50,15 +50,15 @@ func (dr *DataStoreRequester) GetAll() (*datastores.AllDataStoreRetrievalWrapper
 }
 
 func (dr *DataStoreRequester) Get(name string) (*datastores.DataStoreRetrieval, error) {
-	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", dr.info.Connection.URL, dr.info.Workspace, name), nil)
+	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", dr.data.Connection.URL, dr.data.Workspace, name), nil)
 	if err != nil {
 		return nil, err
 	}
 
-	request.SetBasicAuth(dr.info.Connection.Credentials.Username, dr.info.Connection.Credentials.Password)
+	request.SetBasicAuth(dr.data.Connection.Credentials.Username, dr.data.Connection.Credentials.Password)
 	request.Header.Add("Accept", "application/json")
 
-	response, err := dr.info.Client.Do(request)
+	response, err := dr.data.Client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -91,14 +91,14 @@ func (dr *DataStoreRequester) Update() error {
 }
 
 func (dr *DataStoreRequester) Delete(name string, recurse bool) error {
-	request, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s?recurse=%v", dr.info.Connection.URL, dr.info.Workspace, name, recurse), nil)
+	request, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s?recurse=%v", dr.data.Connection.URL, dr.data.Workspace, name, recurse), nil)
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(dr.info.Connection.Credentials.Username, dr.info.Connection.Credentials.Password)
+	request.SetBasicAuth(dr.data.Connection.Credentials.Username, dr.data.Connection.Credentials.Password)
 
-	response, err := dr.info.Client.Do(request)
+	response, err := dr.data.Client.Do(request)
 	if err != nil {
 		return err
 	}

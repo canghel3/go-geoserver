@@ -15,11 +15,11 @@ func ptr[T any](v T) *T {
 
 type FeatureTypes struct {
 	store     string
-	info      *internal.GeoserverInfo
+	info      *internal.GeoserverData
 	requester *requester.Requester
 }
 
-func newFeatureTypes(store string, info *internal.GeoserverInfo) *FeatureTypes {
+func newFeatureTypes(store string, info *internal.GeoserverData) *FeatureTypes {
 	return &FeatureTypes{
 		store:     store,
 		info:      info,

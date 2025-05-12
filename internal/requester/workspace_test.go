@@ -169,7 +169,7 @@ func TestWorkspaceRequester_Get(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, wksp)
 
-		var expectedWorkspace *workspace.SingleWorkspaceRetrievalWrapper
+		var expectedWorkspace *workspace.GetSingleWorkspaceWrapper
 		err = json.Unmarshal(content, &expectedWorkspace)
 		assert.NoError(t, err)
 

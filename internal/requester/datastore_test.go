@@ -26,7 +26,7 @@ func TestDataStoreRequester_Create(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		dataStoreRequester := &DataStoreRequester{info: testdata.GeoserverInfo(mockClient)}
+		dataStoreRequester := &DataStoreRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		err := dataStoreRequester.Create(nil)
 		assert.NoError(t, err)

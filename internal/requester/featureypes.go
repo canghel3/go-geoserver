@@ -13,7 +13,7 @@ import (
 )
 
 type FeatureTypeRequester struct {
-	info *internal.GeoserverInfo
+	info *internal.GeoserverData
 }
 
 func (ftr *FeatureTypeRequester) Create(store string, content []byte) error {
