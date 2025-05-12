@@ -4,14 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/canghel3/go-geoserver/featuretypes"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
+	"github.com/canghel3/go-geoserver/pkg/featuretypes"
 )
-
-func ptr[T any](v T) *T {
-	return &v
-}
 
 type FeatureTypes struct {
 	store     string

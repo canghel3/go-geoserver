@@ -5,10 +5,11 @@ import (
 )
 
 type Requester struct {
-	workspaces   *WorkspaceRequester
-	datastores   *DataStoreRequester
-	featuretypes *FeatureTypeRequester
-	wms          *WMSRequester
+	workspaces     *WorkspaceRequester
+	datastores     *DataStoreRequester
+	coveragestores *CoverageStoreRequester
+	featuretypes   *FeatureTypeRequester
+	wms            *WMSRequester
 }
 
 func NewRequester(info *internal.GeoserverData) *Requester {
@@ -17,6 +18,9 @@ func NewRequester(info *internal.GeoserverData) *Requester {
 			info: info,
 		},
 		datastores: &DataStoreRequester{
+			data: info,
+		},
+		coveragestores: &CoverageStoreRequester{
 			data: info,
 		},
 		featuretypes: &FeatureTypeRequester{
@@ -42,4 +46,8 @@ func (r *Requester) FeatureTypes() *FeatureTypeRequester {
 
 func (r *Requester) WMS() *WMSRequester {
 	return r.wms
+}
+
+func (r *Requester) CoverageStores() *CoverageStoreRequester {
+	return r.coveragestores
 }

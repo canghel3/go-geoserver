@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/canghel3/go-geoserver/handler"
 	"github.com/canghel3/go-geoserver/internal"
+	handler2 "github.com/canghel3/go-geoserver/pkg/handler"
 	"net/http"
 )
 
@@ -44,17 +44,26 @@ func (gco geoserverClientOptions) Client(client internal.HTTPClient) GeoserverCl
 }
 
 // Workspaces displays available actions inside a workspace.
-func (s *GeoserverClient) Workspaces() *handler.Workspaces {
-	return handler.NewWorkspaceHandler(s.info.Clone())
+func (s *GeoserverClient) Workspaces() *handler2.Workspaces {
+	return handler2.NewWorkspaceHandler(s.info.Clone())
 }
 
 // Workspace is shorthand for Workspaces().Use(name)
-func (s *GeoserverClient) Workspace(name string) *handler.Workspace {
-	return handler.NewWorkspaceHandler(s.info.Clone()).Use(name)
+func (s *GeoserverClient) Workspace(name string) *handler2.Workspace {
+	return handler2.NewWorkspaceHandler(s.info.Clone()).Use(name)
 }
 
-func (s *GeoserverClient) WMS() *handler.WMS {
-	return handler.NewWMSHandler(s.info.Clone())
+func (s *GeoserverClient) WMS() *handler2.WMS {
+	return handler2.NewWMSHandler(s.info.Clone())
 }
 
-//TODO: implement wms, wfs and others
+func (s *GeoserverClient) CoverageStores() *handler2.CoverageStores {
+	return handler2.NewCoverageStoreHandler(s.info.Clone())
+}
+
+// CoverageStore is shorthand for CoverageStores().Use(name)
+func (s *GeoserverClient) CoverageStore(name string) *handler2.CoverageStore {
+	return handler2.NewCoverageStoreHandler(s.info.Clone()).Use(name)
+}
+
+//TODO: implement wfs and others

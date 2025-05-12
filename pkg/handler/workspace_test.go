@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/canghel3/go-geoserver/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"github.com/canghel3/go-geoserver/testdata"
 	"github.com/stretchr/testify/assert"
 	"testing"

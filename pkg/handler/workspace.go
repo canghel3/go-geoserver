@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
-	"github.com/canghel3/go-geoserver/workspace"
+	"github.com/canghel3/go-geoserver/pkg/workspace"
 )
 
 type Workspaces struct {
@@ -84,6 +84,14 @@ func (ss *Workspace) DataStore(name string) *FeatureTypes {
 
 func (ss *Workspace) FeatureTypes() *FeatureTypes {
 	return newFeatureTypes("", ss.info.Clone())
+}
+
+func (ss *Workspace) CoverageStores() *CoverageStores {
+	return NewCoverageStoreHandler(ss.info.Clone())
+}
+
+func (ss *Workspace) CoverageStore(name string) *CoverageStore {
+	return NewCoverageStoreHandler(ss.info.Clone()).Use(name)
 }
 
 //TODO: add raster service and layers service for handling layers without specifying store

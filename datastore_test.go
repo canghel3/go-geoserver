@@ -4,9 +4,9 @@ package client
 
 import (
 	"fmt"
-	"github.com/canghel3/go-geoserver/customerrors"
-	"github.com/canghel3/go-geoserver/datastores/postgis"
-	"github.com/canghel3/go-geoserver/options"
+	customerrors2 "github.com/canghel3/go-geoserver/pkg/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
+	options2 "github.com/canghel3/go-geoserver/pkg/options"
 	"github.com/canghel3/go-geoserver/testdata"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -23,7 +23,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 			t.Run("DESCRIPTION", func(t *testing.T) {
 				var description = "generic description"
 				var name = testdata.DATASTORE_POSTGIS + "WITH_DESCRIPTION"
-				err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create(options.Datastore.Description(description)).PostGIS(name, postgis.ConnectionParams{
+				err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create(options2.Datastore.Description(description)).PostGIS(name, postgis.ConnectionParams{
 					Host:     testdata.POSTGIS_HOST,
 					Database: testdata.POSTGIS_DB,
 					User:     testdata.POSTGIS_USERNAME,
@@ -42,7 +42,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 
 			t.Run("DISABLE CONNECTION ON FAILURE", func(t *testing.T) {
 				var name = testdata.DATASTORE_POSTGIS + "WITH_DISABLE_CONNECTION_ON_FAILURE"
-				err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create(options.Datastore.DisableConnectionOnFailure(true)).PostGIS(name, postgis.ConnectionParams{
+				err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Create(options2.Datastore.DisableConnectionOnFailure(true)).PostGIS(name, postgis.ConnectionParams{
 					Host:     testdata.POSTGIS_HOST,
 					Database: testdata.POSTGIS_DB,
 					User:     testdata.POSTGIS_USERNAME,
@@ -71,7 +71,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 						Password: testdata.POSTGIS_PASSWORD,
 						Port:     testdata.POSTGIS_PORT,
 						SSL:      testdata.POSTGIS_SSL,
-					}, options.PostGIS.ValidateConnections())
+					}, options2.PostGIS.ValidateConnections())
 					assert.NoError(t, err)
 
 					store, err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Get(testdata.DATASTORE_POSTGIS + suffix)
@@ -106,7 +106,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 			SSL:      testdata.POSTGIS_SSL,
 		})
 		assert.Error(t, err)
-		assert.IsType(t, err, &customerrors.GeoserverError{})
+		assert.IsType(t, err, &customerrors2.GeoserverError{})
 		//yes, geoserver actually responds with 500 for a conflict error
 		assert.ErrorContains(t, err, fmt.Sprintf(`Store '%s' already exists in workspace '%s'`, testdata.DATASTORE_POSTGIS, testdata.WORKSPACE))
 	})
@@ -144,7 +144,7 @@ func TestDataStoreIntegration_Get(t *testing.T) {
 		ds, err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Get(testdata.DATASTORE_POSTGIS + "_DOES_NOT_EXIST")
 		assert.Error(t, err)
 		assert.Nil(t, ds)
-		assert.IsType(t, err, &customerrors.NotFoundError{})
+		assert.IsType(t, err, &customerrors2.NotFoundError{})
 		assert.EqualError(t, err, fmt.Sprintf("datastore %s not found", testdata.DATASTORE_POSTGIS+"_DOES_NOT_EXIST"))
 	})
 
@@ -180,14 +180,14 @@ func TestDataStoreIntegration_Delete(t *testing.T) {
 			ds, err := geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Get(testdata.DATASTORE_POSTGIS)
 			assert.Nil(t, ds)
 			assert.Error(t, err)
-			assert.IsType(t, err, &customerrors.NotFoundError{})
+			assert.IsType(t, err, &customerrors2.NotFoundError{})
 		})
 	})
 
 	t.Run("404 NOT FOUND", func(t *testing.T) {
 		err = geoserverClient.Workspace(testdata.WORKSPACE).DataStores().Delete(testdata.DATASTORE_POSTGIS, true)
 		assert.Error(t, err)
-		assert.IsType(t, err, &customerrors.NotFoundError{})
+		assert.IsType(t, err, &customerrors2.NotFoundError{})
 		assert.EqualError(t, err, fmt.Sprintf("datastore %s not found", testdata.DATASTORE_POSTGIS))
 	})
 
