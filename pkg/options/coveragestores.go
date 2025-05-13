@@ -16,6 +16,5 @@ func (cs CoverageStoreOptionGenerator) Description(description string) Coverages
 
 func (cs CoverageStoreOptionGenerator) DisableConnectionOnFailure(disable bool) CoveragestoreOptionFunc {
 	return func(csl *internal.CoveragestoreOptions) {
-		csl.DisableOnConnectionFailure = disable
 	}
 }

@@ -23,7 +23,7 @@ func newFeatureTypes(store string, info *internal.GeoserverData) *FeatureTypes {
 	}
 }
 
-func (ft *FeatureTypes) PublishFeature(featureType featuretypes.CreateFeatureType) error {
+func (ft *FeatureTypes) Publish(featureType featuretypes.CreateFeatureType) error {
 	completeFeatureType := internal.CreateFeatureType{
 		Name:       featureType.Name,
 		NativeName: featureType.NativeName,
@@ -51,19 +51,19 @@ func (ft *FeatureTypes) PublishFeature(featureType featuretypes.CreateFeatureTyp
 	return ft.requester.FeatureTypes().Create(ft.store, content)
 }
 
-func (ft *FeatureTypes) GetFeature(name string) (*featuretypes.GetFeatureTypeWrapper, error) {
+func (ft *FeatureTypes) Get(name string) (*featuretypes.GetFeatureTypeWrapper, error) {
 	return ft.requester.FeatureTypes().Get(ft.store, name)
 }
 
-func (ft *FeatureTypes) GetFeatureTypes() ([]featuretypes.GetFeatureTypeWrapper, error) {
+func (ft *FeatureTypes) GetAll() ([]featuretypes.GetFeatureTypeWrapper, error) {
 	return nil, errors.New("not implemented")
 }
 
-func (ft *FeatureTypes) UpdateFeature(featureType featuretypes.CreateFeatureType) error {
+func (ft *FeatureTypes) Update(featureType featuretypes.CreateFeatureType) error {
 	return errors.New("not implemented")
 }
 
-func (ft *FeatureTypes) DeleteFeature(name string, recurse bool) error {
+func (ft *FeatureTypes) Delete(name string, recurse bool) error {
 	return ft.requester.FeatureTypes().Delete(ft.store, name, recurse)
 }
 
