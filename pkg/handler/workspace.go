@@ -75,11 +75,11 @@ func (w *Workspaces) Use(workspace string) *Workspace {
 }
 
 func (ss *Workspace) DataStores() *DataStores {
-	return NewDataStoresHandler(ss.info.Clone())
+	return newDataStoresHandler(ss.info.Clone())
 }
 
 func (ss *Workspace) DataStore(name string) *FeatureTypes {
-	return NewDataStoresHandler(ss.info.Clone()).Use(name)
+	return newDataStoresHandler(ss.info.Clone()).Use(name)
 }
 
 func (ss *Workspace) FeatureTypes() *FeatureTypes {
@@ -87,11 +87,11 @@ func (ss *Workspace) FeatureTypes() *FeatureTypes {
 }
 
 func (ss *Workspace) CoverageStores() *CoverageStores {
-	return NewCoverageStoreHandler(ss.info.Clone())
+	return newCoverageStoreHandler(ss.info.Clone())
 }
 
 func (ss *Workspace) CoverageStore(name string) *CoverageStore {
-	return NewCoverageStoreHandler(ss.info.Clone()).Use(name)
+	return newCoverageStoreHandler(ss.info.Clone()).Use(name)
 }
 
 //TODO: add raster service and layers service for handling layers without specifying store

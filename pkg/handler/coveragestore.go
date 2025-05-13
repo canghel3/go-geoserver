@@ -31,7 +31,7 @@ const (
 	WorldImage       CoverageStoreType = "WorldImage"
 )
 
-func NewCoverageStoreHandler(info *internal.GeoserverData) *CoverageStores {
+func newCoverageStoreHandler(info *internal.GeoserverData) *CoverageStores {
 	r := requester.NewRequester(info)
 	return &CoverageStores{
 		info:      info,

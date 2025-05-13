@@ -17,7 +17,7 @@ const (
 	CSV        DataStoreType = "csv"
 )
 
-func NewDataStoresHandler(info *internal.GeoserverData) *DataStores {
+func newDataStoresHandler(info *internal.GeoserverData) *DataStores {
 	r := requester.NewRequester(info)
 	return &DataStores{
 		info:      info,

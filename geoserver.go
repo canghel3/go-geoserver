@@ -57,13 +57,4 @@ func (s *GeoserverClient) WMS() *handler.WMS {
 	return handler.NewWMSHandler(s.info.Clone())
 }
 
-func (s *GeoserverClient) CoverageStores() *handler.CoverageStores {
-	return handler.NewCoverageStoreHandler(s.info.Clone())
-}
-
-// CoverageStore is shorthand for CoverageStores().Use(name)
-func (s *GeoserverClient) CoverageStore(name string) *handler.CoverageStore {
-	return handler.NewCoverageStoreHandler(s.info.Clone()).Use(name)
-}
-
 //TODO: implement wfs and others
