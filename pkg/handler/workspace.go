@@ -75,11 +75,11 @@ func (w *Workspaces) Use(workspace string) *Workspace {
 }
 
 func (ss *Workspace) DataStores() *DataStores {
-	return newDataStores(ss.info.Clone())
+	return NewDataStoresHandler(ss.info.Clone())
 }
 
 func (ss *Workspace) DataStore(name string) *FeatureTypes {
-	return newDataStores(ss.info.Clone()).Use(name)
+	return NewDataStoresHandler(ss.info.Clone()).Use(name)
 }
 
 func (ss *Workspace) FeatureTypes() *FeatureTypes {

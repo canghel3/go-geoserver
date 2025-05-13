@@ -9,7 +9,15 @@ import (
 	"github.com/canghel3/go-geoserver/pkg/options"
 )
 
-func newDataStores(info *internal.GeoserverData) *DataStores {
+type DataStoreType string
+
+const (
+	PostGIS    DataStoreType = "postgis"
+	GeoPackage DataStoreType = "geopkg"
+	CSV        DataStoreType = "csv"
+)
+
+func NewDataStoresHandler(info *internal.GeoserverData) *DataStores {
 	r := requester.NewRequester(info)
 	return &DataStores{
 		info:      info,
@@ -64,7 +72,7 @@ func (dsl DataStoreList) PostGIS(name string, connectionParams postgis.Connectio
 		"user":     connectionParams.User,
 		"passwd":   connectionParams.Password,
 		"port":     connectionParams.Port,
-		"dbtype":   "postgis",
+		"dbtype":   string(PostGIS),
 	}
 
 	for _, option := range options {
@@ -98,7 +106,7 @@ func (dsl DataStoreList) GeoPackage(name string, filepath string, options ...opt
 
 	cp := internal.ConnectionParams{
 		"database": filepath,
-		"dbtype":   "geopkg",
+		"dbtype":   string(GeoPackage),
 	}
 
 	for _, option := range options {
@@ -198,7 +206,7 @@ func (dsl DataStoreList) CSV(name string, filepath string, options ...options.CS
 
 	cp := internal.ConnectionParams{
 		"url":    filepath,
-		"dbtype": "csv",
+		"dbtype": string(CSV),
 	}
 
 	for _, option := range options {
@@ -226,8 +234,7 @@ func (dsl DataStoreList) CSV(name string, filepath string, options ...options.CS
 
 func (dsl DataStoreList) WebFeatureService(name, getCapabilitiesUrl string, options ...options.WFSOptions) error {
 	cp := internal.ConnectionParams{
-		"WFSDataStoreFactory:GET_CAPABILITIES_URL": getCapabilitiesUrl,
-		"dbtype": "wfs",
+		"GET_CAPABILITIES_URL": getCapabilitiesUrl,
 	}
 
 	for _, option := range options {
