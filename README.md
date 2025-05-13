@@ -12,16 +12,27 @@ This client provides a simple and idiomatic way to talk to GeoServer’s REST AP
       - CSV
       - Directory of spatial files (shapefiles)
       - GeoPackage
-      - PostGIS,
+      - PostGIS
       - Shapefile
       - Web Feature Server
-    - Feature Types
     - Raster Data Sources
-      - GeoTIFF
-      - WorldImage
-      - ImageMosaic
+      - AIG
       - ArcGrid
-      - GeoPackage (raster)
+      - DTED
+      - EHdr
+      - ENVIHdr
+      - ERDASImg
+      - GeoPackage (mosaic)
+      - GeoTIFF
+      - ImageMosaic
+      - ImagePyramid
+      - NITF
+      - RPFTOC
+      - RST
+      - SRP
+      - VRT
+      - WorldImage
+    - Feature Types
 
 ## 🛠️ Work In Progress - in order of priority
 
