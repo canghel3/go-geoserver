@@ -12,6 +12,7 @@ type Requester struct {
 	wms            *WMSRequester
 }
 
+// TODO: having a clone of the requester for each handler is bad design. this must be refactored
 func NewRequester(info *internal.GeoserverData) *Requester {
 	return &Requester{
 		workspaces: &WorkspaceRequester{

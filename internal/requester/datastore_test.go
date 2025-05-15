@@ -5,7 +5,7 @@ package requester
 import (
 	"bytes"
 	"github.com/canghel3/go-geoserver/internal/mocks"
-	"github.com/canghel3/go-geoserver/testdata"
+	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"io"

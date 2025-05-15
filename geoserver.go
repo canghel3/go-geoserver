@@ -2,7 +2,7 @@ package client
 
 import (
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/pkg/handler"
+	"github.com/canghel3/go-geoserver/pkg/actions"
 	"net/http"
 )
 
@@ -44,17 +44,17 @@ func (gco geoserverClientOptions) Client(client internal.HTTPClient) GeoserverCl
 }
 
 // Workspaces displays available actions inside a workspace.
-func (s *GeoserverClient) Workspaces() *handler.Workspaces {
-	return handler.NewWorkspaceHandler(s.info.Clone())
+func (s *GeoserverClient) Workspaces() *actions.Workspaces {
+	return actions.NewWorkspaceHandler(s.info.Clone())
 }
 
 // Workspace is shorthand for Workspaces().Use(name)
-func (s *GeoserverClient) Workspace(name string) *handler.Workspace {
-	return handler.NewWorkspaceHandler(s.info.Clone()).Use(name)
+func (s *GeoserverClient) Workspace(name string) *actions.Workspace {
+	return actions.NewWorkspaceHandler(s.info.Clone()).Use(name)
 }
 
-func (s *GeoserverClient) WMS() *handler.WMS {
-	return handler.NewWMSHandler(s.info.Clone())
+func (s *GeoserverClient) WMS() *actions.WMS {
+	return actions.NewWMSHandler(s.info.Clone())
 }
 
 //TODO: implement wfs and others

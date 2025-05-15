@@ -6,8 +6,8 @@ import (
 	"bytes"
 	"encoding/xml"
 	"github.com/canghel3/go-geoserver/internal/mocks"
+	testdata2 "github.com/canghel3/go-geoserver/internal/testdata"
 	wms2 "github.com/canghel3/go-geoserver/pkg/wms"
-	"github.com/canghel3/go-geoserver/testdata"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"io"
@@ -24,7 +24,7 @@ func TestWMSRequester_GetCapabilitiesRequester(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)
-		content, err := testdata.Read(CAPABILITIES_1_3_0)
+		content, err := testdata2.Read(CAPABILITIES_1_3_0)
 		assert.NoError(t, err)
 
 		mockResponse := &http.Response{
@@ -35,7 +35,7 @@ func TestWMSRequester_GetCapabilitiesRequester(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		wmsRequester := WMSRequester{info: testdata.GeoserverInfo(mockClient)}
+		wmsRequester := WMSRequester{info: testdata2.GeoserverInfo(mockClient)}
 		capabilities, err := wmsRequester.GetCapabilities(string(wms2.VERSION_1_3_0))
 
 		assert.NoError(t, err)

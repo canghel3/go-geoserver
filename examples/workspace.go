@@ -2,12 +2,12 @@ package examples
 
 import (
 	"github.com/canghel3/go-geoserver"
-	"github.com/canghel3/go-geoserver/testdata"
+	"github.com/canghel3/go-geoserver/internal/testdata"
 )
 
 func Create() {
 	geoclient := client.NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
-	err := geoclient.Workspaces().Create(testdata.WORKSPACE, true)
+	err := geoclient.Workspaces().Create(testdata.Workspace, true)
 	if err != nil {
 		panic(err)
 	}
@@ -15,7 +15,7 @@ func Create() {
 
 func Retrieve() {
 	geoclient := client.NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
-	wksp, err := geoclient.Workspaces().Get(testdata.WORKSPACE)
+	wksp, err := geoclient.Workspaces().Get(testdata.Workspace)
 	if err != nil {
 		panic(err)
 	}
@@ -30,7 +30,7 @@ func Retrieve() {
 
 func Update() {
 	geoclient := client.NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
-	err := geoclient.Workspaces().Update(testdata.WORKSPACE, "new_name")
+	err := geoclient.Workspaces().Update(testdata.Workspace, "new_name")
 	if err != nil {
 		panic(err)
 	}
@@ -38,7 +38,7 @@ func Update() {
 
 func Delete() {
 	geoclient := client.NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
-	err := geoclient.Workspaces().Delete(testdata.WORKSPACE, true)
+	err := geoclient.Workspaces().Delete(testdata.Workspace, true)
 	if err != nil {
 		panic(err)
 	}
