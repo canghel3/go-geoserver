@@ -13,3 +13,9 @@ func (cs CoverageStoreOptionGenerator) Description(description string) CoverageS
 		csl.Description = description
 	}
 }
+
+func (cs CoverageStoreOptionGenerator) Default() CoverageStoreOptionFunc {
+	return func(csl *internal.CoverageStoreOptions) {
+		csl.Default = true
+	}
+}

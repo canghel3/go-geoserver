@@ -17,19 +17,19 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 	//create workspace
 	geoserverClient.Workspaces().Create(testdata.Workspace, true)
 
-	//create datastore
-	err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create().PostGIS(testdata.DatastorePostgis, postgis.ConnectionParams{
-		Host:     testdata.PostgisHost,
-		Database: testdata.PostgisDb,
-		User:     testdata.PostgisUsername,
-		Password: testdata.PostgisPassword,
-		Port:     testdata.PostgisPort,
-		SSL:      testdata.PostgisSsl,
-	})
-	assert.NoError(t, err)
-
 	t.Run("200 OK", func(t *testing.T) {
 		t.Run("POSTGIS", func(t *testing.T) {
+			//create datastore
+			err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create().PostGIS(testdata.DatastorePostgis, postgis.ConnectionParams{
+				Host:     testdata.PostgisHost,
+				Database: testdata.PostgisDb,
+				User:     testdata.PostgisUsername,
+				Password: testdata.PostgisPassword,
+				Port:     testdata.PostgisPort,
+				SSL:      testdata.PostgisSsl,
+			})
+			assert.NoError(t, err)
+
 			t.Run("WITHOUT ANY OPTIONS", func(t *testing.T) {
 				feature := featuretypes.New(testdata.FeatureTypeName, testdata.FeatureTypeNativeName)
 
@@ -38,10 +38,10 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 
 				get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypeName)
 				assert.NoError(t, err)
-				assert.Equal(t, get.FeatureType.Name, testdata.FeatureTypeName)
-				assert.Equal(t, get.FeatureType.NativeName, testdata.FeatureTypeNativeName)
-				assert.Equal(t, get.FeatureType.Srs, "EPSG:4326")
-				assert.Equal(t, get.FeatureType.Keywords.Keywords, []string{"features", "init"})
+				assert.Equal(t, get.Name, testdata.FeatureTypeName)
+				assert.Equal(t, get.NativeName, testdata.FeatureTypeNativeName)
+				assert.Equal(t, get.Srs, "EPSG:4326")
+				assert.Equal(t, get.Keywords.Keywords, []string{"features", "init"})
 			})
 
 			t.Run("WITH BBOX OPTION", func(t *testing.T) {
@@ -56,19 +56,19 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 
 				get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(featureName)
 				assert.NoError(t, err)
-				assert.Equal(t, get.FeatureType.Name, featureName)
-				assert.Equal(t, get.FeatureType.NativeName, testdata.FeatureTypeNativeName)
-				assert.Equal(t, get.FeatureType.Srs, "EPSG:4326")
-				assert.Equal(t, get.FeatureType.NativeBoundingBox.MinX, bbox[0])
-				assert.Equal(t, get.FeatureType.NativeBoundingBox.MinY, bbox[1])
-				assert.Equal(t, get.FeatureType.NativeBoundingBox.MaxX, bbox[2])
-				assert.Equal(t, get.FeatureType.NativeBoundingBox.MaxY, bbox[3])
-				assert.Equal(t, get.FeatureType.NativeBoundingBox.CRS, bboxSrs)
+				assert.Equal(t, get.Name, featureName)
+				assert.Equal(t, get.NativeName, testdata.FeatureTypeNativeName)
+				assert.Equal(t, get.Srs, "EPSG:4326")
+				assert.Equal(t, get.NativeBoundingBox.MinX, bbox[0])
+				assert.Equal(t, get.NativeBoundingBox.MinY, bbox[1])
+				assert.Equal(t, get.NativeBoundingBox.MaxX, bbox[2])
+				assert.Equal(t, get.NativeBoundingBox.MaxY, bbox[3])
+				assert.Equal(t, get.NativeBoundingBox.CRS, bboxSrs)
 			})
 		})
 	})
 
-	err = geoserverClient.Workspaces().Delete(testdata.Workspace, true)
+	err := geoserverClient.Workspaces().Delete(testdata.Workspace, true)
 	assert.NoError(t, err)
 }
 
@@ -98,9 +98,9 @@ func TestFeatureTypeIntegration_Get(t *testing.T) {
 		get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypeName)
 		assert.NoError(t, err)
 		assert.NotNil(t, get)
-		assert.Equal(t, get.FeatureType.Name, testdata.FeatureTypeName)
-		assert.Equal(t, get.FeatureType.NativeName, testdata.FeatureTypeNativeName)
-		assert.Equal(t, get.FeatureType.Srs, "EPSG:4326")
+		assert.Equal(t, get.Name, testdata.FeatureTypeName)
+		assert.Equal(t, get.NativeName, testdata.FeatureTypeNativeName)
+		assert.Equal(t, get.Srs, "EPSG:4326")
 	})
 
 	t.Run("404 NOT FOUND", func(t *testing.T) {

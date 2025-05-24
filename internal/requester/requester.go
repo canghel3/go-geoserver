@@ -8,27 +8,31 @@ type Requester struct {
 	workspaces     *WorkspaceRequester
 	datastores     *DataStoreRequester
 	coveragestores *CoverageStoreRequester
+	coverages      *CoverageRequester
 	featuretypes   *FeatureTypeRequester
 	wms            *WMSRequester
 }
 
 // TODO: having a clone of the requester for each handler is bad design. this must be refactored
-func NewRequester(info *internal.GeoserverData) *Requester {
+func NewRequester(data *internal.GeoserverData) *Requester {
 	return &Requester{
 		workspaces: &WorkspaceRequester{
-			info: info,
+			data: data,
 		},
 		datastores: &DataStoreRequester{
-			data: info,
+			data: data,
 		},
 		coveragestores: &CoverageStoreRequester{
-			data: info,
+			data: data,
 		},
 		featuretypes: &FeatureTypeRequester{
-			info: info,
+			data: data,
+		},
+		coverages: &CoverageRequester{
+			data: data,
 		},
 		wms: &WMSRequester{
-			info: info,
+			data: data,
 		},
 	}
 }
@@ -51,4 +55,8 @@ func (r *Requester) WMS() *WMSRequester {
 
 func (r *Requester) CoverageStores() *CoverageStoreRequester {
 	return r.coveragestores
+}
+
+func (r *Requester) Coverages() *CoverageRequester {
+	return r.coverages
 }

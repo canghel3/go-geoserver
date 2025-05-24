@@ -85,7 +85,7 @@ func (ss *Workspace) CoverageStores() *CoverageStores {
 	return newCoverageStoreActions(ss.info.Clone())
 }
 
-func (ss *Workspace) CoverageStore(name string) *CoverageStore {
+func (ss *Workspace) CoverageStore(name string) *Coverages {
 	return newCoverageStoreActions(ss.info.Clone()).Use(name)
 }
 

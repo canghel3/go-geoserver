@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/pkg/models/coveragestores"
-	customerrors2 "github.com/canghel3/go-geoserver/pkg/models/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/models/customerrors"
 	"io"
 	"net/http"
 )
@@ -40,16 +40,16 @@ func (cr *CoverageStoreRequester) Create(content []byte) error {
 			return err
 		}
 
-		return customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 
 // TODO: implement
-func (cr *CoverageStoreRequester) GetAll() (*coveragestores.AllCoverageStoreRetrievalWrapper, error) {
+func (cr *CoverageStoreRequester) GetAll() ([]coveragestores.CoverageStore, error) {
 	return nil, errors.New("not implemented")
 }
 
-func (cr *CoverageStoreRequester) Get(name string) (*coveragestores.CoverageStoreRetrieval, error) {
+func (cr *CoverageStoreRequester) Get(name string) (*coveragestores.CoverageStore, error) {
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s", cr.data.Connection.URL, cr.data.Workspace, name), nil)
 	if err != nil {
 		return nil, err
@@ -74,14 +74,14 @@ func (cr *CoverageStoreRequester) Get(name string) (*coveragestores.CoverageStor
 
 		return &cts.CoverageStore, nil
 	case http.StatusNotFound:
-		return nil, customerrors2.WrapNotFoundError(fmt.Errorf("coveragestore %s not found", name))
+		return nil, customerrors.WrapNotFoundError(fmt.Errorf("coveragestore %s not found", name))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
 			return nil, err
 		}
 
-		return nil, customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 
@@ -108,14 +108,14 @@ func (cr *CoverageStoreRequester) Delete(name string, recurse bool) error {
 	case http.StatusOK:
 		return nil
 	case http.StatusNotFound:
-		return customerrors2.WrapNotFoundError(fmt.Errorf("coveragestore %s not found", name))
+		return customerrors.WrapNotFoundError(fmt.Errorf("coveragestore %s not found", name))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
 			return err
 		}
 
-		return customerrors2.NewGeoserverError(fmt.Sprintf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return customerrors.NewGeoserverError(fmt.Sprintf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 

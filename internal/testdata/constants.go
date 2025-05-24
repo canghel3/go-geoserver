@@ -19,6 +19,9 @@ const (
 	FeatureTypeNativeName = "init"
 	FeatureTypeTitle      = "sample"
 
+	CoverageName       = "sample"
+	CoverageNativeName = "sample"
+
 	PostgisHost     = "postgis"
 	PostgisPort     = "5432"
 	PostgisUsername = "geoserver"

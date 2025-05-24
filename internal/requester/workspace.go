@@ -12,7 +12,7 @@ import (
 )
 
 type WorkspaceRequester struct {
-	info *internal.GeoserverData
+	data *internal.GeoserverData
 }
 
 func (wr *WorkspaceRequester) Create(name string, _default bool) error {
@@ -27,16 +27,16 @@ func (wr *WorkspaceRequester) Create(name string, _default bool) error {
 		return err
 	}
 
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces?default=%v", wr.info.Connection.URL, _default)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces?default=%v", wr.data.Connection.URL, _default)
 	request, err := http.NewRequest(http.MethodPost, target, bytes.NewBuffer(content))
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(wr.info.Connection.Credentials.Username, wr.info.Connection.Credentials.Password)
+	request.SetBasicAuth(wr.data.Connection.Credentials.Username, wr.data.Connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	response, err := wr.info.Client.Do(request)
+	response, err := wr.data.Client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -58,17 +58,17 @@ func (wr *WorkspaceRequester) Create(name string, _default bool) error {
 }
 
 func (wr *WorkspaceRequester) Get(name string) (*workspace.WorkspaceRetrieval, error) {
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", wr.info.Connection.URL, name)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", wr.data.Connection.URL, name)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	request.SetBasicAuth(wr.info.Connection.Credentials.Username, wr.info.Connection.Credentials.Password)
+	request.SetBasicAuth(wr.data.Connection.Credentials.Username, wr.data.Connection.Credentials.Password)
 	request.Header.Add("Accept", "application/json")
 
-	response, err := wr.info.Client.Do(request)
+	response, err := wr.data.Client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -95,17 +95,17 @@ func (wr *WorkspaceRequester) Get(name string) (*workspace.WorkspaceRetrieval, e
 }
 
 func (wr *WorkspaceRequester) GetAll() ([]workspace.MultiWorkspace, error) {
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces", wr.info.Connection.URL)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces", wr.data.Connection.URL)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	request.SetBasicAuth(wr.info.Connection.Credentials.Username, wr.info.Connection.Credentials.Password)
+	request.SetBasicAuth(wr.data.Connection.Credentials.Username, wr.data.Connection.Credentials.Password)
 	request.Header.Add("Accept", "application/json")
 
-	response, err := wr.info.Client.Do(request)
+	response, err := wr.data.Client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -147,16 +147,16 @@ func (wr *WorkspaceRequester) Update(oldName, newName string) error {
 		return err
 	}
 
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", wr.info.Connection.URL, oldName)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", wr.data.Connection.URL, oldName)
 	request, err := http.NewRequest(http.MethodPut, target, bytes.NewReader(content))
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(wr.info.Connection.Credentials.Username, wr.info.Connection.Credentials.Password)
+	request.SetBasicAuth(wr.data.Connection.Credentials.Username, wr.data.Connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
 
-	response, err := wr.info.Client.Do(request)
+	response, err := wr.data.Client.Do(request)
 	if err != nil {
 		return err
 	}
@@ -178,15 +178,15 @@ func (wr *WorkspaceRequester) Update(oldName, newName string) error {
 }
 
 func (wr *WorkspaceRequester) Delete(name string, recurse bool) error {
-	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s?recurse=%v", wr.info.Connection.URL, name, recurse)
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s?recurse=%v", wr.data.Connection.URL, name, recurse)
 	request, err := http.NewRequest(http.MethodDelete, target, nil)
 	if err != nil {
 		return err
 	}
 
-	request.SetBasicAuth(wr.info.Connection.Credentials.Username, wr.info.Connection.Credentials.Password)
+	request.SetBasicAuth(wr.data.Connection.Credentials.Username, wr.data.Connection.Credentials.Password)
 
-	response, err := wr.info.Client.Do(request)
+	response, err := wr.data.Client.Do(request)
 	if err != nil {
 		return err
 	}

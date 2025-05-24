@@ -23,27 +23,27 @@ func newFeatureTypes(store string, info *internal.GeoserverData) *FeatureTypes {
 	}
 }
 
-func (ft *FeatureTypes) Publish(featureType featuretypes.CreateFeatureType) error {
-	completeFeatureType := internal.CreateFeatureType{
+func (ft *FeatureTypes) Publish(featureType featuretypes.FeatureType) error {
+	completeFeatureType := featuretypes.FeatureType{
 		Name:       featureType.Name,
 		NativeName: featureType.NativeName,
-		Namespace: internal.Namespace{
+		Namespace: featuretypes.Namespace{
 			Name: ft.info.Workspace,
 			Href: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", ft.info.Connection.URL, ft.info.Workspace),
 		},
 		Srs:               featureType.Srs,
-		NativeBoundingBox: featureType.Bbox,
+		NativeBoundingBox: featureType.NativeBoundingBox,
 		ProjectionPolicy:  featureType.ProjectionPolicy,
 		Keywords:          featureType.Keywords,
 		Title:             featureType.Title,
-		Store: internal.Store{
+		Store: featuretypes.Store{
 			Class: "dataStore",
 			Name:  fmt.Sprintf("%s:%s", ft.info.Workspace, ft.store),
 			Href:  fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s.json", ft.info.Connection.URL, ft.info.Workspace, ft.store),
 		},
 	}
 
-	content, err := json.Marshal(internal.CreateFeatureTypeWrapper{FeatureType: completeFeatureType})
+	content, err := json.Marshal(featuretypes.CreateFeatureTypeWrapper{FeatureType: completeFeatureType})
 	if err != nil {
 		return err
 	}
@@ -51,15 +51,15 @@ func (ft *FeatureTypes) Publish(featureType featuretypes.CreateFeatureType) erro
 	return ft.requester.FeatureTypes().Create(ft.store, content)
 }
 
-func (ft *FeatureTypes) Get(name string) (*featuretypes.GetFeatureTypeWrapper, error) {
+func (ft *FeatureTypes) Get(name string) (*featuretypes.GetFeatureType, error) {
 	return ft.requester.FeatureTypes().Get(ft.store, name)
 }
 
-func (ft *FeatureTypes) GetAll() ([]featuretypes.GetFeatureTypeWrapper, error) {
+func (ft *FeatureTypes) GetAll() ([]featuretypes.FeatureType, error) {
 	return nil, errors.New("not implemented")
 }
 
-func (ft *FeatureTypes) Update(featureType featuretypes.CreateFeatureType) error {
+func (ft *FeatureTypes) Update(featureType featuretypes.FeatureType) error {
 	return errors.New("not implemented")
 }
 

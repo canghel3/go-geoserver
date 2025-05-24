@@ -5,10 +5,10 @@ import (
 )
 
 type DataStoreRetrievalWrapper struct {
-	DataStore DataStoreRetrieval `json:"dataStore"`
+	DataStore DataStore `json:"dataStore"`
 }
 
-type DataStoreRetrieval struct {
+type DataStore struct {
 	Name                       string                   `json:"name,omitempty"`
 	Description                string                   `json:"description,omitempty"`
 	DisableConnectionOnFailure bool                     `json:"disableOnConnFailure,omitempty"`

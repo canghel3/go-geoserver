@@ -60,7 +60,7 @@ func (ds *DataStores) Create(options ...options.DataStoreOption) DataStoreList {
 	return dsl
 }
 
-func (ds *DataStores) Get(name string) (*datastores.DataStoreRetrieval, error) {
+func (ds *DataStores) Get(name string) (*datastores.DataStore, error) {
 	return ds.requester.DataStores().Get(name)
 }
 

@@ -11,20 +11,20 @@ import (
 )
 
 type WMSRequester struct {
-	info *internal.GeoserverData
+	data *internal.GeoserverData
 }
 
 func (wmsR *WMSRequester) GetCapabilities(version string) (*wms.Capabilities1_3_0, error) {
-	var target = fmt.Sprintf("%s/geoserver/wms?service=wms&version=%s&request=GetCapabilities", wmsR.info.Connection.URL, version)
+	var target = fmt.Sprintf("%s/geoserver/wms?service=wms&version=%s&request=GetCapabilities", wmsR.data.Connection.URL, version)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	request.SetBasicAuth(wmsR.info.Connection.Credentials.Username, wmsR.info.Connection.Credentials.Password)
+	request.SetBasicAuth(wmsR.data.Connection.Credentials.Username, wmsR.data.Connection.Credentials.Password)
 
-	response, err := wmsR.info.Client.Do(request)
+	response, err := wmsR.data.Client.Do(request)
 	if err != nil {
 		return nil, err
 	}

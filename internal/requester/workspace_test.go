@@ -37,7 +37,7 @@ func TestWorkspaceRequester_Create(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		err := workspaceRequester.Create(testdata.Workspace, false)
 		assert.NoError(t, err)
@@ -55,7 +55,7 @@ func TestWorkspaceRequester_Create(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		var econflict *customerrors2.ConflictError
 		err := workspaceRequester.Create(testdata.Workspace, false)
@@ -76,7 +76,7 @@ func TestWorkspaceRequester_Create(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		var econflict *customerrors2.GeoserverError
 		err := workspaceRequester.Create(testdata.Workspace, false)
@@ -99,7 +99,7 @@ func TestWorkspaceRequester_Delete(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		err := workspaceRequester.Delete(testdata.Workspace, false)
 		assert.NoError(t, err)
@@ -117,7 +117,7 @@ func TestWorkspaceRequester_Delete(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		var enotfound *customerrors2.NotFoundError
 		err := workspaceRequester.Delete(testdata.Workspace, false)
@@ -138,7 +138,7 @@ func TestWorkspaceRequester_Delete(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		var econflict *customerrors2.GeoserverError
 		err := workspaceRequester.Delete(testdata.Workspace, false)
@@ -164,7 +164,7 @@ func TestWorkspaceRequester_Get(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		wksp, err := workspaceRequester.Get(testdata.Workspace)
 		assert.NoError(t, err)
@@ -189,7 +189,7 @@ func TestWorkspaceRequester_Get(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		var enotfound *customerrors2.NotFoundError
 		wksp, err := workspaceRequester.Get(testdata.Workspace)
@@ -211,7 +211,7 @@ func TestWorkspaceRequester_Get(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		var econflict *customerrors2.GeoserverError
 		_, err := workspaceRequester.Get(testdata.Workspace)
@@ -237,7 +237,7 @@ func TestWorkspaceRequester_GetAll(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		wksp, err := workspaceRequester.GetAll()
 		assert.NoError(t, err)
@@ -265,7 +265,7 @@ func TestWorkspaceRequester_GetAll(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		wksp, err := workspaceRequester.GetAll()
 		assert.NoError(t, err)
@@ -290,7 +290,7 @@ func TestWorkspaceRequester_GetAll(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		var econflict *customerrors2.GeoserverError
 		_, err := workspaceRequester.GetAll()
@@ -313,7 +313,7 @@ func TestWorkspaceRequester_Update(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		err := workspaceRequester.Update(testdata.Workspace, "newName")
 		assert.NoError(t, err)
@@ -331,7 +331,7 @@ func TestWorkspaceRequester_Update(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		var econflict *customerrors2.NotFoundError
 		err := workspaceRequester.Update(testdata.Workspace, "newName")
@@ -352,7 +352,7 @@ func TestWorkspaceRequester_Update(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		workspaceRequester := &WorkspaceRequester{info: testdata.GeoserverInfo(mockClient)}
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
 		var econflict *customerrors2.GeoserverError
 		err := workspaceRequester.Update(testdata.Workspace, "newName")

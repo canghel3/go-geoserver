@@ -57,18 +57,9 @@ func (cs *CoverageStores) Reset(name string) error {
 }
 
 // Use a specific coverage store
-func (cs *CoverageStores) Use(name string) *CoverageStore {
-	return &CoverageStore{
-		name: name,
-		info: cs.info.Clone(),
-	}
+func (cs *CoverageStores) Use(name string) *Coverages {
+	return newCoverages(name, cs.info.Clone())
 }
-
-type CoverageStore struct {
-	name string
-	info *internal.GeoserverData
-}
-
 func (cs *CoverageStores) Create(options ...options.CoverageStoreOptionFunc) CoverageStoreList {
 	csl := CoverageStoreList{
 		requester: cs.requester,
@@ -83,7 +74,7 @@ func (cs *CoverageStores) Create(options ...options.CoverageStoreOptionFunc) Cov
 	return csl
 }
 
-func (cs *CoverageStores) Get(name string) (*coveragestores.CoverageStoreRetrieval, error) {
+func (cs *CoverageStores) Get(name string) (*coveragestores.CoverageStore, error) {
 	return cs.requester.CoverageStores().Get(name)
 }
 

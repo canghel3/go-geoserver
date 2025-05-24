@@ -5,62 +5,6 @@ import (
 	"time"
 )
 
-type CreateFeatureType struct {
-	Name string
-	//The native name of the resource. This name corresponds to the physical resource that feature type is derived from -- a shapefile Name, a database table, etc...
-	NativeName string
-
-	Title            *string
-	Bbox             *misc.BoundingBox
-	Srs              *string
-	ProjectionPolicy *string
-	Keywords         *misc.Keywords
-	Store            *string
-}
-
-type FeatureTypeOption func(c *CreateFeatureType)
-
-type featureTypesOptions struct{}
-
-func (fto featureTypesOptions) BBOX(bbox [4]float64, bboxSrs string) FeatureTypeOption {
-	return func(f *CreateFeatureType) {
-		f.Bbox = &misc.BoundingBox{
-			MinX: bbox[0],
-			MaxX: bbox[2],
-			MinY: bbox[1],
-			MaxY: bbox[3],
-			CRS:  bboxSrs,
-		}
-	}
-}
-
-var Options featureTypesOptions
-
-func New(name, nativeName string, options ...FeatureTypeOption) CreateFeatureType {
-	cft := new(CreateFeatureType)
-	cft.Name = name
-	cft.NativeName = nativeName
-
-	for _, option := range options {
-		option(cft)
-	}
-
-	return *cft
-}
-
-// Namespace holds workspace configuration details when creating a layer in GeoServer.
-type Namespace struct {
-	Name string `json:"name"`
-	Href string `json:"href"`
-}
-
-// Store holds data store configuration details when creating a layer in GeoServer.
-type Store struct {
-	Class string `json:"@class"`
-	Name  string `json:"name"`
-	Href  string `json:"href"`
-}
-
 type GetFeatureTypeWrapper struct {
 	FeatureType GetFeatureType `json:"featureType"`
 }
@@ -136,4 +80,17 @@ type Attribute struct {
 	Nillable  bool   `json:"nillable"`
 	Binding   string `json:"binding"`
 	Length    *int   `json:"length,omitempty"`
+}
+
+// Namespace holds workspace configuration details when creating a layer in GeoServer.
+type Namespace struct {
+	Name string `json:"name"`
+	Href string `json:"href"`
+}
+
+// Store holds data store configuration details when creating a layer in GeoServer.
+type Store struct {
+	Class string `json:"@class"`
+	Name  string `json:"name"`
+	Href  string `json:"href"`
 }

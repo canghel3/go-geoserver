@@ -36,7 +36,7 @@ func TestWMSRequester_GetCapabilitiesRequester(t *testing.T) {
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
 
-		wmsRequester := WMSRequester{info: testdata2.GeoserverInfo(mockClient)}
+		wmsRequester := WMSRequester{data: testdata2.GeoserverInfo(mockClient)}
 		capabilities, err := wmsRequester.GetCapabilities(string(wms.VERSION_1_3_0))
 
 		assert.NoError(t, err)

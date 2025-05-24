@@ -5,10 +5,10 @@ import (
 )
 
 type CoverageStoreRetrievalWrapper struct {
-	CoverageStore CoverageStoreRetrieval `json:"coverageStore"`
+	CoverageStore CoverageStore `json:"coverageStore"`
 }
 
-type CoverageStoreRetrieval struct {
+type CoverageStore struct {
 	Name                       string                   `json:"name,omitempty"`
 	Description                string                   `json:"description,omitempty"`
 	Type                       string                   `json:"type,omitempty"`
