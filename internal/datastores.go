@@ -1,6 +1,6 @@
 package internal
 
-type DatastoreOptions struct {
+type DataStoreOptions struct {
 	Description                string
 	DisableOnConnectionFailure bool
 }

@@ -6,8 +6,9 @@ import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
 	"github.com/canghel3/go-geoserver/internal/validator"
-	"github.com/canghel3/go-geoserver/pkg/coveragestores"
+	"github.com/canghel3/go-geoserver/pkg/models/coveragestores"
 	"github.com/canghel3/go-geoserver/pkg/options"
+	"strings"
 )
 
 type CoverageStoreType string
@@ -31,7 +32,7 @@ const (
 	WorldImage       CoverageStoreType = "WorldImage"
 )
 
-func newCoverageStoreHandler(info *internal.GeoserverData) *CoverageStores {
+func newCoverageStoreActions(info *internal.GeoserverData) *CoverageStores {
 	r := requester.NewRequester(info)
 	return &CoverageStores{
 		info:      info,
@@ -40,7 +41,7 @@ func newCoverageStoreHandler(info *internal.GeoserverData) *CoverageStores {
 }
 
 type CoverageStoreList struct {
-	options   *internal.CoveragestoreOptions
+	options   *internal.CoverageStoreOptions
 	requester *requester.Requester
 	data      *internal.GeoserverData
 }
@@ -68,10 +69,10 @@ type CoverageStore struct {
 	info *internal.GeoserverData
 }
 
-func (cs *CoverageStores) Create(options ...options.CoveragestoreOptionFunc) CoverageStoreList {
+func (cs *CoverageStores) Create(options ...options.CoverageStoreOptionFunc) CoverageStoreList {
 	csl := CoverageStoreList{
 		requester: cs.requester,
-		options:   &internal.CoveragestoreOptions{},
+		options:   &internal.CoverageStoreOptions{},
 		data:      cs.info.Clone(),
 	}
 
@@ -90,10 +91,17 @@ func (cs *CoverageStores) Delete(name string, recurse bool) error {
 	return cs.requester.CoverageStores().Delete(name, recurse)
 }
 
-func (csl CoverageStoreList) AIG(name string, filepath string, options ...options.ArcGridOptions) error {
+func (csl CoverageStoreList) AIG(name string, filepath string) error {
 	err := internal.ValidateArcGrid(filepath)
 	if err != nil {
 		return err
+	}
+
+	var url string
+	if strings.HasPrefix(filepath, "file:") {
+		url = filepath
+	} else {
+		url = fmt.Sprintf("file:%s", filepath)
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
@@ -106,8 +114,11 @@ func (csl CoverageStoreList) AIG(name string, filepath string, options ...option
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
-			URL:     filepath,
+			Enabled: true,
+			URL:     url,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -119,10 +130,17 @@ func (csl CoverageStoreList) AIG(name string, filepath string, options ...option
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) ArcGrid(name string, filepath string, options ...options.ArcGridOptions) error {
+func (csl CoverageStoreList) ArcGrid(name string, filepath string) error {
 	err := validator.CoverageStore.ArcGrid(filepath)
 	if err != nil {
 		return err
+	}
+
+	var url string
+	if strings.HasPrefix(filepath, "file:") {
+		url = filepath
+	} else {
+		url = fmt.Sprintf("file:%s", filepath)
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
@@ -135,8 +153,11 @@ func (csl CoverageStoreList) ArcGrid(name string, filepath string, options ...op
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
-			URL:     filepath,
+			Enabled: true,
+			URL:     url,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -148,10 +169,17 @@ func (csl CoverageStoreList) ArcGrid(name string, filepath string, options ...op
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) DTED(name string, filepath string, options ...options.ArcGridOptions) error {
+func (csl CoverageStoreList) DTED(name string, filepath string) error {
 	err := internal.ValidateArcGrid(filepath)
 	if err != nil {
 		return err
+	}
+
+	var url string
+	if strings.HasPrefix(filepath, "file:") {
+		url = filepath
+	} else {
+		url = fmt.Sprintf("file:%s", filepath)
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
@@ -164,8 +192,11 @@ func (csl CoverageStoreList) DTED(name string, filepath string, options ...optio
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
-			URL:     filepath,
+			Enabled: true,
+			URL:     url,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -177,10 +208,17 @@ func (csl CoverageStoreList) DTED(name string, filepath string, options ...optio
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) EHdr(name string, filepath string, options ...options.ArcGridOptions) error {
+func (csl CoverageStoreList) EHdr(name string, filepath string) error {
 	err := internal.ValidateArcGrid(filepath)
 	if err != nil {
 		return err
+	}
+
+	var url string
+	if strings.HasPrefix(filepath, "file:") {
+		url = filepath
+	} else {
+		url = fmt.Sprintf("file:%s", filepath)
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
@@ -193,8 +231,11 @@ func (csl CoverageStoreList) EHdr(name string, filepath string, options ...optio
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
-			URL:     filepath,
+			Enabled: true,
+			URL:     url,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -206,10 +247,17 @@ func (csl CoverageStoreList) EHdr(name string, filepath string, options ...optio
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) ENVIHdr(name string, filepath string, options ...options.ArcGridOptions) error {
+func (csl CoverageStoreList) ENVIHdr(name string, filepath string) error {
 	err := internal.ValidateArcGrid(filepath)
 	if err != nil {
 		return err
+	}
+
+	var url string
+	if strings.HasPrefix(filepath, "file:") {
+		url = filepath
+	} else {
+		url = fmt.Sprintf("file:%s", filepath)
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
@@ -222,8 +270,11 @@ func (csl CoverageStoreList) ENVIHdr(name string, filepath string, options ...op
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
-			URL:     filepath,
+			Enabled: true,
+			URL:     url,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -235,10 +286,17 @@ func (csl CoverageStoreList) ENVIHdr(name string, filepath string, options ...op
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) ERDASImg(name string, filepath string, options ...options.ArcGridOptions) error {
+func (csl CoverageStoreList) ERDASImg(name string, filepath string) error {
 	err := internal.ValidateArcGrid(filepath)
 	if err != nil {
 		return err
+	}
+
+	var url string
+	if strings.HasPrefix(filepath, "file:") {
+		url = filepath
+	} else {
+		url = fmt.Sprintf("file:%s", filepath)
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
@@ -251,8 +309,11 @@ func (csl CoverageStoreList) ERDASImg(name string, filepath string, options ...o
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
-			URL:     filepath,
+			Enabled: true,
+			URL:     url,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -264,10 +325,17 @@ func (csl CoverageStoreList) ERDASImg(name string, filepath string, options ...o
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) GeoPackage(name string, filepath string, options ...options.GeoPackageRasterOptions) error {
+func (csl CoverageStoreList) GeoPackage(name string, filepath string) error {
 	err := internal.ValidateGeoPackage(filepath)
 	if err != nil {
 		return err
+	}
+
+	var url string
+	if strings.HasPrefix(filepath, "file:") {
+		url = filepath
+	} else {
+		url = fmt.Sprintf("file:%s", filepath)
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
@@ -280,8 +348,11 @@ func (csl CoverageStoreList) GeoPackage(name string, filepath string, options ..
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
-			URL:     filepath,
+			Enabled: true,
+			URL:     url,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -293,10 +364,17 @@ func (csl CoverageStoreList) GeoPackage(name string, filepath string, options ..
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) GeoTIFF(name string, filepath string, options ...options.GeoTIFFOptions) error {
+func (csl CoverageStoreList) GeoTIFF(name string, filepath string) error {
 	err := internal.ValidateGeoTIFF(filepath)
 	if err != nil {
 		return err
+	}
+
+	var url string
+	if strings.HasPrefix(filepath, "file:") {
+		url = filepath
+	} else {
+		url = fmt.Sprintf("file:%s", filepath)
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
@@ -304,9 +382,16 @@ func (csl CoverageStoreList) GeoTIFF(name string, filepath string, options ...op
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(GeoTIFF),
-			Default:     csl.options.Default,
-			Enabled:     csl.options.Enabled,
-			URL:         filepath,
+			Default:     false,
+			Enabled:     true,
+			URL:         url,
+			Workspace: struct {
+				Name string `json:"name"`
+				Link string `json:"link"`
+			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -318,7 +403,7 @@ func (csl CoverageStoreList) GeoTIFF(name string, filepath string, options ...op
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) ImageMosaic(name string, dirpath string, options ...options.ImageMosaicOptions) error {
+func (csl CoverageStoreList) ImageMosaic(name string, dirpath string) error {
 	err := internal.ValidateImageMosaic(dirpath)
 	if err != nil {
 		return err
@@ -334,8 +419,11 @@ func (csl CoverageStoreList) ImageMosaic(name string, dirpath string, options ..
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
+			Enabled: true,
 			URL:     dirpath,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -347,7 +435,7 @@ func (csl CoverageStoreList) ImageMosaic(name string, dirpath string, options ..
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) ImagePyramid(name string, dirpath string, options ...options.ImageMosaicOptions) error {
+func (csl CoverageStoreList) ImagePyramid(name string, dirpath string) error {
 	err := internal.ValidateImageMosaic(dirpath)
 	if err != nil {
 		return err
@@ -363,8 +451,11 @@ func (csl CoverageStoreList) ImagePyramid(name string, dirpath string, options .
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
+			Enabled: true,
 			URL:     dirpath,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -376,10 +467,17 @@ func (csl CoverageStoreList) ImagePyramid(name string, dirpath string, options .
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) NITF(name string, filepath string, options ...options.ArcGridOptions) error {
+func (csl CoverageStoreList) NITF(name string, filepath string) error {
 	err := internal.ValidateArcGrid(filepath)
 	if err != nil {
 		return err
+	}
+
+	var url string
+	if strings.HasPrefix(filepath, "file:") {
+		url = filepath
+	} else {
+		url = fmt.Sprintf("file:%s", filepath)
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
@@ -392,8 +490,11 @@ func (csl CoverageStoreList) NITF(name string, filepath string, options ...optio
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
-			URL:     filepath,
+			Enabled: true,
+			URL:     url,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -405,10 +506,17 @@ func (csl CoverageStoreList) NITF(name string, filepath string, options ...optio
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) RPFTOC(name string, filepath string, options ...options.ArcGridOptions) error {
+func (csl CoverageStoreList) RPFTOC(name string, filepath string) error {
 	err := internal.ValidateArcGrid(filepath)
 	if err != nil {
 		return err
+	}
+
+	var url string
+	if strings.HasPrefix(filepath, "file:") {
+		url = filepath
+	} else {
+		url = fmt.Sprintf("file:%s", filepath)
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
@@ -421,8 +529,11 @@ func (csl CoverageStoreList) RPFTOC(name string, filepath string, options ...opt
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
-			URL:     filepath,
+			Enabled: true,
+			URL:     url,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -434,10 +545,17 @@ func (csl CoverageStoreList) RPFTOC(name string, filepath string, options ...opt
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) RST(name string, filepath string, options ...options.ArcGridOptions) error {
+func (csl CoverageStoreList) RST(name string, filepath string) error {
 	err := internal.ValidateArcGrid(filepath)
 	if err != nil {
 		return err
+	}
+
+	var url string
+	if strings.HasPrefix(filepath, "file:") {
+		url = filepath
+	} else {
+		url = fmt.Sprintf("file:%s", filepath)
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
@@ -450,8 +568,11 @@ func (csl CoverageStoreList) RST(name string, filepath string, options ...option
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
-			URL:     filepath,
+			Enabled: true,
+			URL:     url,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -463,10 +584,17 @@ func (csl CoverageStoreList) RST(name string, filepath string, options ...option
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) SRP(name string, filepath string, options ...options.ArcGridOptions) error {
+func (csl CoverageStoreList) SRP(name string, filepath string) error {
 	err := internal.ValidateArcGrid(filepath)
 	if err != nil {
 		return err
+	}
+
+	var url string
+	if strings.HasPrefix(filepath, "file:") {
+		url = filepath
+	} else {
+		url = fmt.Sprintf("file:%s", filepath)
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
@@ -479,8 +607,11 @@ func (csl CoverageStoreList) SRP(name string, filepath string, options ...option
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
-			URL:     filepath,
+			Enabled: true,
+			URL:     url,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -492,10 +623,17 @@ func (csl CoverageStoreList) SRP(name string, filepath string, options ...option
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) VRT(name string, filepath string, options ...options.ArcGridOptions) error {
+func (csl CoverageStoreList) VRT(name string, filepath string) error {
 	err := internal.ValidateArcGrid(filepath)
 	if err != nil {
 		return err
+	}
+
+	var url string
+	if strings.HasPrefix(filepath, "file:") {
+		url = filepath
+	} else {
+		url = fmt.Sprintf("file:%s", filepath)
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
@@ -508,8 +646,11 @@ func (csl CoverageStoreList) VRT(name string, filepath string, options ...option
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
-			URL:     filepath,
+			Enabled: true,
+			URL:     url,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 
@@ -521,10 +662,17 @@ func (csl CoverageStoreList) VRT(name string, filepath string, options ...option
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) WorldImage(name string, filepath string, options ...options.WorldImageOptions) error {
+func (csl CoverageStoreList) WorldImage(name string, filepath string) error {
 	err := internal.ValidateWorldImage(filepath)
 	if err != nil {
 		return err
+	}
+
+	var url string
+	if strings.HasPrefix(filepath, "file:") {
+		url = filepath
+	} else {
+		url = fmt.Sprintf("file:%s", filepath)
 	}
 
 	data := coveragestores.GenericCoverageStoreCreationWrapper{
@@ -537,8 +685,11 @@ func (csl CoverageStoreList) WorldImage(name string, filepath string, options ..
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
 			Default: csl.options.Default,
-			Enabled: csl.options.Enabled,
-			URL:     filepath,
+			Enabled: true,
+			URL:     url,
+			Coverages: struct {
+				Link string `json:"link"`
+			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
 		},
 	}
 

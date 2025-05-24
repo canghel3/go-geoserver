@@ -5,8 +5,8 @@ package client
 import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal/testdata"
-	"github.com/canghel3/go-geoserver/pkg/customerrors"
-	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
+	customerrors2 "github.com/canghel3/go-geoserver/pkg/models/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/models/datastores/postgis"
 	"github.com/canghel3/go-geoserver/pkg/options"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -102,7 +102,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 		})
 
 		t.Run("SHAPEFILE", func(t *testing.T) {
-			err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create().Shapefile(testdata.DatastoreShapefile, testdata.Shapefile)
+			err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create().Shapefile(testdata.DatastoreShapefile, testdata.FileShapefile)
 			assert.NoError(t, err)
 
 			store, err := geoserverClient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreShapefile)
@@ -110,8 +110,12 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 			assert.NotNil(t, store)
 		})
 
+		t.Run("DIRECTORY OF SHAPEFILES", func(t *testing.T) {
+			t.Skip()
+		})
+
 		t.Run("GEOPACKAGE", func(t *testing.T) {
-			err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create().GeoPackage(testdata.DatastoreGeoPackage, testdata.GeoPackage)
+			err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create().GeoPackage(testdata.DatastoreGeoPackage, testdata.FileGeoPackage)
 			assert.NoError(t, err)
 
 			store, err := geoserverClient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreShapefile)
@@ -140,7 +144,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 			SSL:      testdata.PostgisSsl,
 		})
 		assert.Error(t, err)
-		assert.IsType(t, err, &customerrors.GeoserverError{})
+		assert.IsType(t, err, &customerrors2.GeoserverError{})
 		//yes, geoserver actually responds with 500 for a conflict error
 		assert.ErrorContains(t, err, fmt.Sprintf(`Store '%s' already exists in workspace '%s'`, testdata.DatastorePostgis, testdata.Workspace))
 	})
@@ -179,7 +183,7 @@ func TestDataStoreIntegration_Get(t *testing.T) {
 		ds, err := geoserverClient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastorePostgis + "_DOES_NOT_EXIST")
 		assert.Error(t, err)
 		assert.Nil(t, ds)
-		assert.IsType(t, err, &customerrors.NotFoundError{})
+		assert.IsType(t, err, &customerrors2.NotFoundError{})
 		assert.EqualError(t, err, fmt.Sprintf("datastore %s not found", testdata.DatastorePostgis+"_DOES_NOT_EXIST"))
 	})
 }
@@ -212,14 +216,14 @@ func TestDataStoreIntegration_Delete(t *testing.T) {
 			ds, err := geoserverClient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastorePostgis)
 			assert.Nil(t, ds)
 			assert.Error(t, err)
-			assert.IsType(t, err, &customerrors.NotFoundError{})
+			assert.IsType(t, err, &customerrors2.NotFoundError{})
 		})
 	})
 
 	t.Run("404 NOT FOUND", func(t *testing.T) {
 		err = geoserverClient.Workspace(testdata.Workspace).DataStores().Delete(testdata.DatastorePostgis, true)
 		assert.Error(t, err)
-		assert.IsType(t, err, &customerrors.NotFoundError{})
+		assert.IsType(t, err, &customerrors2.NotFoundError{})
 		assert.EqualError(t, err, fmt.Sprintf("datastore %s not found", testdata.DatastorePostgis))
 	})
 

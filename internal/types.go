@@ -1,7 +1,7 @@
 package internal
 
 import (
-	"github.com/canghel3/go-geoserver/pkg/datastores"
+	"github.com/canghel3/go-geoserver/pkg/models/datastores"
 )
 
 type ConnectionParams map[string]string

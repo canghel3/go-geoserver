@@ -1,7 +1,6 @@
 package internal
 
-type CoveragestoreOptions struct {
+type CoverageStoreOptions struct {
 	Description string
-	Enabled     bool
 	Default     bool
 }

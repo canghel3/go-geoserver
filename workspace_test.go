@@ -5,7 +5,7 @@ package client
 import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal/testdata"
-	"github.com/canghel3/go-geoserver/pkg/customerrors"
+	customerrors2 "github.com/canghel3/go-geoserver/pkg/models/customerrors"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -22,7 +22,7 @@ func TestWorkspaceIntegration_Create(t *testing.T) {
 
 	t.Run("409 CONFLICT", func(t *testing.T) {
 		err := geoserverClient.Workspaces().Create(testdata.Workspace, false)
-		assert.IsType(t, &customerrors.ConflictError{}, err)
+		assert.IsType(t, &customerrors2.ConflictError{}, err)
 		assert.EqualError(t, err, "workspace already exists")
 	})
 
@@ -48,7 +48,7 @@ func TestWorkspaceIntegration_Get(t *testing.T) {
 		wksp, err := geoserverClient.Workspaces().Get(testdata.Workspace + suffix)
 		assert.Nil(t, wksp)
 		assert.EqualError(t, err, fmt.Sprintf("workspace %s does not exist", testdata.Workspace+suffix))
-		assert.IsType(t, &customerrors.NotFoundError{}, err)
+		assert.IsType(t, &customerrors2.NotFoundError{}, err)
 	})
 
 	//revert changes made in the test
@@ -74,7 +74,7 @@ func TestWorkspaceIntegration_Update(t *testing.T) {
 		var suffix = "_NOT_FOUND"
 		err := geoserverClient.Workspaces().Update(testdata.Workspace, testdata.Workspace+suffix)
 		assert.EqualError(t, err, fmt.Sprintf("workspace %s does not exist", testdata.Workspace))
-		assert.IsType(t, &customerrors.NotFoundError{}, err)
+		assert.IsType(t, &customerrors2.NotFoundError{}, err)
 	})
 
 	//revert changes made in the test
@@ -96,7 +96,7 @@ func TestWorkspaceIntegration_Delete(t *testing.T) {
 	t.Run("404 NOT FOUND", func(t *testing.T) {
 		err := geoserverClient.Workspaces().Delete(testdata.Workspace, false)
 		assert.EqualError(t, err, fmt.Sprintf("workspace %s does not exist", testdata.Workspace))
-		assert.IsType(t, &customerrors.NotFoundError{}, err)
+		assert.IsType(t, &customerrors2.NotFoundError{}, err)
 	})
 }
 

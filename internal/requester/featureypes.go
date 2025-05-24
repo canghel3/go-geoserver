@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/pkg/customerrors"
-	"github.com/canghel3/go-geoserver/pkg/featuretypes"
+	customerrors2 "github.com/canghel3/go-geoserver/pkg/models/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/models/featuretypes"
 	"io"
 	"net/http"
 )
@@ -46,7 +46,7 @@ func (ftr *FeatureTypeRequester) Create(store string, content []byte) error {
 			return err
 		}
 
-		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 
@@ -75,14 +75,14 @@ func (ftr *FeatureTypeRequester) Delete(store, feature string, recurse bool) err
 	case http.StatusOK:
 		return nil
 	case http.StatusNotFound:
-		return customerrors.WrapNotFoundError(fmt.Errorf("featuretype %s does not exist", feature))
+		return customerrors2.WrapNotFoundError(fmt.Errorf("featuretype %s does not exist", feature))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
 			return err
 		}
 
-		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 
@@ -118,14 +118,14 @@ func (ftr *FeatureTypeRequester) Get(store, feature string) (*featuretypes.GetFe
 
 		return &featureType, nil
 	case http.StatusNotFound:
-		return nil, customerrors.WrapNotFoundError(fmt.Errorf("featuretype %s does not exist", feature))
+		return nil, customerrors2.WrapNotFoundError(fmt.Errorf("featuretype %s does not exist", feature))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
 			return nil, err
 		}
 
-		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return nil, customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 
@@ -159,7 +159,7 @@ func (ftr *FeatureTypeRequester) Update(store, name string, content []byte) erro
 			return err
 		}
 
-		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 

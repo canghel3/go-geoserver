@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
-	"github.com/canghel3/go-geoserver/pkg/featuretypes"
+	"github.com/canghel3/go-geoserver/pkg/models/featuretypes"
 )
 
 type FeatureTypes struct {

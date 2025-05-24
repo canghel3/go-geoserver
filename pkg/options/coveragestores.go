@@ -6,15 +6,10 @@ var CoverageStore CoverageStoreOptionGenerator
 
 type CoverageStoreOptionGenerator struct{}
 
-type CoveragestoreOptionFunc func(csl *internal.CoveragestoreOptions)
+type CoverageStoreOptionFunc func(csl *internal.CoverageStoreOptions)
 
-func (cs CoverageStoreOptionGenerator) Description(description string) CoveragestoreOptionFunc {
-	return func(csl *internal.CoveragestoreOptions) {
+func (cs CoverageStoreOptionGenerator) Description(description string) CoverageStoreOptionFunc {
+	return func(csl *internal.CoverageStoreOptions) {
 		csl.Description = description
-	}
-}
-
-func (cs CoverageStoreOptionGenerator) DisableConnectionOnFailure(disable bool) CoveragestoreOptionFunc {
-	return func(csl *internal.CoveragestoreOptions) {
 	}
 }

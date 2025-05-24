@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
-	"github.com/canghel3/go-geoserver/pkg/datastores"
-	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
+	"github.com/canghel3/go-geoserver/pkg/models/datastores"
+	"github.com/canghel3/go-geoserver/pkg/models/datastores/postgis"
 	"github.com/canghel3/go-geoserver/pkg/options"
 	"strings"
 )
@@ -20,7 +20,7 @@ const (
 	CSV        DataStoreType = "csv"
 )
 
-func newDataStoresHandler(info *internal.GeoserverData) *DataStores {
+func newDataStoresActions(info *internal.GeoserverData) *DataStores {
 	r := requester.NewRequester(info)
 	return &DataStores{
 		info:      info,
@@ -29,7 +29,7 @@ func newDataStoresHandler(info *internal.GeoserverData) *DataStores {
 }
 
 type DataStoreList struct {
-	options   *internal.DatastoreOptions
+	options   *internal.DataStoreOptions
 	requester *requester.Requester
 }
 
@@ -47,10 +47,10 @@ func (ds *DataStores) Use(name string) *FeatureTypes {
 	return newFeatureTypes(name, ds.info.Clone())
 }
 
-func (ds *DataStores) Create(options ...options.DatastoreOptionFunc) DataStoreList {
+func (ds *DataStores) Create(options ...options.DataStoreOption) DataStoreList {
 	dsl := DataStoreList{
 		requester: ds.requester,
-		options:   &internal.DatastoreOptions{},
+		options:   &internal.DataStoreOptions{},
 	}
 
 	for _, option := range options {

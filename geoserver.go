@@ -45,12 +45,12 @@ func (gco geoserverClientOptions) Client(client internal.HTTPClient) GeoserverCl
 
 // Workspaces displays available actions inside a workspace.
 func (s *GeoserverClient) Workspaces() *actions.Workspaces {
-	return actions.NewWorkspaceHandler(s.info.Clone())
+	return actions.NewWorkspaceActions(s.info.Clone())
 }
 
 // Workspace is shorthand for Workspaces().Use(name)
 func (s *GeoserverClient) Workspace(name string) *actions.Workspace {
-	return actions.NewWorkspaceHandler(s.info.Clone()).Use(name)
+	return actions.NewWorkspaceActions(s.info.Clone()).Use(name)
 }
 
 func (s *GeoserverClient) WMS() *actions.WMS {

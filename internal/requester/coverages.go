@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/pkg/coverages"
-	"github.com/canghel3/go-geoserver/pkg/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/models/coverages"
+	"github.com/canghel3/go-geoserver/pkg/models/customerrors"
 	"io"
 	"net/http"
 )

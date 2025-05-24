@@ -3,7 +3,7 @@ package actions
 import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
-	"github.com/canghel3/go-geoserver/pkg/workspace"
+	"github.com/canghel3/go-geoserver/pkg/models/workspace"
 )
 
 type Workspaces struct {
@@ -11,7 +11,7 @@ type Workspaces struct {
 	requester *requester.Requester
 }
 
-func NewWorkspaceHandler(info *internal.GeoserverData) *Workspaces {
+func NewWorkspaceActions(info *internal.GeoserverData) *Workspaces {
 	return &Workspaces{
 		info:      info,
 		requester: requester.NewRequester(info),
@@ -70,11 +70,11 @@ func (w *Workspaces) Use(workspace string) *Workspace {
 }
 
 func (ss *Workspace) DataStores() *DataStores {
-	return newDataStoresHandler(ss.info.Clone())
+	return newDataStoresActions(ss.info.Clone())
 }
 
 func (ss *Workspace) DataStore(name string) *FeatureTypes {
-	return newDataStoresHandler(ss.info.Clone()).Use(name)
+	return newDataStoresActions(ss.info.Clone()).Use(name)
 }
 
 //func (ss *Workspace) FeatureTypes() *FeatureTypes {
@@ -82,11 +82,11 @@ func (ss *Workspace) DataStore(name string) *FeatureTypes {
 //}
 
 func (ss *Workspace) CoverageStores() *CoverageStores {
-	return newCoverageStoreHandler(ss.info.Clone())
+	return newCoverageStoreActions(ss.info.Clone())
 }
 
 func (ss *Workspace) CoverageStore(name string) *CoverageStore {
-	return newCoverageStoreHandler(ss.info.Clone()).Use(name)
+	return newCoverageStoreActions(ss.info.Clone()).Use(name)
 }
 
 //TODO: add raster service and layers service for handling layers without specifying store

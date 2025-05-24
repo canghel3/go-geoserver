@@ -4,9 +4,9 @@ package client
 
 import (
 	"github.com/canghel3/go-geoserver/internal/testdata"
-	"github.com/canghel3/go-geoserver/pkg/customerrors"
-	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
-	"github.com/canghel3/go-geoserver/pkg/featuretypes"
+	"github.com/canghel3/go-geoserver/pkg/models/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/models/datastores/postgis"
+	"github.com/canghel3/go-geoserver/pkg/models/featuretypes"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -29,40 +29,42 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 	assert.NoError(t, err)
 
 	t.Run("200 OK", func(t *testing.T) {
-		t.Run("WITHOUT ANY OPTIONS", func(t *testing.T) {
-			feature := featuretypes.New(testdata.FeatureTypeName, testdata.FeatureTypeNativeName)
+		t.Run("POSTGIS", func(t *testing.T) {
+			t.Run("WITHOUT ANY OPTIONS", func(t *testing.T) {
+				feature := featuretypes.New(testdata.FeatureTypeName, testdata.FeatureTypeNativeName)
 
-			err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
-			assert.NoError(t, err)
+				err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
+				assert.NoError(t, err)
 
-			get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypeName)
-			assert.NoError(t, err)
-			assert.Equal(t, get.FeatureType.Name, testdata.FeatureTypeName)
-			assert.Equal(t, get.FeatureType.NativeName, testdata.FeatureTypeNativeName)
-			assert.Equal(t, get.FeatureType.Srs, "EPSG:4326")
-			assert.Equal(t, get.FeatureType.Keywords.Keywords, []string{"features", "init"})
-		})
+				get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypeName)
+				assert.NoError(t, err)
+				assert.Equal(t, get.FeatureType.Name, testdata.FeatureTypeName)
+				assert.Equal(t, get.FeatureType.NativeName, testdata.FeatureTypeNativeName)
+				assert.Equal(t, get.FeatureType.Srs, "EPSG:4326")
+				assert.Equal(t, get.FeatureType.Keywords.Keywords, []string{"features", "init"})
+			})
 
-		t.Run("WITH BBOX OPTION", func(t *testing.T) {
-			var featureName = testdata.FeatureTypeName + "_WITH_BBOX"
-			var bbox = [4]float64{-180.0, -90.0, 180.0, 90.0}
-			var bboxSrs = "EPSG:4326"
+			t.Run("WITH BBOX OPTION", func(t *testing.T) {
+				var featureName = testdata.FeatureTypeName + "_WITH_BBOX"
+				var bbox = [4]float64{-180.0, -90.0, 180.0, 90.0}
+				var bboxSrs = "EPSG:4326"
 
-			feature := featuretypes.New(featureName, testdata.FeatureTypeNativeName, featuretypes.Options.BBOX(bbox, bboxSrs))
+				feature := featuretypes.New(featureName, testdata.FeatureTypeNativeName, featuretypes.Options.BBOX(bbox, bboxSrs))
 
-			err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
-			assert.NoError(t, err)
+				err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
+				assert.NoError(t, err)
 
-			get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(featureName)
-			assert.NoError(t, err)
-			assert.Equal(t, get.FeatureType.Name, featureName)
-			assert.Equal(t, get.FeatureType.NativeName, testdata.FeatureTypeNativeName)
-			assert.Equal(t, get.FeatureType.Srs, "EPSG:4326")
-			assert.Equal(t, get.FeatureType.NativeBoundingBox.MinX, bbox[0])
-			assert.Equal(t, get.FeatureType.NativeBoundingBox.MinY, bbox[1])
-			assert.Equal(t, get.FeatureType.NativeBoundingBox.MaxX, bbox[2])
-			assert.Equal(t, get.FeatureType.NativeBoundingBox.MaxY, bbox[3])
-			assert.Equal(t, get.FeatureType.NativeBoundingBox.CRS, bboxSrs)
+				get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(featureName)
+				assert.NoError(t, err)
+				assert.Equal(t, get.FeatureType.Name, featureName)
+				assert.Equal(t, get.FeatureType.NativeName, testdata.FeatureTypeNativeName)
+				assert.Equal(t, get.FeatureType.Srs, "EPSG:4326")
+				assert.Equal(t, get.FeatureType.NativeBoundingBox.MinX, bbox[0])
+				assert.Equal(t, get.FeatureType.NativeBoundingBox.MinY, bbox[1])
+				assert.Equal(t, get.FeatureType.NativeBoundingBox.MaxX, bbox[2])
+				assert.Equal(t, get.FeatureType.NativeBoundingBox.MaxY, bbox[3])
+				assert.Equal(t, get.FeatureType.NativeBoundingBox.CRS, bboxSrs)
+			})
 		})
 	})
 

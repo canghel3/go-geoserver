@@ -13,6 +13,8 @@ const (
 	DatastoreShapefile  = "SHAPEFILE"
 	DatastoreGeoPackage = "GEOPACKAGE"
 
+	CoverageStoreGeoTiff = "GEOTIFF"
+
 	FeatureTypeName       = "init"
 	FeatureTypeNativeName = "init"
 	FeatureTypeTitle      = "sample"
@@ -24,6 +26,8 @@ const (
 	PostgisDb       = "vectors"
 	PostgisSsl      = "disable"
 
-	Shapefile  = "ne_110m_coastline.shp"
-	GeoPackage = "bld_fts_buildingpart.gpkg"
+	FileShapefile  = "ne_110m_coastline.shp"
+	FileGeoPackage = "bld_fts_buildingpart.gpkg"
+
+	FileGeoTiff = "sample.tif"
 )

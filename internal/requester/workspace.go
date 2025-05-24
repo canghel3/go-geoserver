@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/pkg/customerrors"
-	"github.com/canghel3/go-geoserver/pkg/workspace"
+	customerrors2 "github.com/canghel3/go-geoserver/pkg/models/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/models/workspace"
 	"io"
 	"net/http"
 )
@@ -46,14 +46,14 @@ func (wr *WorkspaceRequester) Create(name string, _default bool) error {
 	case http.StatusCreated:
 		return nil
 	case http.StatusConflict:
-		return customerrors.WrapConflictError(fmt.Errorf("workspace already exists"))
+		return customerrors2.WrapConflictError(fmt.Errorf("workspace already exists"))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
 			return err
 		}
 
-		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 
@@ -83,14 +83,14 @@ func (wr *WorkspaceRequester) Get(name string) (*workspace.WorkspaceRetrieval, e
 
 		return &wksp.Workspace, nil
 	case http.StatusNotFound:
-		return nil, customerrors.WrapNotFoundError(fmt.Errorf("workspace %s does not exist", name))
+		return nil, customerrors2.WrapNotFoundError(fmt.Errorf("workspace %s does not exist", name))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
 			return nil, err
 		}
 
-		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return nil, customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 
@@ -131,7 +131,7 @@ func (wr *WorkspaceRequester) GetAll() ([]workspace.MultiWorkspace, error) {
 
 		return wksp.Workspaces.Workspace, nil
 	default:
-		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return nil, customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 
@@ -166,14 +166,14 @@ func (wr *WorkspaceRequester) Update(oldName, newName string) error {
 	case http.StatusOK:
 		return nil
 	case http.StatusNotFound:
-		return customerrors.WrapNotFoundError(fmt.Errorf("workspace %s does not exist", oldName))
+		return customerrors2.WrapNotFoundError(fmt.Errorf("workspace %s does not exist", oldName))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
 			return err
 		}
 
-		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 
@@ -196,13 +196,13 @@ func (wr *WorkspaceRequester) Delete(name string, recurse bool) error {
 	case http.StatusOK:
 		return nil
 	case http.StatusNotFound:
-		return customerrors.WrapNotFoundError(fmt.Errorf("workspace %s does not exist", name))
+		return customerrors2.WrapNotFoundError(fmt.Errorf("workspace %s does not exist", name))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
 			return err
 		}
 
-		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
