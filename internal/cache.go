@@ -1,4 +1,4 @@
-package cache
+package internal
 
 type Cache struct {
 	Name        string `json:"name"`

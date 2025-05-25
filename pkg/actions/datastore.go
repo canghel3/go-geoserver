@@ -6,8 +6,8 @@ import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
 	"github.com/canghel3/go-geoserver/internal/validator"
-	"github.com/canghel3/go-geoserver/pkg/models/datastores"
-	"github.com/canghel3/go-geoserver/pkg/models/datastores/postgis"
+	"github.com/canghel3/go-geoserver/pkg/datastores"
+	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
 	"github.com/canghel3/go-geoserver/pkg/options"
 	"strings"
 )
@@ -48,6 +48,7 @@ func (ds *DataStores) Use(name string) *FeatureTypes {
 	return newFeatureTypes(name, ds.info.Clone())
 }
 
+// Create sets general store options and returns a list of available data stores to create.
 func (ds *DataStores) Create(options ...options.DataStoreOption) DataStoreList {
 	dsl := DataStoreList{
 		requester: ds.requester,
@@ -75,7 +76,7 @@ func (dsl DataStoreList) PostGIS(name string, connectionParams postgis.Connectio
 		return err
 	}
 
-	cp := internal.ConnectionParams{
+	cp := datastores.ConnectionParams{
 		"host":     connectionParams.Host,
 		"database": connectionParams.Database,
 		"user":     connectionParams.User,
@@ -120,7 +121,7 @@ func (dsl DataStoreList) GeoPackage(name string, filepath string, options ...opt
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	cp := internal.ConnectionParams{
+	cp := datastores.ConnectionParams{
 		"database": url,
 		"dbtype":   string(GeoPackage),
 	}
@@ -161,7 +162,7 @@ func (dsl DataStoreList) Shapefile(name string, filepath string, options ...opti
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	cp := internal.ConnectionParams{
+	cp := datastores.ConnectionParams{
 		"url":      url,
 		"filetype": string(Shapefile),
 	}
@@ -195,7 +196,7 @@ func (dsl DataStoreList) Shapefiles(name string, dir string, options ...options.
 		return err
 	}
 
-	cp := internal.ConnectionParams{
+	cp := datastores.ConnectionParams{
 		"url": dir,
 	}
 
@@ -228,7 +229,7 @@ func (dsl DataStoreList) CSV(name string, filepath string, options ...options.CS
 		return err
 	}
 
-	cp := internal.ConnectionParams{
+	cp := datastores.ConnectionParams{
 		"url":    filepath,
 		"dbtype": string(CSV),
 	}
@@ -257,7 +258,7 @@ func (dsl DataStoreList) CSV(name string, filepath string, options ...options.CS
 }
 
 func (dsl DataStoreList) WebFeatureService(name, getCapabilitiesUrl string, options ...options.WFSOptions) error {
-	cp := internal.ConnectionParams{
+	cp := datastores.ConnectionParams{
 		"GET_CAPABILITIES_URL": getCapabilitiesUrl,
 	}
 

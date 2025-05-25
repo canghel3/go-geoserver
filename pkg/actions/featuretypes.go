@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
-	"github.com/canghel3/go-geoserver/pkg/models/featuretypes"
+	"github.com/canghel3/go-geoserver/pkg/featuretypes"
 )
 
 type FeatureTypes struct {
@@ -24,26 +24,18 @@ func newFeatureTypes(store string, info *internal.GeoserverData) *FeatureTypes {
 }
 
 func (ft *FeatureTypes) Publish(featureType internal.FeatureType) error {
-	completeFeatureType := internal.FeatureType{
-		Name:       featureType.Name,
-		NativeName: featureType.NativeName,
-		Namespace: internal.Namespace{
-			Name: ft.info.Workspace,
-			Href: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", ft.info.Connection.URL, ft.info.Workspace),
-		},
-		Srs:               featureType.Srs,
-		NativeBoundingBox: featureType.NativeBoundingBox,
-		ProjectionPolicy:  featureType.ProjectionPolicy,
-		Keywords:          featureType.Keywords,
-		Title:             featureType.Title,
-		Store: internal.Store{
-			Class: "dataStore",
-			Name:  fmt.Sprintf("%s:%s", ft.info.Workspace, ft.store),
-			Href:  fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s.json", ft.info.Connection.URL, ft.info.Workspace, ft.store),
-		},
+	featureType.Namespace = internal.Namespace{
+		Name: ft.info.Workspace,
+		Href: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", ft.info.Connection.URL, ft.info.Workspace),
 	}
 
-	content, err := json.Marshal(internal.CreateFeatureTypeWrapper{FeatureType: completeFeatureType})
+	featureType.Store = internal.Store{
+		Class: "dataStore",
+		Name:  fmt.Sprintf("%s:%s", ft.info.Workspace, ft.store),
+		Href:  fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s.json", ft.info.Connection.URL, ft.info.Workspace, ft.store),
+	}
+
+	content, err := json.Marshal(internal.CreateFeatureTypeWrapper{FeatureType: featureType})
 	if err != nil {
 		return err
 	}
@@ -55,11 +47,11 @@ func (ft *FeatureTypes) Get(name string) (*featuretypes.GetFeatureType, error) {
 	return ft.requester.FeatureTypes().Get(ft.store, name)
 }
 
-func (ft *FeatureTypes) GetAll() ([]featuretypes.FeatureType, error) {
+func (ft *FeatureTypes) GetAll() ([]featuretypes.GetFeatureType, error) {
 	return nil, errors.New("not implemented")
 }
 
-func (ft *FeatureTypes) Update(featureType featuretypes.FeatureType) error {
+func (ft *FeatureTypes) Update(featureType internal.FeatureType) error {
 	return errors.New("not implemented")
 }
 

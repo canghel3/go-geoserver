@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/pkg/models/coverages"
-	"github.com/canghel3/go-geoserver/pkg/models/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/coverages"
+	customerrors2 "github.com/canghel3/go-geoserver/pkg/customerrors"
 	"io"
 	"net/http"
 )
@@ -47,7 +47,7 @@ func (cr *CoverageRequester) Create(store string, content []byte) error {
 			return err
 		}
 
-		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 
@@ -88,14 +88,14 @@ func (cr *CoverageRequester) Get(store, coverage string) (*coverages.Coverage, e
 
 		return &coverageWrapper.Coverage, nil
 	case http.StatusNotFound:
-		return nil, customerrors.WrapNotFoundError(fmt.Errorf("featuretype %s does not exist", coverage))
+		return nil, customerrors2.WrapNotFoundError(fmt.Errorf("featuretype %s does not exist", coverage))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
 			return nil, err
 		}
 
-		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return nil, customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 
@@ -124,14 +124,14 @@ func (cr *CoverageRequester) Delete(store, coverage string, recurse bool) error 
 	case http.StatusOK:
 		return nil
 	case http.StatusNotFound:
-		return customerrors.WrapNotFoundError(fmt.Errorf("featuretype %s does not exist", coverage))
+		return customerrors2.WrapNotFoundError(fmt.Errorf("featuretype %s does not exist", coverage))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
 			return err
 		}
 
-		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 
@@ -165,6 +165,6 @@ func (cr *CoverageRequester) Update(store, coverage string, content []byte) erro
 			return err
 		}
 
-		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }

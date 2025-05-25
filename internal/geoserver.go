@@ -2,12 +2,8 @@ package internal
 
 import "net/http"
 
-type HTTPClient interface {
-	Do(req *http.Request) (*http.Response, error)
-}
-
 type GeoserverData struct {
-	Client     HTTPClient
+	Client     http.Client
 	Connection GeoserverConnection
 	DataDir    string
 	Workspace  string

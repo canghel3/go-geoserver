@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/pkg/models/coveragestores"
-	"github.com/canghel3/go-geoserver/pkg/models/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/coveragestores"
+	customerrors2 "github.com/canghel3/go-geoserver/pkg/customerrors"
 	"io"
 	"net/http"
 )
@@ -40,7 +40,7 @@ func (cr *CoverageStoreRequester) Create(content []byte) error {
 			return err
 		}
 
-		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 
@@ -74,14 +74,14 @@ func (cr *CoverageStoreRequester) Get(name string) (*coveragestores.CoverageStor
 
 		return &cts.CoverageStore, nil
 	case http.StatusNotFound:
-		return nil, customerrors.WrapNotFoundError(fmt.Errorf("coveragestore %s not found", name))
+		return nil, customerrors2.WrapNotFoundError(fmt.Errorf("coveragestore %s not found", name))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
 			return nil, err
 		}
 
-		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return nil, customerrors2.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 
@@ -108,14 +108,14 @@ func (cr *CoverageStoreRequester) Delete(name string, recurse bool) error {
 	case http.StatusOK:
 		return nil
 	case http.StatusNotFound:
-		return customerrors.WrapNotFoundError(fmt.Errorf("coveragestore %s not found", name))
+		return customerrors2.WrapNotFoundError(fmt.Errorf("coveragestore %s not found", name))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
 			return err
 		}
 
-		return customerrors.NewGeoserverError(fmt.Sprintf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+		return customerrors2.NewGeoserverError(fmt.Sprintf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
 

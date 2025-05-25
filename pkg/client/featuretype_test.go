@@ -4,9 +4,9 @@ package client
 
 import (
 	"github.com/canghel3/go-geoserver/internal/testdata"
-	"github.com/canghel3/go-geoserver/pkg/models/customerrors"
-	"github.com/canghel3/go-geoserver/pkg/models/datastores/postgis"
-	"github.com/canghel3/go-geoserver/pkg/models/featuretypes"
+	"github.com/canghel3/go-geoserver/pkg/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
+	"github.com/canghel3/go-geoserver/pkg/featuretypes"
 	"github.com/canghel3/go-geoserver/pkg/options"
 	"github.com/stretchr/testify/assert"
 	"testing"

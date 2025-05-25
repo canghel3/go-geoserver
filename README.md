@@ -9,40 +9,27 @@ This client provides a simple and idiomatic way to talk to GeoServer’s REST AP
 - Support for managing:
     - Workspaces
     - Vector Data Sources
-      - CSV
-      - Directory of spatial files (shapefiles)
-      - GeoPackage
-      - PostGIS
-      - Shapefile
-      - Web Feature Server
     - Raster Data Sources
-      - AIG
-      - ArcGrid
-      - DTED
-      - EHdr
-      - ENVIHdr
-      - ERDASImg
-      - GeoPackage (mosaic)
-      - GeoTIFF
-      - ImageMosaic
-      - ImagePyramid
-      - NITF
-      - RPFTOC
-      - RST
-      - SRP
-      - VRT
-      - WorldImage
     - Feature Types
+    - Coverages
+
+Tested Vector Data Sources:
+- CSV
+- GeoPackage
+- PostGIS
+- Shapefile
+
+Tested Raster Data Sources:
+- GeoTIFF
 
 ## 🛠️ Work In Progress - in order of priority
 
 Support:
 
-- Coverages
-- Layer Groups
+- WMS, WFS, WCS, WMTS 
 - Styles
+- Layer Groups
 - Caching
-- WMS, WFS
 
 ## 📦 Installation
 
@@ -52,6 +39,22 @@ go get github.com/canghel3/go-geoserver
 
 ## 🧪 Examples
 
+### Client Initialization
+
+[`examples/client.go`](./pkg/client/client_test.go)
+
 ### Workspaces
 
-[`examples/workspace.go`](./examples/workspace.go)
+[`examples/workspaces.go`](./pkg/client/workspace_test.go)
+
+### DataStores
+
+[`examples/datastores.go`](./pkg/actions/datastore_test.go)
+
+### CoverageStores and Coverages
+
+[`examples/coverages.go`](./pkg/client/coverage_test.go)
+
+### Feature Types
+
+[`examples/featuretypes.go`](./pkg/client/featuretype_test.go)

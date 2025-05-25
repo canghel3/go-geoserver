@@ -1,8 +1,8 @@
-package layergroups
+package internal
 
 import (
-	"github.com/canghel3/go-geoserver/internal/misc"
-	"github.com/canghel3/go-geoserver/pkg/models/workspace"
+	"github.com/canghel3/go-geoserver/pkg/misc"
+	"github.com/canghel3/go-geoserver/pkg/workspace"
 )
 
 type GroupWrapper struct {
@@ -21,10 +21,10 @@ type Group struct {
 }
 
 type Publishables struct {
-	Published []Layer `json:"published"`
+	Published []Published `json:"published"`
 }
 
-type Layer struct {
+type Published struct {
 	Type string `json:"@type"`
 	Name string `json:"name"`
 	Link string `json:"href"`

@@ -6,7 +6,7 @@ import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
 	"github.com/canghel3/go-geoserver/internal/validator"
-	"github.com/canghel3/go-geoserver/pkg/models/coveragestores"
+	"github.com/canghel3/go-geoserver/pkg/coveragestores"
 	"github.com/canghel3/go-geoserver/pkg/options"
 	"strings"
 )
@@ -60,7 +60,7 @@ func (cs *CoverageStores) Reset(name string) error {
 func (cs *CoverageStores) Use(name string) *Coverages {
 	return newCoverages(name, cs.info.Clone())
 }
-func (cs *CoverageStores) Create(options ...options.CoverageStoreOptionFunc) CoverageStoreList {
+func (cs *CoverageStores) Create(options ...options.CoverageStoreOption) CoverageStoreList {
 	csl := CoverageStoreList{
 		requester: cs.requester,
 		options:   &internal.CoverageStoreOptions{},

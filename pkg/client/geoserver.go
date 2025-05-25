@@ -13,7 +13,6 @@ type GeoserverClient struct {
 func NewGeoserverClient(url, username, password string, options ...GeoserverClientOption) *GeoserverClient {
 	gc := new(GeoserverClient)
 	gc.info = new(internal.GeoserverData)
-	gc.info.Client = &http.Client{}
 	gc.info.Connection.URL = url
 	gc.info.Connection.Credentials.Username = username
 	gc.info.Connection.Credentials.Password = password
@@ -37,7 +36,7 @@ func (gco geoserverClientOptions) DataDir(datadir string) GeoserverClientOption 
 	}
 }
 
-func (gco geoserverClientOptions) Client(client internal.HTTPClient) GeoserverClientOption {
+func (gco geoserverClientOptions) Client(client http.Client) GeoserverClientOption {
 	return func(c *GeoserverClient) {
 		c.info.Client = client
 	}

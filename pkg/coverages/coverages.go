@@ -2,7 +2,7 @@ package coverages
 
 import (
 	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/internal/misc"
+	"github.com/canghel3/go-geoserver/pkg/misc"
 	"github.com/canghel3/go-geoserver/pkg/options"
 )
 

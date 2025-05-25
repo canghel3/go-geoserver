@@ -1,4 +1,4 @@
-package layers
+package internal
 
 type LayerWrapper struct {
 	Layer Layer `json:"layer"`

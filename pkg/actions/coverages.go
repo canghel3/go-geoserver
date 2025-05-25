@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
-	"github.com/canghel3/go-geoserver/pkg/models/coverages"
+	"github.com/canghel3/go-geoserver/pkg/coverages"
 )
 
 type Coverages struct {
@@ -24,40 +24,18 @@ func newCoverages(store string, data *internal.GeoserverData) *Coverages {
 }
 
 func (c *Coverages) Publish(coverage internal.Coverage) error {
-	completeCoverage := internal.Coverage{
-		Abstract:                   coverage.Abstract,
-		DefaultInterpolationMethod: coverage.DefaultInterpolationMethod,
-		Description:                coverage.Description,
-		Dimensions:                 coverage.Dimensions,
-		Enabled:                    coverage.Enabled,
-		Grid:                       coverage.Grid,
-		InterpolationMethods:       coverage.InterpolationMethods,
-		ProjectionPolicy:           coverage.ProjectionPolicy,
-		Keywords:                   coverage.Keywords,
-		LatLonBoundingBox:          coverage.LatLonBoundingBox,
-		Metadata:                   coverage.Metadata,
-		Name:                       coverage.Name,
-		Namespace: internal.NamespaceDetails{
-			Href: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", c.data.Connection.URL, c.data.Workspace),
-			Name: c.data.Workspace,
-		},
-		NativeBoundingBox: coverage.NativeBoundingBox,
-		NativeCRS:         coverage.NativeCRS,
-		NativeFormat:      coverage.NativeFormat,
-		NativeName:        coverage.NativeName,
-		RequestSRS:        coverage.RequestSRS,
-		ResponseSRS:       coverage.ResponseSRS,
-		Srs:               coverage.Srs,
-		Store: internal.StoreDetails{
-			Class: "coverageStore",
-			Href:  fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s.json", c.data.Connection.URL, c.data.Workspace, c.store),
-			Name:  fmt.Sprintf("%s:%s", c.data.Workspace, c.store),
-		},
-		SupportedFormats: coverage.SupportedFormats,
-		Title:            coverage.Title,
+	coverage.Namespace = internal.NamespaceDetails{
+		Href: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", c.data.Connection.URL, c.data.Workspace),
+		Name: c.data.Workspace,
 	}
 
-	content, err := json.Marshal(internal.CoverageWrapper{Coverage: completeCoverage})
+	coverage.Store = internal.StoreDetails{
+		Class: "coverageStore",
+		Href:  fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s.json", c.data.Connection.URL, c.data.Workspace, c.store),
+		Name:  fmt.Sprintf("%s:%s", c.data.Workspace, c.store),
+	}
+
+	content, err := json.Marshal(internal.CoverageWrapper{Coverage: coverage})
 	if err != nil {
 		return err
 	}

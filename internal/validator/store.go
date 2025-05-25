@@ -2,7 +2,7 @@ package validator
 
 import (
 	"errors"
-	"github.com/canghel3/go-geoserver/pkg/models/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/customerrors"
 )
 
 var Store StoreValidator

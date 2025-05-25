@@ -1,4 +1,4 @@
-package gwc
+package internal
 
 // GeoServerLayer describes the response for the tiling tab in xml.
 type GeoServerLayer struct {

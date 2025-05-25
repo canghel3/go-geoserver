@@ -2,7 +2,7 @@ package validator
 
 import (
 	"errors"
-	"github.com/canghel3/go-geoserver/pkg/models/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"regexp"
 )
 
@@ -19,7 +19,7 @@ func (wv WorkspaceValidator) Name(url string) error {
 }
 
 func validateAlphaNumerical(name string) error {
-	regex, err := regexp.Compile(`[^a-zA-Z0-9_]+`)
+	regex, err := regexp.Compile(`[^a-zA-Z0-9_-]+`)
 	if err != nil {
 		return err
 	}
