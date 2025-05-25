@@ -1,8 +1,8 @@
 package examples
 
 import (
-	"github.com/canghel3/go-geoserver"
 	"github.com/canghel3/go-geoserver/internal/testdata"
+	"github.com/canghel3/go-geoserver/pkg/client"
 )
 
 func Create() {

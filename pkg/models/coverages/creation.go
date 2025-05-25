@@ -37,7 +37,7 @@ type Coverage struct {
 	Metadata                   *Metadata             `json:"metadata,omitempty"`
 	Name                       string                `json:"name"`
 	Namespace                  NamespaceDetails      `json:"namespace"`
-	NativeBoundingBox          misc.BoundingBox      `json:"nativeBoundingBox"`
+	NativeBoundingBox          *misc.BoundingBox     `json:"nativeBoundingBox,omitempty"`
 	NativeCRS                  *CRS                  `json:"nativeCRS,omitempty"`
 	NativeFormat               *string               `json:"nativeFormat,omitempty"`
 	NativeName                 string                `json:"nativeName,omitempty"`

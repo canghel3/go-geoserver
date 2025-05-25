@@ -14,6 +14,8 @@ import (
 func TestFeatureTypeIntegration_Create(t *testing.T) {
 	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
 
+	geoserverClient.Workspaces().Delete(testdata.Workspace, true)
+
 	//create workspace
 	geoserverClient.Workspaces().Create(testdata.Workspace, true)
 
