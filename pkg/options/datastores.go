@@ -2,7 +2,7 @@ package options
 
 import "github.com/canghel3/go-geoserver/internal"
 
-var Datastore DatastoreOptionGenerator
+var DataStore DatastoreOptionGenerator
 
 type DatastoreOptionGenerator struct{}
 

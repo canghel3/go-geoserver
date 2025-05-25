@@ -83,7 +83,7 @@ func (cs *CoverageStores) Delete(name string, recurse bool) error {
 }
 
 func (csl CoverageStoreList) AIG(name string, filepath string) error {
-	err := internal.ValidateArcGrid(filepath)
+	err := validator.CoverageStore.AIG(filepath)
 	if err != nil {
 		return err
 	}
@@ -161,7 +161,7 @@ func (csl CoverageStoreList) ArcGrid(name string, filepath string) error {
 }
 
 func (csl CoverageStoreList) DTED(name string, filepath string) error {
-	err := internal.ValidateArcGrid(filepath)
+	err := validator.CoverageStore.DTED(filepath)
 	if err != nil {
 		return err
 	}
@@ -200,7 +200,7 @@ func (csl CoverageStoreList) DTED(name string, filepath string) error {
 }
 
 func (csl CoverageStoreList) EHdr(name string, filepath string) error {
-	err := internal.ValidateArcGrid(filepath)
+	err := validator.CoverageStore.EHdr(filepath)
 	if err != nil {
 		return err
 	}
@@ -239,7 +239,7 @@ func (csl CoverageStoreList) EHdr(name string, filepath string) error {
 }
 
 func (csl CoverageStoreList) ENVIHdr(name string, filepath string) error {
-	err := internal.ValidateArcGrid(filepath)
+	err := validator.CoverageStore.ENVIHdr(filepath)
 	if err != nil {
 		return err
 	}
@@ -278,7 +278,7 @@ func (csl CoverageStoreList) ENVIHdr(name string, filepath string) error {
 }
 
 func (csl CoverageStoreList) ERDASImg(name string, filepath string) error {
-	err := internal.ValidateArcGrid(filepath)
+	err := validator.CoverageStore.ERDASImg(filepath)
 	if err != nil {
 		return err
 	}
@@ -317,7 +317,7 @@ func (csl CoverageStoreList) ERDASImg(name string, filepath string) error {
 }
 
 func (csl CoverageStoreList) GeoPackage(name string, filepath string) error {
-	err := internal.ValidateGeoPackage(filepath)
+	err := validator.CoverageStore.GeoPackage(filepath)
 	if err != nil {
 		return err
 	}
@@ -356,7 +356,7 @@ func (csl CoverageStoreList) GeoPackage(name string, filepath string) error {
 }
 
 func (csl CoverageStoreList) GeoTIFF(name string, filepath string) error {
-	err := internal.ValidateGeoTIFF(filepath)
+	err := validator.CoverageStore.GeoTIFF(filepath)
 	if err != nil {
 		return err
 	}
@@ -395,7 +395,7 @@ func (csl CoverageStoreList) GeoTIFF(name string, filepath string) error {
 }
 
 func (csl CoverageStoreList) ImageMosaic(name string, dirpath string) error {
-	err := internal.ValidateImageMosaic(dirpath)
+	err := validator.CoverageStore.ImageMosaic(dirpath)
 	if err != nil {
 		return err
 	}
@@ -427,7 +427,7 @@ func (csl CoverageStoreList) ImageMosaic(name string, dirpath string) error {
 }
 
 func (csl CoverageStoreList) ImagePyramid(name string, dirpath string) error {
-	err := internal.ValidateImageMosaic(dirpath)
+	err := validator.CoverageStore.ImagePyramid(dirpath)
 	if err != nil {
 		return err
 	}
@@ -459,7 +459,7 @@ func (csl CoverageStoreList) ImagePyramid(name string, dirpath string) error {
 }
 
 func (csl CoverageStoreList) NITF(name string, filepath string) error {
-	err := internal.ValidateArcGrid(filepath)
+	err := validator.CoverageStore.NITF(filepath)
 	if err != nil {
 		return err
 	}
@@ -498,7 +498,7 @@ func (csl CoverageStoreList) NITF(name string, filepath string) error {
 }
 
 func (csl CoverageStoreList) RPFTOC(name string, filepath string) error {
-	err := internal.ValidateArcGrid(filepath)
+	err := validator.CoverageStore.RPFTOC(filepath)
 	if err != nil {
 		return err
 	}
@@ -537,7 +537,7 @@ func (csl CoverageStoreList) RPFTOC(name string, filepath string) error {
 }
 
 func (csl CoverageStoreList) RST(name string, filepath string) error {
-	err := internal.ValidateArcGrid(filepath)
+	err := validator.CoverageStore.RST(filepath)
 	if err != nil {
 		return err
 	}
@@ -576,7 +576,7 @@ func (csl CoverageStoreList) RST(name string, filepath string) error {
 }
 
 func (csl CoverageStoreList) SRP(name string, filepath string) error {
-	err := internal.ValidateArcGrid(filepath)
+	err := validator.CoverageStore.SRP(filepath)
 	if err != nil {
 		return err
 	}
@@ -615,7 +615,7 @@ func (csl CoverageStoreList) SRP(name string, filepath string) error {
 }
 
 func (csl CoverageStoreList) VRT(name string, filepath string) error {
-	err := internal.ValidateArcGrid(filepath)
+	err := validator.CoverageStore.VRT(filepath)
 	if err != nil {
 		return err
 	}
@@ -654,7 +654,7 @@ func (csl CoverageStoreList) VRT(name string, filepath string) error {
 }
 
 func (csl CoverageStoreList) WorldImage(name string, filepath string) error {
-	err := internal.ValidateWorldImage(filepath)
+	err := validator.CoverageStore.WorldImage(filepath)
 	if err != nil {
 		return err
 	}

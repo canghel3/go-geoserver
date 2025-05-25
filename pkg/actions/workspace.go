@@ -3,6 +3,7 @@ package actions
 import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
+	"github.com/canghel3/go-geoserver/internal/validator"
 	"github.com/canghel3/go-geoserver/pkg/models/workspace"
 )
 
@@ -19,7 +20,7 @@ func NewWorkspaceActions(info *internal.GeoserverData) *Workspaces {
 }
 
 func (w *Workspaces) Create(name string, _default bool) error {
-	err := internal.ValidateWorkspace(name)
+	err := validator.Workspace.Name(name)
 	if err != nil {
 		return err
 	}
@@ -28,7 +29,7 @@ func (w *Workspaces) Create(name string, _default bool) error {
 }
 
 func (w *Workspaces) Get(name string) (*workspace.WorkspaceRetrieval, error) {
-	err := internal.ValidateWorkspace(name)
+	err := validator.Workspace.Name(name)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +42,12 @@ func (w *Workspaces) GetAll() ([]workspace.MultiWorkspace, error) {
 }
 
 func (w *Workspaces) Update(oldName, newName string) error {
-	err := internal.ValidateWorkspace(oldName)
+	err := validator.Workspace.Name(oldName)
+	if err != nil {
+		return err
+	}
+
+	err = validator.Workspace.Name(newName)
 	if err != nil {
 		return err
 	}
@@ -50,7 +56,7 @@ func (w *Workspaces) Update(oldName, newName string) error {
 }
 
 func (w *Workspaces) Delete(name string, recurse bool) error {
-	err := internal.ValidateWorkspace(name)
+	err := validator.Workspace.Name(name)
 	if err != nil {
 		return err
 	}

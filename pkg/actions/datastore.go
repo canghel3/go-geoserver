@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
+	"github.com/canghel3/go-geoserver/internal/validator"
 	"github.com/canghel3/go-geoserver/pkg/models/datastores"
 	"github.com/canghel3/go-geoserver/pkg/models/datastores/postgis"
 	"github.com/canghel3/go-geoserver/pkg/options"
@@ -68,7 +69,12 @@ func (ds *DataStores) Delete(name string, recurse bool) error {
 	return ds.requester.DataStores().Delete(name, recurse)
 }
 
-func (dsl DataStoreList) PostGIS(name string, connectionParams postgis.ConnectionParams, options ...options.PostGISOptionFunc) error {
+func (dsl DataStoreList) PostGIS(name string, connectionParams postgis.ConnectionParams, options ...options.PostGISOption) error {
+	err := validator.DataStore.PostGIS(name)
+	if err != nil {
+		return err
+	}
+
 	cp := internal.ConnectionParams{
 		"host":     connectionParams.Host,
 		"database": connectionParams.Database,
@@ -102,7 +108,7 @@ func (dsl DataStoreList) PostGIS(name string, connectionParams postgis.Connectio
 }
 
 func (dsl DataStoreList) GeoPackage(name string, filepath string, options ...options.GeoPackageOptions) error {
-	err := internal.ValidateGeoPackage(filepath)
+	err := validator.DataStore.GeoPackage(filepath)
 	if err != nil {
 		return err
 	}
@@ -142,8 +148,8 @@ func (dsl DataStoreList) GeoPackage(name string, filepath string, options ...opt
 	return dsl.requester.DataStores().Create(content)
 }
 
-func (dsl DataStoreList) Shapefile(name string, filepath string, options ...options.ShapefileOptions) error {
-	err := internal.ValidateShapefile(filepath)
+func (dsl DataStoreList) Shapefile(name string, filepath string, options ...options.ShapefileOption) error {
+	err := validator.DataStore.Shapefile(filepath)
 	if err != nil {
 		return err
 	}
@@ -183,8 +189,8 @@ func (dsl DataStoreList) Shapefile(name string, filepath string, options ...opti
 	return dsl.requester.DataStores().Create(content)
 }
 
-func (dsl DataStoreList) Shapefiles(name string, dir string, options ...options.ShapefileOptions) error {
-	err := internal.ValidateShapefileDirectory(dir)
+func (dsl DataStoreList) Shapefiles(name string, dir string, options ...options.ShapefileOption) error {
+	err := validator.DataStore.ShapefileDirectory(dir)
 	if err != nil {
 		return err
 	}
@@ -217,7 +223,7 @@ func (dsl DataStoreList) Shapefiles(name string, dir string, options ...options.
 }
 
 func (dsl DataStoreList) CSV(name string, filepath string, options ...options.CSVOptions) error {
-	err := internal.ValidateCSV(filepath)
+	err := validator.DataStore.CSV(filepath)
 	if err != nil {
 		return err
 	}

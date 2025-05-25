@@ -25,7 +25,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 			t.Run("DESCRIPTION", func(t *testing.T) {
 				var description = "generic description"
 				var name = testdata.DatastorePostgis + "WITH_DESCRIPTION"
-				err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create(options.Datastore.Description(description)).PostGIS(name, postgis.ConnectionParams{
+				err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create(options.DataStore.Description(description)).PostGIS(name, postgis.ConnectionParams{
 					Host:     testdata.PostgisHost,
 					Database: testdata.PostgisDb,
 					User:     testdata.PostgisUsername,
@@ -44,7 +44,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 
 			t.Run("DISABLE CONNECTION ON FAILURE", func(t *testing.T) {
 				var name = testdata.DatastorePostgis + "WITH_DISABLE_CONNECTION_ON_FAILURE"
-				err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create(options.Datastore.DisableConnectionOnFailure(true)).PostGIS(name, postgis.ConnectionParams{
+				err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create(options.DataStore.DisableConnectionOnFailure(true)).PostGIS(name, postgis.ConnectionParams{
 					Host:     testdata.PostgisHost,
 					Database: testdata.PostgisDb,
 					User:     testdata.PostgisUsername,

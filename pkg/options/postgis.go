@@ -6,9 +6,9 @@ var PostGIS PostGISOptionGenerator
 
 type PostGISOptionGenerator struct{}
 
-type PostGISOptionFunc func(params *internal.ConnectionParams)
+type PostGISOption func(params *internal.ConnectionParams)
 
-func (pgo PostGISOptionGenerator) ValidateConnections() PostGISOptionFunc {
+func (pgo PostGISOptionGenerator) ValidateConnections() PostGISOption {
 	return func(params *internal.ConnectionParams) {
 		(*params)["validate connections"] = "true"
 	}
