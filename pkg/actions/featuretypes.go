@@ -23,11 +23,11 @@ func newFeatureTypes(store string, info *internal.GeoserverData) *FeatureTypes {
 	}
 }
 
-func (ft *FeatureTypes) Publish(featureType featuretypes.FeatureType) error {
-	completeFeatureType := featuretypes.FeatureType{
+func (ft *FeatureTypes) Publish(featureType internal.FeatureType) error {
+	completeFeatureType := internal.FeatureType{
 		Name:       featureType.Name,
 		NativeName: featureType.NativeName,
-		Namespace: featuretypes.Namespace{
+		Namespace: internal.Namespace{
 			Name: ft.info.Workspace,
 			Href: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", ft.info.Connection.URL, ft.info.Workspace),
 		},
@@ -36,14 +36,14 @@ func (ft *FeatureTypes) Publish(featureType featuretypes.FeatureType) error {
 		ProjectionPolicy:  featureType.ProjectionPolicy,
 		Keywords:          featureType.Keywords,
 		Title:             featureType.Title,
-		Store: featuretypes.Store{
+		Store: internal.Store{
 			Class: "dataStore",
 			Name:  fmt.Sprintf("%s:%s", ft.info.Workspace, ft.store),
 			Href:  fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s.json", ft.info.Connection.URL, ft.info.Workspace, ft.store),
 		},
 	}
 
-	content, err := json.Marshal(featuretypes.CreateFeatureTypeWrapper{FeatureType: completeFeatureType})
+	content, err := json.Marshal(internal.CreateFeatureTypeWrapper{FeatureType: completeFeatureType})
 	if err != nil {
 		return err
 	}

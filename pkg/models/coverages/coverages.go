@@ -1,13 +1,13 @@
 package coverages
 
 import (
+	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/misc"
+	"github.com/canghel3/go-geoserver/pkg/options"
 )
 
-type CoverageOption func(c *Coverage)
-
-func New(name, nativeName string, options ...CoverageOption) Coverage {
-	c := new(Coverage)
+func New(name, nativeName string, options ...options.CoverageOption) internal.Coverage {
+	c := new(internal.Coverage)
 	c.Name = name
 	c.NativeName = nativeName
 	for _, option := range options {

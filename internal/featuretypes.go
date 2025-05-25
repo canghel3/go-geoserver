@@ -1,22 +1,6 @@
-package featuretypes
+package internal
 
-import (
-	"github.com/canghel3/go-geoserver/internal"
-	"github.com/canghel3/go-geoserver/internal/misc"
-	"github.com/canghel3/go-geoserver/pkg/options"
-)
-
-func New(name, nativeName string, options ...options.FeatureTypeOption) internal.FeatureType {
-	cft := new(internal.FeatureType)
-	cft.Name = name
-	cft.NativeName = nativeName
-
-	for _, option := range options {
-		option(cft)
-	}
-
-	return *cft
-}
+import "github.com/canghel3/go-geoserver/internal/misc"
 
 type CreateFeatureTypeWrapper struct {
 	FeatureType FeatureType `json:"featureType"`
@@ -33,4 +17,17 @@ type FeatureType struct {
 	Keywords          *misc.Keywords    `json:"keywords,omitempty"`
 	Title             *string           `json:"title,omitempty"`
 	Store             Store             `json:"store"`
+}
+
+// Namespace holds workspace configuration details when creating a layer in GeoServer.
+type Namespace struct {
+	Name string `json:"name"`
+	Href string `json:"href"`
+}
+
+// Store holds data store configuration details when creating a layer in GeoServer.
+type Store struct {
+	Class string `json:"@class"`
+	Name  string `json:"name"`
+	Href  string `json:"href"`
 }

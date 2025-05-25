@@ -23,8 +23,8 @@ func newCoverages(store string, data *internal.GeoserverData) *Coverages {
 	}
 }
 
-func (c *Coverages) Publish(coverage coverages.Coverage) error {
-	completeCoverage := coverages.Coverage{
+func (c *Coverages) Publish(coverage internal.Coverage) error {
+	completeCoverage := internal.Coverage{
 		Abstract:                   coverage.Abstract,
 		DefaultInterpolationMethod: coverage.DefaultInterpolationMethod,
 		Description:                coverage.Description,
@@ -37,7 +37,7 @@ func (c *Coverages) Publish(coverage coverages.Coverage) error {
 		LatLonBoundingBox:          coverage.LatLonBoundingBox,
 		Metadata:                   coverage.Metadata,
 		Name:                       coverage.Name,
-		Namespace: coverages.NamespaceDetails{
+		Namespace: internal.NamespaceDetails{
 			Href: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", c.data.Connection.URL, c.data.Workspace),
 			Name: c.data.Workspace,
 		},
@@ -48,7 +48,7 @@ func (c *Coverages) Publish(coverage coverages.Coverage) error {
 		RequestSRS:        coverage.RequestSRS,
 		ResponseSRS:       coverage.ResponseSRS,
 		Srs:               coverage.Srs,
-		Store: coverages.StoreDetails{
+		Store: internal.StoreDetails{
 			Class: "coverageStore",
 			Href:  fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s.json", c.data.Connection.URL, c.data.Workspace, c.store),
 			Name:  fmt.Sprintf("%s:%s", c.data.Workspace, c.store),
@@ -57,7 +57,7 @@ func (c *Coverages) Publish(coverage coverages.Coverage) error {
 		Title:            coverage.Title,
 	}
 
-	content, err := json.Marshal(coverages.CoverageWrapper{Coverage: completeCoverage})
+	content, err := json.Marshal(internal.CoverageWrapper{Coverage: completeCoverage})
 	if err != nil {
 		return err
 	}

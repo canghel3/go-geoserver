@@ -7,6 +7,7 @@ import (
 	"github.com/canghel3/go-geoserver/pkg/models/customerrors"
 	"github.com/canghel3/go-geoserver/pkg/models/datastores/postgis"
 	"github.com/canghel3/go-geoserver/pkg/models/featuretypes"
+	"github.com/canghel3/go-geoserver/pkg/options"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -51,7 +52,7 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 				var bbox = [4]float64{-180.0, -90.0, 180.0, 90.0}
 				var bboxSrs = "EPSG:4326"
 
-				feature := featuretypes.New(featureName, testdata.FeatureTypeNativeName, featuretypes.Options.BBOX(bbox, bboxSrs))
+				feature := featuretypes.New(featureName, testdata.FeatureTypeNativeName, options.FeatureType.BBOX(bbox, bboxSrs))
 
 				err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
 				assert.NoError(t, err)

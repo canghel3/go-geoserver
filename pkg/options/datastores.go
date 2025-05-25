@@ -1,6 +1,8 @@
 package options
 
-import "github.com/canghel3/go-geoserver/internal"
+import (
+	"github.com/canghel3/go-geoserver/internal"
+)
 
 var DataStore DatastoreOptionGenerator
 
