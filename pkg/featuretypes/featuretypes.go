@@ -1,14 +1,14 @@
 package featuretypes
 
 import (
-	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/models"
 	misc2 "github.com/canghel3/go-geoserver/pkg/misc"
 	"github.com/canghel3/go-geoserver/pkg/options"
 	"time"
 )
 
-func New(name, nativeName string, options ...options.FeatureTypeOption) internal.FeatureType {
-	cft := new(internal.FeatureType)
+func New(name, nativeName string, options ...options.FeatureTypeOption) models.FeatureType {
+	cft := new(models.FeatureType)
 	cft.Name = name
 	cft.NativeName = nativeName
 

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/models"
 	"github.com/canghel3/go-geoserver/internal/requester"
 	"github.com/canghel3/go-geoserver/pkg/featuretypes"
 )
@@ -23,19 +24,19 @@ func newFeatureTypes(store string, info *internal.GeoserverData) *FeatureTypes {
 	}
 }
 
-func (ft *FeatureTypes) Publish(featureType internal.FeatureType) error {
-	featureType.Namespace = internal.Namespace{
+func (ft *FeatureTypes) Publish(featureType models.FeatureType) error {
+	featureType.Namespace = models.Namespace{
 		Name: ft.info.Workspace,
 		Href: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", ft.info.Connection.URL, ft.info.Workspace),
 	}
 
-	featureType.Store = internal.Store{
+	featureType.Store = models.Store{
 		Class: "dataStore",
 		Name:  fmt.Sprintf("%s:%s", ft.info.Workspace, ft.store),
 		Href:  fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s.json", ft.info.Connection.URL, ft.info.Workspace, ft.store),
 	}
 
-	content, err := json.Marshal(internal.CreateFeatureTypeWrapper{FeatureType: featureType})
+	content, err := json.Marshal(models.CreateFeatureTypeWrapper{FeatureType: featureType})
 	if err != nil {
 		return err
 	}
@@ -51,7 +52,7 @@ func (ft *FeatureTypes) GetAll() ([]featuretypes.GetFeatureType, error) {
 	return nil, errors.New("not implemented")
 }
 
-func (ft *FeatureTypes) Update(featureType internal.FeatureType) error {
+func (ft *FeatureTypes) Update(featureType models.FeatureType) error {
 	return errors.New("not implemented")
 }
 

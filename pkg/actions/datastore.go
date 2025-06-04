@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/models"
 	"github.com/canghel3/go-geoserver/internal/requester"
 	"github.com/canghel3/go-geoserver/internal/validator"
 	"github.com/canghel3/go-geoserver/pkg/datastores"
@@ -30,7 +31,7 @@ func newDataStoresActions(info *internal.GeoserverData) *DataStores {
 }
 
 type DataStoreList struct {
-	options   *internal.DataStoreOptions
+	options   *models.DataStoreOptions
 	requester *requester.Requester
 }
 
@@ -52,7 +53,7 @@ func (ds *DataStores) Use(name string) *FeatureTypes {
 func (ds *DataStores) Create(options ...options.DataStoreOption) DataStoreList {
 	dsl := DataStoreList{
 		requester: ds.requester,
-		options:   &internal.DataStoreOptions{},
+		options:   &models.DataStoreOptions{},
 	}
 
 	for _, option := range options {

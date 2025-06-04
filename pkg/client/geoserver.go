@@ -3,6 +3,7 @@ package client
 import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/pkg/actions"
+	"github.com/canghel3/go-geoserver/pkg/options"
 	"net/http"
 )
 
@@ -10,7 +11,7 @@ type GeoserverClient struct {
 	info *internal.GeoserverData
 }
 
-func NewGeoserverClient(url, username, password string, options ...GeoserverClientOption) *GeoserverClient {
+func NewGeoserverClient(url, username, password string, options ...options.GeoserverClientOption) *GeoserverClient {
 	gc := new(GeoserverClient)
 	gc.info = new(internal.GeoserverData)
 	gc.info.Connection.URL = url
@@ -18,7 +19,7 @@ func NewGeoserverClient(url, username, password string, options ...GeoserverClie
 	gc.info.Connection.Credentials.Password = password
 
 	for _, option := range options {
-		option(gc)
+		option(gc.info)
 	}
 
 	return gc

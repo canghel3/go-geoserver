@@ -2,6 +2,7 @@ package client
 
 import (
 	"crypto/tls"
+	"github.com/canghel3/go-geoserver/pkg/options"
 	"net/http"
 )
 
@@ -17,15 +18,15 @@ func ExampleNewGeoserverClient() {
 		"http://localhost:8080",
 		"admin",
 		"geoserver",
-		Options.DataDir("/data"),
+		options.Client.DataDir("/data"),
 	)
 
-	// Initialize with Client option
+	// Initialize with HttpClient option
 	client = NewGeoserverClient(
 		"http://localhost:8080",
 		"admin",
 		"geoserver",
-		Options.Client(http.Client{
+		options.Client.HttpClient(http.Client{
 			Transport: &http.Transport{
 				TLSClientConfig: &tls.Config{
 					InsecureSkipVerify: true,

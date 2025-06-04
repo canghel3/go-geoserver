@@ -1,4 +1,4 @@
-package internal
+package models
 
 // GeoServerLayer describes the response for the tiling tab in xml.
 type GeoServerLayer struct {

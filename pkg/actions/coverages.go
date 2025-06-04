@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/models"
 	"github.com/canghel3/go-geoserver/internal/requester"
 	"github.com/canghel3/go-geoserver/pkg/coverages"
 )
@@ -23,19 +24,19 @@ func newCoverages(store string, data *internal.GeoserverData) *Coverages {
 	}
 }
 
-func (c *Coverages) Publish(coverage internal.Coverage) error {
-	coverage.Namespace = internal.NamespaceDetails{
+func (c *Coverages) Publish(coverage models.Coverage) error {
+	coverage.Namespace = models.NamespaceDetails{
 		Href: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", c.data.Connection.URL, c.data.Workspace),
 		Name: c.data.Workspace,
 	}
 
-	coverage.Store = internal.StoreDetails{
+	coverage.Store = models.StoreDetails{
 		Class: "coverageStore",
 		Href:  fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s.json", c.data.Connection.URL, c.data.Workspace, c.store),
 		Name:  fmt.Sprintf("%s:%s", c.data.Workspace, c.store),
 	}
 
-	content, err := json.Marshal(internal.CoverageWrapper{Coverage: coverage})
+	content, err := json.Marshal(models.CoverageWrapper{Coverage: coverage})
 	if err != nil {
 		return err
 	}

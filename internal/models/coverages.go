@@ -1,4 +1,4 @@
-package internal
+package models
 
 import (
 	"github.com/canghel3/go-geoserver/pkg/misc"

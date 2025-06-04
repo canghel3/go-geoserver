@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/canghel3/go-geoserver)](https://goreportcard.com/report/github.com/canghel3/go-geoserver)
+
 # Geoserver Go Client
 
 Making interactions with [GeoServer](https://geoserver.org/) frustration-less in Go.
@@ -37,7 +39,7 @@ Support:
 go get github.com/canghel3/go-geoserver
 ```
 
-## 🧪 Examples
+## 🧪 Usage Examples
 
 ### Client Initialization
 

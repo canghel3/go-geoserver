@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
+	"github.com/canghel3/go-geoserver/internal/models"
 	"github.com/canghel3/go-geoserver/internal/requester"
 	"github.com/canghel3/go-geoserver/internal/validator"
 	"github.com/canghel3/go-geoserver/pkg/coveragestores"
@@ -41,7 +42,7 @@ func newCoverageStoreActions(info *internal.GeoserverData) *CoverageStores {
 }
 
 type CoverageStoreList struct {
-	options   *internal.CoverageStoreOptions
+	options   *models.CoverageStoreOptions
 	requester *requester.Requester
 	data      *internal.GeoserverData
 }
@@ -63,7 +64,7 @@ func (cs *CoverageStores) Use(name string) *Coverages {
 func (cs *CoverageStores) Create(options ...options.CoverageStoreOption) CoverageStoreList {
 	csl := CoverageStoreList{
 		requester: cs.requester,
-		options:   &internal.CoverageStoreOptions{},
+		options:   &models.CoverageStoreOptions{},
 		data:      cs.info.Clone(),
 	}
 

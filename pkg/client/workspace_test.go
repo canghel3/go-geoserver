@@ -1,5 +1,3 @@
-//go:build integration
-
 package client
 
 import (
@@ -88,6 +86,21 @@ func ExampleGeoserverClient_Workspaces_delete() {
 
 	fmt.Println("Workspace deleted successfully")
 	// Output: Workspace deleted successfully
+}
+
+func ExampleGeoserverClient_Workspace_use() {
+	// Initialize the client
+	geoserverClient := NewGeoserverClient(
+		"http://localhost:1111",
+		"admin",
+		"geoserver",
+	)
+
+	//Set which workspace to use
+	workspaceActions := geoserverClient.Workspaces().Use("my-workspace")
+
+	//workspaceActions contains available actions within a workspace
+	workspaceActions.DataStores().Create()
 }
 
 func ExampleGeoserverClient_Workspaces_getAll() {
