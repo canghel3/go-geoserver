@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	VectorsTestdataDir = filepath.Join("internal", "testdata", "vectors")
-	RastersTestdataDir = filepath.Join("internal", "testdata", "rasters")
+	VectorsTestdataDir = filepath.Join("..", "..", "internal", "testdata", "vectors")
+	RastersTestdataDir = filepath.Join("..", "..", "internal", "testdata", "rasters")
 )
 
 func TestMain(m *testing.M) {

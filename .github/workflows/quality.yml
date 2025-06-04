@@ -48,29 +48,49 @@ jobs:
 
       - name: Wait for services to be ready
         run: |
-          # Wait for PostgreSQL
-          until PGPASSWORD=geoserver psql -h localhost -U geoserver -d vectors -c '\q'; do
-            echo "Waiting for PostgreSQL..."
+          # Wait for PostgreSQL with timeout
+          echo "Waiting for PostgreSQL..."
+          timeout=60
+          elapsed=0
+          until PGPASSWORD=geoserver psql -h localhost -U geoserver -d vectors -c '\q' 2>/dev/null; do
+            if [ $elapsed -ge $timeout ]; then
+              echo "PostgreSQL failed to start within $timeout seconds"
+              exit 1
+            fi
+            echo "Waiting for PostgreSQL... ($elapsed/$timeout seconds)"
             sleep 2
+            elapsed=$((elapsed + 2))
           done
           echo "PostgreSQL is ready!"
           
-          # Wait for GeoServer (more robust check)
+          # Wait for GeoServer with better debugging
           echo "Waiting for GeoServer to start..."
           timeout=300  # 5 minutes timeout
           elapsed=0
-          until curl -s -f http://localhost:1112/geoserver/rest/about/version.json -u admin:geoserver > /dev/null 2>&1; do
-            if [ $elapsed -ge $timeout ]; then
-              echo "GeoServer failed to start within $timeout seconds"
-              curl -v http://localhost:1112/geoserver/web/ || true
-              docker logs $(docker ps -q --filter ancestor=kartoza/geoserver:2.22.2) || true
-              exit 1
+          while [ $elapsed -lt $timeout ]; do
+            # Check if GeoServer is responding
+            if curl -s -f http://localhost:1112/geoserver/rest/about/version.json -u admin:geoserver > /dev/null 2>&1; then
+              echo "GeoServer is ready!"
+              break
             fi
+          
+            # Show what's happening
             echo "Waiting for GeoServer... ($elapsed/$timeout seconds)"
+            echo "Checking basic connectivity:"
+            curl -s -I http://localhost:1112/ || echo "No response from port 1112"
+            echo "Checking web interface:"
+            curl -s -I http://localhost:1112/geoserver/web/ || echo "GeoServer web not ready"
+          
             sleep 5
             elapsed=$((elapsed + 5))
           done
-          echo "GeoServer is ready!"
+          
+          if [ $elapsed -ge $timeout ]; then
+            echo "GeoServer failed to start within $timeout seconds"
+            echo "Final connectivity check:"
+            curl -v http://localhost:1112/geoserver/web/ || true
+            exit 1
+          fi
           
           echo "All services are ready!"
 
