@@ -4,6 +4,7 @@ import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/pkg/actions"
 	"github.com/canghel3/go-geoserver/pkg/options"
+	"github.com/canghel3/go-geoserver/pkg/wms"
 	"net/http"
 )
 
@@ -53,8 +54,8 @@ func (s *GeoserverClient) Workspace(name string) *actions.Workspace {
 	return actions.NewWorkspaceActions(s.info.Clone()).Use(name)
 }
 
-func (s *GeoserverClient) WMS() *actions.WMS {
-	return actions.NewWMSHandler(s.info.Clone())
+func (s *GeoserverClient) WMS(version wms.WMSVersion) *actions.WMS {
+	return actions.NewWMSHandler(s.info.Clone(), version)
 }
 
 //TODO: implement wfs and others
