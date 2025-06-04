@@ -19,5 +19,9 @@ func NewWMSHandler(info *internal.GeoserverData) *WMS {
 // TODO: should return a Capabilities interface to accomodate all response formats based on the requested version
 func (wms *WMS) GetCapabilities(version wms.WMSVersion) (*wms.Capabilities1_3_0, error) {
 	//TODO: validate version
-	return wms.requester.WMS().GetCapabilities(string(version))
+	return wms.requester.WMS().GetCapabilities(version)
+}
+
+func (wms *WMS) GetMap(version wms.WMSVersion) {
+	//return wms.requester.WMS().GetMap(version)
 }
