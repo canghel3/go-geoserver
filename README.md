@@ -1,4 +1,5 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/canghel3/go-geoserver)](https://goreportcard.com/report/github.com/canghel3/go-geoserver)
+[![codecov](https://codecov.io/gh/canghel3/go-geoserver/graph/badge.svg?token=OTMJR61Q1H)](https://codecov.io/gh/canghel3/go-geoserver)
 
 # Geoserver Go Client
 
