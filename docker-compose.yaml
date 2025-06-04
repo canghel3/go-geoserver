@@ -20,7 +20,7 @@ services:
       - STABLE_EXTENSIONS=css-plugin
     command: run
     volumes:
-      - /opt/geoserver-for-tests/data:/opt/geoserver/data
+      - /tmp/data:/opt/geoserver/data
     restart: always
   geoserver:
     image: kartoza/geoserver:2.22.2

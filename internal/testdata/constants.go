@@ -4,7 +4,7 @@ const (
 	GeoserverUrl      = "http://localhost:1112"
 	GeoserverUsername = "admin"
 	GeoserverPassword = "geoserver"
-	GeoserverDataDir  = "/opt/geoserver-for-tests/data"
+	GeoserverDataDir  = "/tmp/data"
 
 	Workspace            = "PLAYGROUND"
 	InvalidWorkspaceName = "SO_!@#MEINVALIDNAME"
