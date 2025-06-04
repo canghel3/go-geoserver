@@ -67,8 +67,8 @@ jobs:
               exit 1
             fi
             echo "Waiting for GeoServer... ($elapsed/$timeout seconds)"
-            sleep 10
-            elapsed=$((elapsed + 10))
+            sleep 5
+            elapsed=$((elapsed + 5))
           done
           echo "GeoServer is ready!"
           
