@@ -9,6 +9,32 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    services:
+      postgis:
+        image: postgis/postgis:17-3.5
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: geoserver
+          POSTGRES_PASSWORD: geoserver
+          POSTGRES_DB: vectors
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      geoserver:
+        image: kartoza/geoserver:2.22.2
+        ports:
+          - 1112:8080
+        env:
+          GEOSERVER_ADMIN_USER: admin
+          GEOSERVER_ADMIN_PASSWORD: geoserver
+          GEOSERVER_DATA_DIR: /opt/geoserver/data
+          STABLE_EXTENSIONS: css-plugin
+
     steps:
       - uses: actions/checkout@v4
 
@@ -20,9 +46,39 @@ jobs:
       - name: Install dependencies
         run: go mod download
 
+      - name: Copy SQL migration file
+        run: |
+          PGPASSWORD=geoserver psql -h localhost -U geoserver -d vectors -f ./internal/testdata/migrations/table_for_feature.sql
+
+      - name: Wait for services to be ready
+        run: |
+          # Wait for PostgreSQL
+          until PGPASSWORD=geoserver psql -h localhost -U geoserver -d vectors -c '\q'; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+          
+          # Wait for GeoServer
+          until curl -f http://localhost:1112/geoserver/web/ || [ $? -eq 22 ]; do
+            echo "Waiting for GeoServer..."
+            sleep 5
+          done
+          
+          echo "Services are ready!"
+
       - name: Run tests with coverage
         run: |
           CGO_ENABLED=1 go test -v -race -coverpkg=./... -coverprofile=coverage.out -covermode=atomic ./...
+        env:
+          # Set environment variables your tests might need
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: geoserver
+          POSTGRES_PASSWORD: geoserver
+          POSTGRES_DB: vectors
+          GEOSERVER_URL: http://localhost:1112
+          GEOSERVER_USER: admin
+          GEOSERVER_PASSWORD: geoserver
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
