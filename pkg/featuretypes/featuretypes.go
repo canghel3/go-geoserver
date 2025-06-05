@@ -2,8 +2,8 @@ package featuretypes
 
 import (
 	"github.com/canghel3/go-geoserver/internal/models"
-	misc2 "github.com/canghel3/go-geoserver/pkg/misc"
 	"github.com/canghel3/go-geoserver/pkg/options"
+	"github.com/canghel3/go-geoserver/pkg/shared"
 	"time"
 )
 
@@ -24,31 +24,31 @@ type GetFeatureTypeWrapper struct {
 }
 
 type GetFeatureType struct {
-	Name                   string            `json:"name"`
-	NativeName             string            `json:"nativeName"`
-	Namespace              Namespace         `json:"namespace"`
-	Title                  string            `json:"title"`
-	Abstract               string            `json:"abstract"`
-	Keywords               misc2.Keywords    `json:"keywords"`
-	MetadataLinks          Links             `json:"metadataLinks"`
-	DataLinks              Links             `json:"dataLinks"`
-	NativeCRS              string            `json:"nativeCRS"`
-	Srs                    string            `json:"srs"`
-	NativeBoundingBox      misc2.BoundingBox `json:"nativeBoundingBox"`
-	LatLonBoundingBox      misc2.BoundingBox `json:"latLonBoundingBox"`
-	ProjectionPolicy       string            `json:"projectionPolicy"`
-	Enabled                bool              `json:"enabled"`
-	Metadata               Metadata          `json:"metadata"`
-	Store                  Store             `json:"store"`
-	CqlFilter              string            `json:"cqlFilter"`
-	MaxFeatures            int               `json:"maxFeatures"`
-	NumDecimals            int               `json:"numDecimals"`
-	ResponseSRS            SRS               `json:"responseSRS"`
-	OverridingServiceSRS   bool              `json:"overridingServiceSRS"`
-	SkipNumberMatched      bool              `json:"skipNumberMatched"`
-	CircularArcPresent     bool              `json:"circularArcPresent"`
-	LinearizationTolerance int               `json:"linearizationTolerance"`
-	Attributes             Attributes        `json:"attributes"`
+	Name                   string             `json:"name"`
+	NativeName             string             `json:"nativeName"`
+	Namespace              Namespace          `json:"namespace"`
+	Title                  string             `json:"title"`
+	Abstract               string             `json:"abstract"`
+	Keywords               shared.Keywords    `json:"keywords"`
+	MetadataLinks          Links              `json:"metadataLinks"`
+	DataLinks              Links              `json:"dataLinks"`
+	NativeCRS              string             `json:"nativeCRS"`
+	Srs                    string             `json:"srs"`
+	NativeBoundingBox      shared.BoundingBox `json:"nativeBoundingBox"`
+	LatLonBoundingBox      shared.BoundingBox `json:"latLonBoundingBox"`
+	ProjectionPolicy       string             `json:"projectionPolicy"`
+	Enabled                bool               `json:"enabled"`
+	Metadata               Metadata           `json:"metadata"`
+	Store                  Store              `json:"store"`
+	CqlFilter              string             `json:"cqlFilter"`
+	MaxFeatures            int                `json:"maxFeatures"`
+	NumDecimals            int                `json:"numDecimals"`
+	ResponseSRS            SRS                `json:"responseSRS"`
+	OverridingServiceSRS   bool               `json:"overridingServiceSRS"`
+	SkipNumberMatched      bool               `json:"skipNumberMatched"`
+	CircularArcPresent     bool               `json:"circularArcPresent"`
+	LinearizationTolerance int                `json:"linearizationTolerance"`
+	Attributes             Attributes         `json:"attributes"`
 }
 
 type Links struct {

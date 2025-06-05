@@ -2,7 +2,7 @@ package options
 
 import (
 	"github.com/canghel3/go-geoserver/internal/models"
-	"github.com/canghel3/go-geoserver/pkg/misc"
+	"github.com/canghel3/go-geoserver/pkg/shared"
 )
 
 var FeatureType FeatureTypeOptionsGenerator
@@ -13,7 +13,7 @@ type FeatureTypeOption func(ft *models.FeatureType)
 
 func (ftog FeatureTypeOptionsGenerator) BBOX(bbox [4]float64, bboxSrs string) FeatureTypeOption {
 	return func(ft *models.FeatureType) {
-		ft.NativeBoundingBox = &misc.BoundingBox{
+		ft.NativeBoundingBox = &shared.BoundingBox{
 			MinX: bbox[0],
 			MaxX: bbox[2],
 			MinY: bbox[1],

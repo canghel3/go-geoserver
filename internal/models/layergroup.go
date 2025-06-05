@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/canghel3/go-geoserver/pkg/misc"
+	"github.com/canghel3/go-geoserver/pkg/shared"
 	"github.com/canghel3/go-geoserver/pkg/workspace"
 )
 
@@ -15,8 +15,8 @@ type Group struct {
 	Title        string                      `json:"title"`
 	Workspace    workspace.WorkspaceCreation `json:"workspace"`
 	Publishables Publishables                `json:"publishables"`
-	Bounds       misc.BoundingBox            `json:"bounds"`
-	Keywords     *misc.Keywords              `json:"keywords,omitempty"`
+	Bounds       shared.BoundingBox          `json:"bounds"`
+	Keywords     *shared.Keywords            `json:"keywords,omitempty"`
 	Styles       GroupStyles                 `json:"styles"`
 }
 
@@ -31,7 +31,7 @@ type Published struct {
 }
 
 type GroupStyles struct {
-	Style []misc.Style `json:"style"`
+	Style []shared.Style `json:"style"`
 }
 
 type GetGroupWrapper struct {
@@ -45,7 +45,7 @@ type GetGroup struct {
 	Title        string                      `json:"title"`
 	Workspace    workspace.WorkspaceCreation `json:"workspace"`
 	Publishables Publishables                `json:"publishables"`
-	Bounds       misc.BoundingBox            `json:"bounds"`
-	Keywords     *misc.Keywords              `json:"keywords,omitempty"`
+	Bounds       shared.BoundingBox          `json:"bounds"`
+	Keywords     *shared.Keywords            `json:"keywords,omitempty"`
 	Styles       any                         `json:"styles,omitempty"`
 }

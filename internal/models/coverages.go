@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/canghel3/go-geoserver/pkg/misc"
+	"github.com/canghel3/go-geoserver/pkg/shared"
 )
 
 type CoverageWrapper struct {
@@ -17,12 +17,12 @@ type Coverage struct {
 	Grid                       *GridDetails          `json:"grid,omitempty"`
 	InterpolationMethods       *InterpolationMethods `json:"interpolationMethods,omitempty"`
 	ProjectionPolicy           *string               `json:"projectionPolicy,omitempty"`
-	Keywords                   *misc.Keywords        `json:"keywords,omitempty"`
-	LatLonBoundingBox          *misc.BoundingBox     `json:"latLonBoundingBox,omitempty"`
+	Keywords                   *shared.Keywords      `json:"keywords,omitempty"`
+	LatLonBoundingBox          *shared.BoundingBox   `json:"latLonBoundingBox,omitempty"`
 	Metadata                   *Metadata             `json:"metadata,omitempty"`
 	Name                       string                `json:"name"`
 	Namespace                  NamespaceDetails      `json:"namespace"`
-	NativeBoundingBox          *misc.BoundingBox     `json:"nativeBoundingBox,omitempty"`
+	NativeBoundingBox          *shared.BoundingBox   `json:"nativeBoundingBox,omitempty"`
 	NativeCRS                  *CRS                  `json:"nativeCRS,omitempty"`
 	NativeFormat               *string               `json:"nativeFormat,omitempty"`
 	NativeName                 string                `json:"nativeName,omitempty"`

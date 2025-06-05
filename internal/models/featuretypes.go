@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/canghel3/go-geoserver/pkg/misc"
+	"github.com/canghel3/go-geoserver/pkg/shared"
 )
 
 type CreateFeatureTypeWrapper struct {
@@ -11,14 +11,14 @@ type CreateFeatureTypeWrapper struct {
 type FeatureType struct {
 	Name string `json:"name"`
 	//The native Name of the resource. This Name corresponds to the physical resource that feature type is derived from -- a shapefile Name, a database table, etc...
-	NativeName        string            `json:"nativeName"`
-	Namespace         Namespace         `json:"namespace"`
-	Srs               *string           `json:"srs,omitempty"`
-	NativeBoundingBox *misc.BoundingBox `json:"nativeBoundingBox,omitempty"`
-	ProjectionPolicy  *string           `json:"projectionPolicy,omitempty"`
-	Keywords          *misc.Keywords    `json:"keywords,omitempty"`
-	Title             *string           `json:"title,omitempty"`
-	Store             Store             `json:"store"`
+	NativeName        string              `json:"nativeName"`
+	Namespace         Namespace           `json:"namespace"`
+	Srs               *string             `json:"srs,omitempty"`
+	NativeBoundingBox *shared.BoundingBox `json:"nativeBoundingBox,omitempty"`
+	ProjectionPolicy  *string             `json:"projectionPolicy,omitempty"`
+	Keywords          *shared.Keywords    `json:"keywords,omitempty"`
+	Title             *string             `json:"title,omitempty"`
+	Store             Store               `json:"store"`
 }
 
 // Namespace holds workspace configuration details when creating a layer in GeoServer.

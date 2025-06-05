@@ -4,6 +4,14 @@ import (
 	"encoding/xml"
 )
 
+type Capabilities interface {
+	Version() string
+	Layers() Layer
+}
+
+type Capabilities1_1_1 struct {
+}
+
 type Capabilities1_3_0 struct {
 	XMLName    xml.Name   `xml:"WMS_Capabilities" json:"-"`
 	Service    Service    `xml:"Service" json:"service"`

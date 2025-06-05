@@ -1,11 +1,18 @@
 package actions
 
 import (
+	"bytes"
 	"errors"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
+	"github.com/canghel3/go-geoserver/pkg/shared"
 	"github.com/canghel3/go-geoserver/pkg/wms"
+	"golang.org/x/image/tiff"
+	"html/template"
 	"image"
+	"image/gif"
+	"image/jpeg"
+	"image/png"
 )
 
 type WMS struct {
@@ -13,75 +20,138 @@ type WMS struct {
 	version   wms.WMSVersion
 }
 
-func NewWMSHandler(info *internal.GeoserverData, version wms.WMSVersion) *WMS {
+func NewWMSActions(info *internal.GeoserverData, version wms.WMSVersion) *WMS {
 	return &WMS{
 		requester: requester.NewRequester(info),
 		version:   version,
 	}
 }
 
-func (wms *WMS) GetCapabilities() (*wms.Capabilities1_3_0, error) {
-	//TODO: validate version
-	return wms.requester.WMS().GetCapabilities(wms.version)
+func (wms *WMS) GetCapabilities() (*wms.Capabilities, error) {
+	_, err := wms.requester.WMS().GetCapabilities(wms.version)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, errors.New("not implemented")
 }
 
-func (wms *WMS) GetMap() *MapFormats {
-	//return wms.requester.WMS().GetMap(version)
+func (wms *WMS) GetMap(width, height uint16, layers []string, bbox shared.BBOX) *MapFormats {
 	return &MapFormats{
-		version: wms.version,
+		width:     width,
+		height:    height,
+		bbox:      bbox,
+		layers:    layers,
+		version:   wms.version,
+		requester: wms.requester,
 	}
 }
 
 type MapFormats struct {
-	version wms.WMSVersion
+	width     uint16
+	height    uint16
+	layers    []string
+	bbox      shared.BBOX
+	version   wms.WMSVersion
+	requester *requester.Requester
 }
 
 func (mf *MapFormats) Png() (image.Image, error) {
-	return nil, errors.New("not implemented")
+	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.PNG)
+	if err != nil {
+		return nil, err
+	}
+
+	return png.Decode(bytes.NewReader(content))
 }
 
 func (mf *MapFormats) Png8() (image.Image, error) {
-	return nil, errors.New("not implemented")
+	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.PNG8)
+	if err != nil {
+		return nil, err
+	}
+
+	return png.Decode(bytes.NewReader(content))
 }
 
 func (mf *MapFormats) Jpeg() (image.Image, error) {
-	return nil, errors.New("not implemented")
+	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.JPEG)
+	if err != nil {
+		return nil, err
+	}
+
+	return jpeg.Decode(bytes.NewReader(content))
 }
 
 func (mf *MapFormats) JpegPng() (image.Image, error) {
-	return nil, errors.New("not implemented")
+	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.JPEG_PNG)
+	if err != nil {
+		return nil, err
+	}
+
+	return jpeg.Decode(bytes.NewReader(content))
 }
 
 func (mf *MapFormats) JpegPng8() (image.Image, error) {
-	return nil, errors.New("not implemented")
+	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.JPEG_PNG8)
+	if err != nil {
+		return nil, err
+	}
+
+	return jpeg.Decode(bytes.NewReader(content))
 }
 
 func (mf *MapFormats) Gif() (image.Image, error) {
-	return nil, errors.New("not implemented")
+	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.GIF)
+	if err != nil {
+		return nil, err
+	}
+
+	return gif.Decode(bytes.NewReader(content))
 }
 
 func (mf *MapFormats) Tiff() (image.Image, error) {
-	return nil, errors.New("not implemented")
+	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.TIFF)
+	if err != nil {
+		return nil, err
+	}
+
+	return tiff.Decode(bytes.NewReader(content))
 }
 
 func (mf *MapFormats) Tiff8() (image.Image, error) {
-	return nil, errors.New("not implemented")
+	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.TIFF8)
+	if err != nil {
+		return nil, err
+	}
+
+	return tiff.Decode(bytes.NewReader(content))
 }
 
 func (mf *MapFormats) GeoTiff() (image.Image, error) {
-	return nil, errors.New("not implemented")
+	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.GeoTIFF)
+	if err != nil {
+		return nil, err
+	}
+
+	return tiff.Decode(bytes.NewReader(content))
 }
 
 func (mf *MapFormats) GeoTiff8() (image.Image, error) {
-	return nil, errors.New("not implemented")
+	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.GeoTIFF8)
+	if err != nil {
+		return nil, err
+	}
+
+	return tiff.Decode(bytes.NewReader(content))
 }
 
-func (mf *MapFormats) Svg() (image.Image, error) {
-	return nil, errors.New("not implemented")
+func (mf *MapFormats) Svg() ([]byte, error) {
+	return mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.SVG)
 }
 
 func (mf *MapFormats) Pdf() ([]byte, error) {
-	return nil, errors.New("not implemented")
+	return mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.PDF)
 }
 
 func (mf *MapFormats) GeoRSS() (image.Image, error) {
@@ -104,7 +174,7 @@ func (mf *MapFormats) MapMLHTMLViewer() ([]byte, error) {
 	return nil, errors.New("not implemented")
 }
 
-func (mf *MapFormats) OpenLayers() ([]byte, error) {
+func (mf *MapFormats) OpenLayers() (*template.HTML, error) {
 	return nil, errors.New("not implemented")
 }
 
