@@ -15,9 +15,11 @@ const (
 
 	CoverageStoreGeoTiff = "GEOTIFF"
 
-	FeatureTypeName       = "init"
-	FeatureTypeNativeName = "init"
-	FeatureTypeTitle      = "sample"
+	FeatureTypePostgis              = "init"
+	FeatureTypePostgisNativeName    = "init"
+	FeatureTypeGeoPackage           = "buildings"
+	FeatureTypeGeoPackageNativeName = "bld_fts_buildingpart"
+	FeatureTypeTitle                = "sample"
 
 	CoverageName       = "sample"
 	CoverageNativeName = "sample"

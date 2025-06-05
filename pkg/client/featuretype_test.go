@@ -32,25 +32,25 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 			assert.NoError(t, err)
 
 			t.Run("WITHOUT ANY OPTIONS", func(t *testing.T) {
-				feature := featuretypes.New(testdata.FeatureTypeName, testdata.FeatureTypeNativeName)
+				feature := featuretypes.New(testdata.FeatureTypePostgis, testdata.FeatureTypePostgisNativeName)
 
 				err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
 				assert.NoError(t, err)
 
-				get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypeName)
+				get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
 				assert.NoError(t, err)
-				assert.Equal(t, get.Name, testdata.FeatureTypeName)
-				assert.Equal(t, get.NativeName, testdata.FeatureTypeNativeName)
+				assert.Equal(t, get.Name, testdata.FeatureTypePostgis)
+				assert.Equal(t, get.NativeName, testdata.FeatureTypePostgisNativeName)
 				assert.Equal(t, get.Srs, "EPSG:4326")
 				assert.Equal(t, get.Keywords.Keywords, []string{"features", "init"})
 			})
 
 			t.Run("WITH BBOX OPTION", func(t *testing.T) {
-				var featureName = testdata.FeatureTypeName + "_WITH_BBOX"
+				var featureName = testdata.FeatureTypePostgis + "_WITH_BBOX"
 				var bbox = [4]float64{-180.0, -90.0, 180.0, 90.0}
 				var bboxSrs = "EPSG:4326"
 
-				feature := featuretypes.New(featureName, testdata.FeatureTypeNativeName, options.FeatureType.BBOX(bbox, bboxSrs))
+				feature := featuretypes.New(featureName, testdata.FeatureTypePostgisNativeName, options.FeatureType.BBOX(bbox, bboxSrs))
 
 				err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
 				assert.NoError(t, err)
@@ -58,7 +58,7 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 				get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(featureName)
 				assert.NoError(t, err)
 				assert.Equal(t, get.Name, featureName)
-				assert.Equal(t, get.NativeName, testdata.FeatureTypeNativeName)
+				assert.Equal(t, get.NativeName, testdata.FeatureTypePostgisNativeName)
 				assert.Equal(t, get.Srs, "EPSG:4326")
 				assert.Equal(t, get.NativeBoundingBox.MinX, bbox[0])
 				assert.Equal(t, get.NativeBoundingBox.MinY, bbox[1])
@@ -91,21 +91,21 @@ func TestFeatureTypeIntegration_Get(t *testing.T) {
 	assert.NoError(t, err)
 
 	//create feature type
-	feature := featuretypes.New(testdata.FeatureTypeName, testdata.FeatureTypeNativeName)
+	feature := featuretypes.New(testdata.FeatureTypePostgis, testdata.FeatureTypePostgisNativeName)
 	err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
 	assert.NoError(t, err)
 
 	t.Run("200 OK", func(t *testing.T) {
-		get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypeName)
+		get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
 		assert.NoError(t, err)
 		assert.NotNil(t, get)
-		assert.Equal(t, get.Name, testdata.FeatureTypeName)
-		assert.Equal(t, get.NativeName, testdata.FeatureTypeNativeName)
+		assert.Equal(t, get.Name, testdata.FeatureTypePostgis)
+		assert.Equal(t, get.NativeName, testdata.FeatureTypePostgisNativeName)
 		assert.Equal(t, get.Srs, "EPSG:4326")
 	})
 
 	t.Run("404 NOT FOUND", func(t *testing.T) {
-		get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypeName + "_DOES_NOT_EXIST")
+		get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis + "_DOES_NOT_EXIST")
 		assert.Error(t, err)
 		assert.Nil(t, get)
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
@@ -133,23 +133,23 @@ func TestFeatureTypeIntegration_Delete(t *testing.T) {
 	assert.NoError(t, err)
 
 	//create feature type
-	feature := featuretypes.New(testdata.FeatureTypeName, testdata.FeatureTypeNativeName)
+	feature := featuretypes.New(testdata.FeatureTypePostgis, testdata.FeatureTypePostgisNativeName)
 	err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
 	assert.NoError(t, err)
 
 	t.Run("200 OK", func(t *testing.T) {
-		err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Delete(testdata.FeatureTypeName, true)
+		err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Delete(testdata.FeatureTypePostgis, true)
 		assert.NoError(t, err)
 
 		//try to retrieve the feature type
-		get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypeName)
+		get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
 		assert.Nil(t, get)
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 	})
 
 	t.Run("404 NOT FOUND", func(t *testing.T) {
-		err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Delete(testdata.FeatureTypeName, true)
+		err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Delete(testdata.FeatureTypePostgis, true)
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 	})
