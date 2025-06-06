@@ -35,7 +35,7 @@ func (fr *FontsRequester) Get() (*fonts.Fonts, error) {
 	}
 
 	switch response.StatusCode {
-	case http.StatusCreated:
+	case http.StatusOK:
 		fonts := &fonts.Fonts{}
 		if err = json.Unmarshal(body, fonts); err != nil {
 			return nil, err

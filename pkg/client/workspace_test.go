@@ -222,7 +222,7 @@ func TestWorkspaceIntegration_GetAll(t *testing.T) {
 	t.Run("200 OK", func(t *testing.T) {
 		t.Run("EMPTY", func(t *testing.T) {
 			wksp, err := geoserverClient.Workspaces().GetAll()
-			assert.Nil(t, wksp)
+			assert.Empty(t, wksp)
 			assert.NoError(t, err)
 		})
 

@@ -35,7 +35,7 @@ func (ar *AboutRequester) Manifest() (*about.Manifest, error) {
 	}
 
 	switch response.StatusCode {
-	case http.StatusCreated:
+	case http.StatusOK:
 		manifest := &about.ManifestResponse{}
 		if err = json.Unmarshal(body, manifest); err != nil {
 			return nil, err
@@ -67,7 +67,7 @@ func (ar *AboutRequester) Version() (*about.Version, error) {
 	}
 
 	switch response.StatusCode {
-	case http.StatusCreated:
+	case http.StatusOK:
 		version := &about.VersionResponse{}
 		if err = json.Unmarshal(body, version); err != nil {
 			return nil, err
@@ -99,7 +99,7 @@ func (ar *AboutRequester) Status() (*about.Status, error) {
 	}
 
 	switch response.StatusCode {
-	case http.StatusCreated:
+	case http.StatusOK:
 		status := &about.StatusResponse{}
 		if err = json.Unmarshal(body, status); err != nil {
 			return nil, err
@@ -131,7 +131,7 @@ func (ar *AboutRequester) SystemStatus() (*about.Metrics, error) {
 	}
 
 	switch response.StatusCode {
-	case http.StatusCreated:
+	case http.StatusOK:
 		metrics := &about.MetricsResponse{}
 		if err = json.Unmarshal(body, metrics); err != nil {
 			return nil, err

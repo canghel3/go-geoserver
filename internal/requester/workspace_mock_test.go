@@ -3,6 +3,7 @@ package requester
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal/mock"
 	"github.com/canghel3/go-geoserver/internal/testdata"
@@ -16,7 +17,7 @@ import (
 )
 
 const (
-	SINGLE_WORKSPACE_RESPONSE    = "../testdata/workspace/single_workspace_response.json"
+	singleWorkspaceResponse      = "../testdata/workspace/single_workspace_response.json"
 	MULTI_WORKSPACE_RESPONSE     = "../testdata/workspace/multi_workspace_response.json"
 	NO_WORKSPACES_EXIST_RESPONSE = "../testdata/workspace/does_not_exist_response.json"
 )
@@ -81,6 +82,18 @@ func TestWorkspaceRequester_Create(t *testing.T) {
 		assert.EqualError(t, err, fmt.Sprintf("received status code %d from geoserver: some error", http.StatusInternalServerError))
 		assert.ErrorAs(t, err, &econflict)
 	})
+
+	t.Run("Client Error", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockClient.EXPECT().Do(gomock.Any()).Return(nil, errors.New("client error"))
+
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
+		err := workspaceRequester.Create(testdata.Workspace, false)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "client error")
+	})
 }
 
 func TestWorkspaceRequester_Delete(t *testing.T) {
@@ -143,13 +156,25 @@ func TestWorkspaceRequester_Delete(t *testing.T) {
 		assert.EqualError(t, err, fmt.Sprintf("received status code %d from geoserver: some error", http.StatusInternalServerError))
 		assert.ErrorAs(t, err, &econflict)
 	})
+
+	t.Run("Client Error", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockClient.EXPECT().Do(gomock.Any()).Return(nil, errors.New("client error"))
+
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
+		err := workspaceRequester.Delete(testdata.Workspace, false)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "client error")
+	})
 }
 
 func TestWorkspaceRequester_Get(t *testing.T) {
 	t.Run("200 OK", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
-		content, err := testdata.Read(SINGLE_WORKSPACE_RESPONSE)
+		content, err := testdata.Read(singleWorkspaceResponse)
 		assert.NoError(t, err)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)
@@ -216,37 +241,21 @@ func TestWorkspaceRequester_Get(t *testing.T) {
 		assert.EqualError(t, err, fmt.Sprintf("received status code %d from geoserver: some error", http.StatusInternalServerError))
 		assert.ErrorAs(t, err, &econflict)
 	})
+
+	t.Run("Client Error", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockClient.EXPECT().Do(gomock.Any()).Return(nil, errors.New("client error"))
+
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
+		_, err := workspaceRequester.Get(testdata.Workspace)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "client error")
+	})
 }
 
 func TestWorkspaceRequester_GetAll(t *testing.T) {
-	t.Run("No workspaces exist", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-
-		content, err := testdata.Read(NO_WORKSPACES_EXIST_RESPONSE)
-		assert.NoError(t, err)
-
-		mockClient := mocks.NewMockHTTPClient(ctrl)
-		mockResponse := &http.Response{
-			StatusCode: http.StatusOK,
-			Header:     make(http.Header),
-			Body:       io.NopCloser(bytes.NewReader(content)),
-		}
-
-		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
-
-		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
-
-		wksp, err := workspaceRequester.GetAll()
-		assert.NoError(t, err)
-		assert.NotNil(t, wksp)
-
-		var expectedWorkspace workspace.MultiWorkspaceRetrievalWrapper
-		err = json.Unmarshal(content, &expectedWorkspace)
-		assert.NoError(t, err)
-
-		assert.Equal(t, expectedWorkspace.Workspaces.Workspace, wksp)
-	})
-
 	t.Run("200 OK", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
@@ -294,6 +303,46 @@ func TestWorkspaceRequester_GetAll(t *testing.T) {
 		assert.Error(t, err)
 		assert.EqualError(t, err, fmt.Sprintf("received status code %d from geoserver: some error", http.StatusInternalServerError))
 		assert.ErrorAs(t, err, &econflict)
+	})
+
+	t.Run("No workspaces exist", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		content, err := testdata.Read(NO_WORKSPACES_EXIST_RESPONSE)
+		assert.NoError(t, err)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(bytes.NewReader(content)),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		wksp, err := workspaceRequester.GetAll()
+		assert.NoError(t, err)
+		assert.NotNil(t, wksp)
+
+		var expectedWorkspace workspace.MultiWorkspaceRetrievalWrapper
+		err = json.Unmarshal(content, &expectedWorkspace)
+		assert.NoError(t, err)
+
+		assert.Equal(t, expectedWorkspace.Workspaces.Workspace, wksp)
+	})
+
+	t.Run("Client Error", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockClient.EXPECT().Do(gomock.Any()).Return(nil, errors.New("client error"))
+
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
+		_, err := workspaceRequester.GetAll()
+		assert.Error(t, err)
+		assert.EqualError(t, err, "client error")
 	})
 }
 
@@ -356,5 +405,17 @@ func TestWorkspaceRequester_Update(t *testing.T) {
 		assert.Error(t, err)
 		assert.EqualError(t, err, fmt.Sprintf("received status code %d from geoserver: some error", http.StatusInternalServerError))
 		assert.ErrorAs(t, err, &econflict)
+	})
+
+	t.Run("Client Error", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockClient.EXPECT().Do(gomock.Any()).Return(nil, errors.New("client error"))
+
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
+		err := workspaceRequester.Update(testdata.Workspace, "newName")
+		assert.Error(t, err)
+		assert.EqualError(t, err, "client error")
 	})
 }
