@@ -26,7 +26,7 @@ func ExampleNewGeoserverClient() {
 		"http://localhost:8080",
 		"admin",
 		"geoserver",
-		options.Client.HttpClient(http.Client{
+		options.Client.HttpClient(&http.Client{
 			Transport: &http.Transport{
 				TLSClientConfig: &tls.Config{
 					InsecureSkipVerify: true,

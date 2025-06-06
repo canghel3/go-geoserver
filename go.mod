@@ -3,6 +3,7 @@ module github.com/canghel3/go-geoserver
 go 1.24.0
 
 require (
+	github.com/golang/mock v1.6.0
 	github.com/stretchr/testify v1.10.0
 	golang.org/x/image v0.28.0
 )

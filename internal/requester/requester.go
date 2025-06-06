@@ -5,6 +5,7 @@ import (
 )
 
 type Requester struct {
+	about          *AboutRequester
 	workspaces     *WorkspaceRequester
 	datastores     *DataStoreRequester
 	coveragestores *CoverageStoreRequester
@@ -13,9 +14,11 @@ type Requester struct {
 	wms            *WMSRequester
 }
 
-// TODO: having a clone of the requester for each handler is bad design. this must be refactored
 func NewRequester(data *internal.GeoserverData) *Requester {
 	return &Requester{
+		about: &AboutRequester{
+			data: data,
+		},
 		workspaces: &WorkspaceRequester{
 			data: data,
 		},
@@ -35,6 +38,10 @@ func NewRequester(data *internal.GeoserverData) *Requester {
 			data: data,
 		},
 	}
+}
+
+func (r *Requester) About() *AboutRequester {
+	return r.about
 }
 
 func (r *Requester) Workspaces() *WorkspaceRequester {

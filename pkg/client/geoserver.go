@@ -5,6 +5,7 @@ import (
 	"github.com/canghel3/go-geoserver/pkg/actions"
 	"github.com/canghel3/go-geoserver/pkg/options"
 	"github.com/canghel3/go-geoserver/pkg/wms"
+	"net/http"
 )
 
 type GeoserverClient struct {
@@ -14,6 +15,7 @@ type GeoserverClient struct {
 func NewGeoserverClient(url, username, password string, options ...options.GeoserverClientOption) *GeoserverClient {
 	gc := new(GeoserverClient)
 	gc.info = new(internal.GeoserverData)
+	gc.info.Client = &http.Client{}
 	gc.info.Connection.URL = url
 	gc.info.Connection.Credentials.Username = username
 	gc.info.Connection.Credentials.Password = password
@@ -26,6 +28,10 @@ func NewGeoserverClient(url, username, password string, options ...options.Geose
 }
 
 type GeoserverClientOption func(*GeoserverClient)
+
+func (s *GeoserverClient) About() *actions.About {
+	return actions.NewAboutAction(s.info.Clone())
+}
 
 // Workspaces displays available actions inside a workspace.
 func (s *GeoserverClient) Workspaces() *actions.Workspaces {

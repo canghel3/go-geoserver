@@ -2,7 +2,6 @@ package options
 
 import (
 	"github.com/canghel3/go-geoserver/internal"
-	"net/http"
 )
 
 type GeoserverClientOption func(*internal.GeoserverData)
@@ -17,7 +16,7 @@ func (gco GeoserverClientOptionsGenerator) DataDir(datadir string) GeoserverClie
 	}
 }
 
-func (gco GeoserverClientOptionsGenerator) HttpClient(client http.Client) GeoserverClientOption {
+func (gco GeoserverClientOptionsGenerator) HttpClient(client internal.HTTPClient) GeoserverClientOption {
 	return func(i *internal.GeoserverData) {
 		i.Client = client
 	}
