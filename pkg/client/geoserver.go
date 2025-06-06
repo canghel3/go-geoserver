@@ -33,6 +33,10 @@ func (s *GeoserverClient) About() *actions.About {
 	return actions.NewAboutAction(s.info.Clone())
 }
 
+func (s *GeoserverClient) Fonts() *actions.Fonts {
+	return actions.NewFonts(s.info.Clone())
+}
+
 // Workspaces displays available actions inside a workspace.
 func (s *GeoserverClient) Workspaces() *actions.Workspaces {
 	return actions.NewWorkspaceActions(s.info.Clone())
@@ -45,6 +49,10 @@ func (s *GeoserverClient) Workspace(name string) *actions.Workspace {
 
 func (s *GeoserverClient) WMS(version wms.WMSVersion) *actions.WMS {
 	return actions.NewWMSActions(s.info.Clone(), version)
+}
+
+func (s *GeoserverClient) Logging() *actions.Logging {
+	return actions.NewLoggingActions(s.info.Clone())
 }
 
 //TODO: implement wfs and others

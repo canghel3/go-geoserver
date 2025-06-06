@@ -6,17 +6,22 @@ import (
 
 type Requester struct {
 	about          *AboutRequester
+	fonts          *FontsRequester
 	workspaces     *WorkspaceRequester
 	datastores     *DataStoreRequester
 	coveragestores *CoverageStoreRequester
 	coverages      *CoverageRequester
 	featuretypes   *FeatureTypeRequester
 	wms            *WMSRequester
+	logging        *LoggingRequester
 }
 
 func NewRequester(data *internal.GeoserverData) *Requester {
 	return &Requester{
 		about: &AboutRequester{
+			data: data,
+		},
+		fonts: &FontsRequester{
 			data: data,
 		},
 		workspaces: &WorkspaceRequester{
@@ -37,11 +42,18 @@ func NewRequester(data *internal.GeoserverData) *Requester {
 		wms: &WMSRequester{
 			data: data,
 		},
+		logging: &LoggingRequester{
+			data: data,
+		},
 	}
 }
 
 func (r *Requester) About() *AboutRequester {
 	return r.about
+}
+
+func (r *Requester) Fonts() *FontsRequester {
+	return r.fonts
 }
 
 func (r *Requester) Workspaces() *WorkspaceRequester {
@@ -66,4 +78,8 @@ func (r *Requester) CoverageStores() *CoverageStoreRequester {
 
 func (r *Requester) Coverages() *CoverageRequester {
 	return r.coverages
+}
+
+func (r *Requester) Logging() *LoggingRequester {
+	return r.logging
 }

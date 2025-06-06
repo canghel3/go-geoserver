@@ -189,8 +189,21 @@ func (mf MapFormats) MapMLHTMLViewer() ([]byte, error) {
 	return nil, errors.New("not implemented")
 }
 
-func (mf MapFormats) OpenLayers() (*template.HTML, error) {
-	return nil, errors.New("not implemented")
+func (mf MapFormats) OpenLayers() (*wms.OpenLayersTemplate, error) {
+	raw, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.OpenLayers)
+	if err != nil {
+		return nil, err
+	}
+
+	templ, err := template.New("OpenLayers").Parse(string(raw))
+	if err != nil {
+		return nil, err
+	}
+
+	return &wms.OpenLayersTemplate{
+		Template: templ,
+		RawHTML:  raw,
+	}, nil
 }
 
 func (mf MapFormats) UTFGrid() ([]byte, error) {
