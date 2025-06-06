@@ -1,14 +1,11 @@
 package client
 
 import (
-	"bytes"
-	"encoding/base64"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/shared"
 	"github.com/canghel3/go-geoserver/pkg/wms"
 	"github.com/stretchr/testify/assert"
-	"image/png"
 	"testing"
 )
 
@@ -36,9 +33,9 @@ func TestWMS_GetMap(t *testing.T) {
 				assert.NotNil(t, img)
 				assert.NotNil(t, img.Bounds())
 
-				var buf bytes.Buffer
-				png.Encode(&buf, img)
-				fmt.Println(base64.StdEncoding.EncodeToString(buf.Bytes()))
+				//var buf bytes.Buffer
+				//png.Encode(&buf, img)
+				//fmt.Println(base64.StdEncoding.EncodeToString(buf.Bytes()))
 			})
 		})
 

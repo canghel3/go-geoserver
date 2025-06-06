@@ -1,0 +1,18 @@
+{
+  "about": {
+    "resource": [
+      {
+        "@name": "GeoServer",
+        "Build-Timestamp": "17-Feb-2023 17:46",
+        "Version": "2.22.2",
+        "Git-Revision": "78e7383a361356dabfc16b992ebcb0d9e623b831"
+      },
+      {
+        "@name": "GeoTools",
+        "Build-Timestamp": "17-Feb-2023 16:44",
+        "Version": 28.2,
+        "Git-Revision": "558cedba96f8d4c593a362982ce55b7a9e6942dc"
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "metrics": {
+    "metric": [
+      {
+        "available": false,
+        "description": "Operating system",
+        "name": "OPERATING_SYSTEM",
+        "unit": "",
+        "category": "SYSTEM",
+        "identifier": "OPERATING_SYSTEM",
+        "priority": 1,
+        "value": "NOT AVAILABLE"
+      },
+      {
+        "available": false,
+        "description": "Uptime",
+        "name": "SYSTEM_UPTIME",
+        "unit": "sec",
+        "category": "SYSTEM",
+        "identifier": "SYSTEM_UPTIME",
+        "priority": 2,
+        "value": "NOT AVAILABLE"
+      }
+    ]
+  }
+}

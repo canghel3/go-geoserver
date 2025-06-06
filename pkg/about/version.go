@@ -11,6 +11,6 @@ type Version struct {
 type VersionResource struct {
 	Name           string `json:"@name"`
 	BuildTimestamp string `json:"Build-Timestamp"`
-	Version        string `json:"Version"`
+	Version        any    `json:"Version"`
 	GitRevision    string `json:"Git-Revision"`
 }

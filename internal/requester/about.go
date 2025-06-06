@@ -104,7 +104,7 @@ func (ar *AboutRequester) Status() (*about.Status, error) {
 		if err = json.Unmarshal(body, status); err != nil {
 			return nil, err
 		}
-		return &status.About, nil
+		return &status.Status, nil
 	default:
 		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}

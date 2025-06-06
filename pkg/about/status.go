@@ -1,7 +1,7 @@
 package about
 
 type StatusResponse struct {
-	About Status `json:"about"`
+	Status Status `json:"statuss"` //this is a typo in GeoServer v2.22.2
 }
 
 type Status struct {

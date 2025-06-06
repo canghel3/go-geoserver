@@ -1,0 +1,14 @@
+{
+  "statuss": {
+    "status": [
+      {
+        "name": "GeoServer Web UI Web Feature Service",
+        "href": "http://localhost:1111/geoserver/rest/about/status/GeoServer+Web+UI+Web+Feature+Service.json"
+      },
+      {
+        "name": "GeoServer Web UI Core",
+        "href": "http://localhost:1111/geoserver/rest/about/status/GeoServer+Web+UI+Core.json"
+      }
+    ]
+  }
+}
