@@ -129,7 +129,7 @@ func TestCoverageRequester_Get(t *testing.T) {
 		_, err := coverageRequester.Get(testdata.CoverageStoreGeoTiff, testdata.CoverageName)
 		assert.Error(t, err)
 		assert.ErrorAs(t, err, &geoserverError)
-		assert.EqualError(t, err, fmt.Sprintf("coverage %s does not exist", testdata.CoverageName))
+		assert.EqualError(t, err, fmt.Sprintf("coverage %s not found", testdata.CoverageName))
 	})
 
 	t.Run("500 Internal Server Error", func(t *testing.T) {
@@ -203,7 +203,7 @@ func TestCoverageRequester_Delete(t *testing.T) {
 		err := coverageRequester.Delete(testdata.CoverageStoreGeoTiff, testdata.CoverageName, true)
 		assert.Error(t, err)
 		assert.ErrorAs(t, err, &geoserverError)
-		assert.EqualError(t, err, fmt.Sprintf("coverage %s does not exist", testdata.CoverageName))
+		assert.EqualError(t, err, fmt.Sprintf("coverage %s not found", testdata.CoverageName))
 	})
 
 	t.Run("500 Internal Server Error", func(t *testing.T) {

@@ -17,9 +17,9 @@ import (
 )
 
 const (
-	singleWorkspaceResponse      = "../testdata/workspace/single_workspace_response.json"
-	MULTI_WORKSPACE_RESPONSE     = "../testdata/workspace/multi_workspace_response.json"
-	NO_WORKSPACES_EXIST_RESPONSE = "../testdata/workspace/does_not_exist_response.json"
+	singleWorkspaceResponse = "../testdata/workspace/single_workspace_response.json"
+	multiWorkspace          = "../testdata/workspace/multi_workspace_response.json"
+	noWorkspacesExist       = "../testdata/workspace/does_not_exist_response.json"
 )
 
 func TestWorkspaceRequester_Create(t *testing.T) {
@@ -259,7 +259,7 @@ func TestWorkspaceRequester_GetAll(t *testing.T) {
 	t.Run("200 OK", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
-		content, err := testdata.Read(MULTI_WORKSPACE_RESPONSE)
+		content, err := testdata.Read(multiWorkspace)
 		assert.NoError(t, err)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)
@@ -308,7 +308,7 @@ func TestWorkspaceRequester_GetAll(t *testing.T) {
 	t.Run("No workspaces exist", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
-		content, err := testdata.Read(NO_WORKSPACES_EXIST_RESPONSE)
+		content, err := testdata.Read(noWorkspacesExist)
 		assert.NoError(t, err)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)

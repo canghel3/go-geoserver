@@ -1,0 +1,16 @@
+{
+  "coverageStore": {
+    "name": "ss",
+    "type": "GeoTIFF",
+    "enabled": true,
+    "workspace": {
+      "name": "PLAYGROUND",
+      "href": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND.json"
+    },
+    "_default": false,
+    "dateCreated": "2025-06-10 18:56:35.997 UTC",
+    "disableOnConnFailure": false,
+    "url": "file:sample.tif",
+    "coverages": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND/coveragestores/ss/coverages.json"
+  }
+}

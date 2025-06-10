@@ -78,7 +78,7 @@ func (cr *CoverageRequester) Get(store, coverage string) (*coverages.Coverage, e
 
 		return &coverageWrapper.Coverage, nil
 	case http.StatusNotFound:
-		return nil, customerrors.WrapNotFoundError(fmt.Errorf("coverage %s does not exist", coverage))
+		return nil, customerrors.WrapNotFoundError(fmt.Errorf("coverage %s not found", coverage))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
@@ -109,7 +109,7 @@ func (cr *CoverageRequester) Delete(store, coverage string, recurse bool) error 
 	case http.StatusOK:
 		return nil
 	case http.StatusNotFound:
-		return customerrors.WrapNotFoundError(fmt.Errorf("coverage %s does not exist", coverage))
+		return customerrors.WrapNotFoundError(fmt.Errorf("coverage %s not found", coverage))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
