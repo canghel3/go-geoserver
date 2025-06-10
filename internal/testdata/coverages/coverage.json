@@ -1,0 +1,175 @@
+{
+  "coverage": {
+    "name": "sample",
+    "nativeName": "sample",
+    "namespace": {
+      "name": "PLAYGROUND",
+      "href": "http://localhost:1111/geoserver/rest/namespaces/PLAYGROUND.json"
+    },
+    "title": "sample",
+    "description": "Generated from GeoTIFF",
+    "keywords": {
+      "string": [
+        "sample",
+        "WCS",
+        "GeoTIFF"
+      ]
+    },
+    "nativeCRS": {
+      "@class": "projected",
+      "$": "PROJCS[\"WGS 84 / UTM zone 31N\", \n  GEOGCS[\"WGS 84\", \n    DATUM[\"World Geodetic System 1984\", \n      SPHEROID[\"WGS 84\", 6378137.0, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], \n      AUTHORITY[\"EPSG\",\"6326\"]], \n    PRIMEM[\"Greenwich\", 0.0, AUTHORITY[\"EPSG\",\"8901\"]], \n    UNIT[\"degree\", 0.017453292519943295], \n    AXIS[\"Geodetic longitude\", EAST], \n    AXIS[\"Geodetic latitude\", NORTH], \n    AUTHORITY[\"EPSG\",\"4326\"]], \n  PROJECTION[\"Transverse_Mercator\", AUTHORITY[\"EPSG\",\"9807\"]], \n  PARAMETER[\"central_meridian\", 3.0], \n  PARAMETER[\"latitude_of_origin\", 0.0], \n  PARAMETER[\"scale_factor\", 0.9996], \n  PARAMETER[\"false_easting\", 500000.0], \n  PARAMETER[\"false_northing\", 0.0], \n  UNIT[\"m\", 1.0], \n  AXIS[\"Easting\", EAST], \n  AXIS[\"Northing\", NORTH], \n  AUTHORITY[\"EPSG\",\"32631\"]]"
+    },
+    "srs": "EPSG:32631",
+    "nativeBoundingBox": {
+      "minx": 590520,
+      "maxx": 600530,
+      "miny": 5780620,
+      "maxy": 5790630,
+      "crs": {
+        "@class": "projected",
+        "$": "EPSG:32631"
+      }
+    },
+    "latLonBoundingBox": {
+      "minx": 4.323570028889712,
+      "maxx": 4.472858110631908,
+      "miny": 52.16689884513138,
+      "maxy": 52.258603570943045,
+      "crs": "EPSG:4326"
+    },
+    "projectionPolicy": "REPROJECT_TO_DECLARED",
+    "enabled": true,
+    "metadata": {
+      "entry": {
+        "@key": "dirName",
+        "$": "ss_sample"
+      }
+    },
+    "store": {
+      "@class": "coverageStore",
+      "name": "PLAYGROUND:ss",
+      "href": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND/coveragestores/ss.json"
+    },
+    "serviceConfiguration": false,
+    "simpleConversionEnabled": false,
+    "internationalTitle": "",
+    "internationalAbstract": "",
+    "nativeFormat": "GeoTIFF",
+    "grid": {
+      "@dimension": 2,
+      "range": {
+        "low": "0 0",
+        "high": "1001 1001"
+      },
+      "transform": {
+        "scaleX": 10,
+        "scaleY": -10,
+        "shearX": 0,
+        "shearY": 0,
+        "translateX": 590525,
+        "translateY": 5790625
+      },
+      "crs": "EPSG:32631"
+    },
+    "supportedFormats": {
+      "string": [
+        "GeoPackage (mosaic)",
+        "RPFTOC",
+        "ArcGrid",
+        "VRT",
+        "AIG",
+        "ImagePyramid",
+        "RST",
+        "ImageMosaic",
+        "EHdr",
+        "DTED",
+        "NITF",
+        "ERDASImg",
+        "GIF",
+        "PNG",
+        "JPEG",
+        "TIFF",
+        "ENVIHdr",
+        "SRP",
+        "GEOTIFF"
+      ]
+    },
+    "interpolationMethods": {
+      "string": [
+        "nearest neighbor",
+        "bilinear",
+        "bicubic"
+      ]
+    },
+    "defaultInterpolationMethod": "nearest neighbor",
+    "dimensions": {
+      "coverageDimension": [
+        {
+          "name": "RED_BAND",
+          "description": "GridSampleDimension[-Infinity,Infinity]",
+          "range": {
+            "min": "-inf",
+            "max": "inf"
+          },
+          "unit": "W.m-2.Sr-1",
+          "dimensionType": {
+            "name": "UNSIGNED_16BITS"
+          }
+        },
+        {
+          "name": "GREEN_BAND",
+          "description": "GridSampleDimension[-Infinity,Infinity]",
+          "range": {
+            "min": "-inf",
+            "max": "inf"
+          },
+          "unit": "W.m-2.Sr-1",
+          "dimensionType": {
+            "name": "UNSIGNED_16BITS"
+          }
+        },
+        {
+          "name": "BLUE_BAND",
+          "description": "GridSampleDimension[-Infinity,Infinity]",
+          "range": {
+            "min": "-inf",
+            "max": "inf"
+          },
+          "unit": "W.m-2.Sr-1",
+          "dimensionType": {
+            "name": "UNSIGNED_16BITS"
+          }
+        }
+      ]
+    },
+    "requestSRS": {
+      "string": "EPSG:32631"
+    },
+    "responseSRS": {
+      "string": "EPSG:32631"
+    },
+    "parameters": {
+      "entry": [
+        {
+          "string": "InputTransparentColor",
+          "null": ""
+        },
+        {
+          "string": [
+            "SUGGESTED_TILE_SIZE",
+            "512,512"
+          ]
+        },
+        {
+          "string": "Bands",
+          "null": ""
+        },
+        {
+          "string": "RescalePixels",
+          "boolean": true
+        }
+      ]
+    },
+    "nativeCoverageName": "sample"
+  }
+}

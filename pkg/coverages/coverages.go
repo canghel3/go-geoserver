@@ -50,7 +50,7 @@ type Coverage struct {
 }
 
 type CoverageDimensions struct {
-	CoverageDimension CoverageDimension `json:"coverageDimension"`
+	CoverageDimension []CoverageDimension `json:"coverageDimension"`
 }
 
 type CoverageDimension struct {
@@ -70,8 +70,8 @@ type NullValues struct {
 }
 
 type Range struct {
-	Max float64 `json:"max"`
-	Min float64 `json:"min"`
+	Max any `json:"max"`
+	Min any `json:"min"`
 }
 
 type GridDetails struct {
@@ -108,13 +108,12 @@ type LatLonBoundingBox struct {
 }
 
 type Metadata struct {
-	Entry []MetadataEntry `json:"entry"`
+	Entry MetadataEntry `json:"entry"`
 }
 
 type MetadataEntry struct {
-	Key           string        `json:"@key"`
-	Text          string        `json:"$"`
-	DimensionInfo DimensionInfo `json:"dimensionInfo,omitempty"`
+	Key  string `json:"@key"`
+	Text string `json:"$"`
 }
 
 type DimensionInfo struct {
@@ -147,7 +146,7 @@ type CRS struct {
 }
 
 type SRS struct {
-	String []string `json:"string"`
+	String string `json:"string"`
 }
 
 type StoreDetails struct {
