@@ -13,7 +13,7 @@ import (
 )
 
 type DataStoreRequester struct {
-	data *internal.GeoserverData
+	data internal.GeoserverData
 }
 
 func (dr *DataStoreRequester) Create(content []byte) error {
@@ -32,7 +32,7 @@ func (dr *DataStoreRequester) Create(content []byte) error {
 	defer response.Body.Close()
 
 	switch response.StatusCode {
-	case http.StatusCreated:
+	case http.StatusOK, http.StatusCreated:
 		return nil
 	default:
 		body, err := io.ReadAll(response.Body)

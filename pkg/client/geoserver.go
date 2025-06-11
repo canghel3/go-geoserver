@@ -9,16 +9,21 @@ import (
 )
 
 type GeoserverClient struct {
-	info *internal.GeoserverData
+	info internal.GeoserverData
 }
 
 func NewGeoserverClient(url, username, password string, options ...options.GeoserverClientOption) *GeoserverClient {
 	gc := new(GeoserverClient)
-	gc.info = new(internal.GeoserverData)
-	gc.info.Client = &http.Client{}
-	gc.info.Connection.URL = url
-	gc.info.Connection.Credentials.Username = username
-	gc.info.Connection.Credentials.Password = password
+	gc.info = internal.GeoserverData{
+		Client: &http.Client{},
+		Connection: internal.GeoserverConnection{
+			URL: url,
+			Credentials: internal.GeoserverCredentials{
+				Username: username,
+				Password: password,
+			},
+		},
+	}
 
 	for _, option := range options {
 		option(gc.info)

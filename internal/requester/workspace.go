@@ -12,7 +12,7 @@ import (
 )
 
 type WorkspaceRequester struct {
-	data *internal.GeoserverData
+	data internal.GeoserverData
 }
 
 func (wr *WorkspaceRequester) Create(name string, _default bool) error {
@@ -83,7 +83,7 @@ func (wr *WorkspaceRequester) Get(name string) (*workspace.WorkspaceRetrieval, e
 
 		return &wksp.Workspace, nil
 	case http.StatusNotFound:
-		return nil, customerrors.WrapNotFoundError(fmt.Errorf("workspace %s does not exist", name))
+		return nil, customerrors.WrapNotFoundError(fmt.Errorf("workspace %s not found", name))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
@@ -166,7 +166,7 @@ func (wr *WorkspaceRequester) Update(oldName, newName string) error {
 	case http.StatusOK:
 		return nil
 	case http.StatusNotFound:
-		return customerrors.WrapNotFoundError(fmt.Errorf("workspace %s does not exist", oldName))
+		return customerrors.WrapNotFoundError(fmt.Errorf("workspace %s not found", oldName))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
@@ -196,7 +196,7 @@ func (wr *WorkspaceRequester) Delete(name string, recurse bool) error {
 	case http.StatusOK:
 		return nil
 	case http.StatusNotFound:
-		return customerrors.WrapNotFoundError(fmt.Errorf("workspace %s does not exist", name))
+		return customerrors.WrapNotFoundError(fmt.Errorf("workspace %s not found", name))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {

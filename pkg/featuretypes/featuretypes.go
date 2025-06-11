@@ -32,7 +32,7 @@ type GetFeatureType struct {
 	Keywords               shared.Keywords    `json:"keywords"`
 	MetadataLinks          Links              `json:"metadataLinks"`
 	DataLinks              Links              `json:"dataLinks"`
-	NativeCRS              string             `json:"nativeCRS"`
+	NativeCRS              any                `json:"nativeCRS"`
 	Srs                    string             `json:"srs"`
 	NativeBoundingBox      shared.BoundingBox `json:"nativeBoundingBox"`
 	LatLonBoundingBox      shared.BoundingBox `json:"latLonBoundingBox"`

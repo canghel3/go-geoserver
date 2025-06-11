@@ -21,7 +21,7 @@ type WMS struct {
 	version   wms.WMSVersion
 }
 
-func NewWMSActions(info *internal.GeoserverData, version wms.WMSVersion) *WMS {
+func NewWMSActions(info internal.GeoserverData, version wms.WMSVersion) *WMS {
 	return &WMS{
 		requester: requester.NewRequester(info),
 		version:   version,

@@ -10,7 +10,7 @@ type Logging struct {
 	requester *requester.Requester
 }
 
-func NewLoggingActions(data *internal.GeoserverData) *Logging {
+func NewLoggingActions(data internal.GeoserverData) *Logging {
 	return &Logging{
 		requester: requester.NewRequester(data),
 	}

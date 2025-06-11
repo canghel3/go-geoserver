@@ -10,7 +10,7 @@ type Fonts struct {
 	requester *requester.Requester
 }
 
-func NewFonts(data *internal.GeoserverData) *Fonts {
+func NewFonts(data internal.GeoserverData) *Fonts {
 	return &Fonts{
 		requester: requester.NewRequester(data),
 	}

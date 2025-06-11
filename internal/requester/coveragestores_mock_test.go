@@ -11,8 +11,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"io"
 	"net/http"
+	"strings"
 	"testing"
 )
+
+const coverageStoreFile = "../testdata/coveragestores/coveragestore.json"
 
 func TestCoverageStoreRequester_Create(t *testing.T) {
 	t.Run("200 Ok", func(t *testing.T) {
@@ -58,7 +61,7 @@ func TestCoverageStoreRequester_Create(t *testing.T) {
 		mockResponse := &http.Response{
 			StatusCode: http.StatusInternalServerError,
 			Header:     make(http.Header),
-			Body:       io.NopCloser(bytes.NewReader([]byte("some error"))),
+			Body:       io.NopCloser(strings.NewReader("some error")),
 		}
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
@@ -141,7 +144,7 @@ func TestCoverageStoreRequester_Get(t *testing.T) {
 		mockResponse := &http.Response{
 			StatusCode: http.StatusNotFound,
 			Header:     make(http.Header),
-			Body:       io.NopCloser(bytes.NewReader([]byte("not found"))),
+			Body:       io.NopCloser(strings.NewReader("not found")),
 		}
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
@@ -162,7 +165,7 @@ func TestCoverageStoreRequester_Get(t *testing.T) {
 		mockResponse := &http.Response{
 			StatusCode: http.StatusInternalServerError,
 			Header:     make(http.Header),
-			Body:       io.NopCloser(bytes.NewReader([]byte("some error"))),
+			Body:       io.NopCloser(strings.NewReader("some error")),
 		}
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
@@ -215,7 +218,7 @@ func TestCoverageStoreRequester_Delete(t *testing.T) {
 		mockResponse := &http.Response{
 			StatusCode: http.StatusNotFound,
 			Header:     make(http.Header),
-			Body:       io.NopCloser(bytes.NewReader([]byte("not found"))),
+			Body:       io.NopCloser(strings.NewReader("not found")),
 		}
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
@@ -236,7 +239,7 @@ func TestCoverageStoreRequester_Delete(t *testing.T) {
 		mockResponse := &http.Response{
 			StatusCode: http.StatusInternalServerError,
 			Header:     make(http.Header),
-			Body:       io.NopCloser(bytes.NewReader([]byte("some error"))),
+			Body:       io.NopCloser(strings.NewReader("some error")),
 		}
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)

@@ -16,6 +16,9 @@ type DataStore struct {
 	Workspace                  workspace.MultiWorkspace `json:"workspace,omitempty"`
 	ConnectionParameters       ConnectionParameters     `json:"connectionParameters"`
 	Default                    bool                     `json:"_default,omitempty"`
+	DateCreated                string                   `json:"dateCreated,omitempty"`
+	DateModified               string                   `json:"dateModified,omitempty"`
+	Type                       string                   `json:"type,omitempty"`
 	FeatureTypes               string                   `json:"featureTypes,omitempty"`
 }
 

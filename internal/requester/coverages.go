@@ -13,7 +13,7 @@ import (
 )
 
 type CoverageRequester struct {
-	data *internal.GeoserverData
+	data internal.GeoserverData
 }
 
 func (cr *CoverageRequester) Create(store string, content []byte) error {

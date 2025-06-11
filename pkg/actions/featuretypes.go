@@ -12,11 +12,11 @@ import (
 
 type FeatureTypes struct {
 	store     string
-	info      *internal.GeoserverData
+	info      internal.GeoserverData
 	requester *requester.Requester
 }
 
-func newFeatureTypes(store string, info *internal.GeoserverData) *FeatureTypes {
+func newFeatureTypes(store string, info internal.GeoserverData) *FeatureTypes {
 	return &FeatureTypes{
 		store:     store,
 		info:      info,

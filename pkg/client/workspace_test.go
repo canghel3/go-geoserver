@@ -163,7 +163,7 @@ func TestWorkspaceIntegration_Get(t *testing.T) {
 		var suffix = "_NOT_FOUND"
 		wksp, err := geoserverClient.Workspaces().Get(testdata.Workspace + suffix)
 		assert.Nil(t, wksp)
-		assert.EqualError(t, err, fmt.Sprintf("workspace %s does not exist", testdata.Workspace+suffix))
+		assert.EqualError(t, err, fmt.Sprintf("workspace %s not found", testdata.Workspace+suffix))
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 	})
 
@@ -189,7 +189,7 @@ func TestWorkspaceIntegration_Update(t *testing.T) {
 	t.Run("404 NOT FOUND", func(t *testing.T) {
 		var suffix = "_NOT_FOUND"
 		err := geoserverClient.Workspaces().Update(testdata.Workspace, testdata.Workspace+suffix)
-		assert.EqualError(t, err, fmt.Sprintf("workspace %s does not exist", testdata.Workspace))
+		assert.EqualError(t, err, fmt.Sprintf("workspace %s not found", testdata.Workspace))
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 	})
 
@@ -211,7 +211,7 @@ func TestWorkspaceIntegration_Delete(t *testing.T) {
 
 	t.Run("404 NOT FOUND", func(t *testing.T) {
 		err := geoserverClient.Workspaces().Delete(testdata.Workspace, false)
-		assert.EqualError(t, err, fmt.Sprintf("workspace %s does not exist", testdata.Workspace))
+		assert.EqualError(t, err, fmt.Sprintf("workspace %s not found", testdata.Workspace))
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 	})
 }

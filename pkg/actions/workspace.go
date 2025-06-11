@@ -8,11 +8,11 @@ import (
 )
 
 type Workspaces struct {
-	info      *internal.GeoserverData
+	info      internal.GeoserverData
 	requester *requester.Requester
 }
 
-func NewWorkspaceActions(info *internal.GeoserverData) *Workspaces {
+func NewWorkspaceActions(info internal.GeoserverData) *Workspaces {
 	return &Workspaces{
 		info:      info,
 		requester: requester.NewRequester(info),
@@ -65,7 +65,7 @@ func (ws *Workspaces) Delete(name string, recurse bool) error {
 }
 
 type Workspace struct {
-	info *internal.GeoserverData
+	info internal.GeoserverData
 }
 
 func (ws *Workspaces) Use(workspace string) *Workspace {

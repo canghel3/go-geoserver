@@ -10,16 +10,15 @@ import (
 	"github.com/stretchr/testify/assert"
 	"io"
 	"net/http"
+	"strings"
 	"testing"
 )
 
 const (
-	coverageStoreFile = "../testdata/coveragestores/coveragestore.json"
-	coverageFile      = "../testdata/coverages/coverage.json"
-	manifestFile      = "../testdata/about/manifest.json"
-	metricFile        = "../testdata/about/metrics.json"
-	versionFile       = "../testdata/about/version.json"
-	statusFile        = "../testdata/about/status.json"
+	manifestFile = "../testdata/about/manifest.json"
+	metricFile   = "../testdata/about/metrics.json"
+	versionFile  = "../testdata/about/version.json"
+	statusFile   = "../testdata/about/status.json"
 )
 
 func TestAboutRequester_Manifest(t *testing.T) {
@@ -57,7 +56,7 @@ func TestAboutRequester_Manifest(t *testing.T) {
 		mockResponse := &http.Response{
 			StatusCode: http.StatusInternalServerError,
 			Header:     make(http.Header),
-			Body:       io.NopCloser(bytes.NewReader([]byte("some error"))),
+			Body:       io.NopCloser(strings.NewReader("some error")),
 		}
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
@@ -119,7 +118,7 @@ func TestAboutRequester_Version(t *testing.T) {
 		mockResponse := &http.Response{
 			StatusCode: http.StatusInternalServerError,
 			Header:     make(http.Header),
-			Body:       io.NopCloser(bytes.NewReader([]byte("some error"))),
+			Body:       io.NopCloser(strings.NewReader("some error")),
 		}
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
@@ -181,7 +180,7 @@ func TestAboutRequester_SystemStatus(t *testing.T) {
 		mockResponse := &http.Response{
 			StatusCode: http.StatusInternalServerError,
 			Header:     make(http.Header),
-			Body:       io.NopCloser(bytes.NewReader([]byte("some error"))),
+			Body:       io.NopCloser(strings.NewReader("some error")),
 		}
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
@@ -243,7 +242,7 @@ func TestAboutRequester_Status(t *testing.T) {
 		mockResponse := &http.Response{
 			StatusCode: http.StatusInternalServerError,
 			Header:     make(http.Header),
-			Body:       io.NopCloser(bytes.NewReader([]byte("some error"))),
+			Body:       io.NopCloser(strings.NewReader("some error")),
 		}
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)

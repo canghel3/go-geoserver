@@ -1,0 +1,64 @@
+{
+  "dataStore": {
+    "name": "g",
+    "type": "Shapefile",
+    "enabled": true,
+    "workspace": {
+      "name": "PLAYGROUND",
+      "href": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND.json"
+    },
+    "connectionParameters": {
+      "entry": [
+        {
+          "@key": "charset",
+          "$": "ISO-8859-1"
+        },
+        {
+          "@key": "filetype",
+          "$": "shapefile"
+        },
+        {
+          "@key": "create spatial index",
+          "$": "true"
+        },
+        {
+          "@key": "memory mapped buffer",
+          "$": "false"
+        },
+        {
+          "@key": "timezone",
+          "$": "GMT"
+        },
+        {
+          "@key": "enable spatial index",
+          "$": "true"
+        },
+        {
+          "@key": "namespace",
+          "$": "lol"
+        },
+        {
+          "@key": "cache and reuse memory maps",
+          "$": "true"
+        },
+        {
+          "@key": "skipScan",
+          "$": "true"
+        },
+        {
+          "@key": "url",
+          "$": "file:ne_110m_coastline.shp"
+        },
+        {
+          "@key": "fstype",
+          "$": "shape"
+        }
+      ]
+    },
+    "_default": false,
+    "dateCreated": "2025-05-15 19:09:10.716 UTC",
+    "dateModified": "2025-05-15 19:09:43.18 UTC",
+    "disableOnConnFailure": false,
+    "featureTypes": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND/datastores/g/featuretypes.json"
+  }
+}

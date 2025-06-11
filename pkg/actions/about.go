@@ -10,7 +10,7 @@ type About struct {
 	requester *requester.Requester
 }
 
-func NewAboutAction(data *internal.GeoserverData) *About {
+func NewAboutAction(data internal.GeoserverData) *About {
 	return &About{
 		requester: requester.NewRequester(data),
 	}

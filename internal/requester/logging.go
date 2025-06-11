@@ -13,7 +13,7 @@ import (
 
 // LoggingRequester handles requests related to logging
 type LoggingRequester struct {
-	data *internal.GeoserverData
+	data internal.GeoserverData
 }
 
 // Get retrieves logs from the server

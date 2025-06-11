@@ -1,0 +1,444 @@
+{
+  "featureType": {
+    "name": "bld_fts_buildingpart",
+    "nativeName": "bld_fts_buildingpart",
+    "namespace": {
+      "name": "s",
+      "href": "http://localhost:1111/geoserver/rest/namespaces/s.json"
+    },
+    "title": "bld_fts_buildingpart",
+    "keywords": {
+      "string": [
+        "features",
+        "bld_fts_buildingpart"
+      ]
+    },
+    "nativeCRS": {
+      "@class": "projected",
+      "$": "PROJCS[\"OSGB 1936 / British National Grid\", \n  GEOGCS[\"OSGB 1936\", \n    DATUM[\"OSGB 1936\", \n      SPHEROID[\"Airy 1830\", 6377563.396, 299.3249646, AUTHORITY[\"EPSG\",\"7001\"]], \n      TOWGS84[446.448, -125.157, 542.06, 0.15, 0.247, 0.842, -20.489], \n      AUTHORITY[\"EPSG\",\"6277\"]], \n    PRIMEM[\"Greenwich\", 0.0, AUTHORITY[\"EPSG\",\"8901\"]], \n    UNIT[\"degree\", 0.017453292519943295], \n    AXIS[\"Geodetic longitude\", EAST], \n    AXIS[\"Geodetic latitude\", NORTH], \n    AUTHORITY[\"EPSG\",\"4277\"]], \n  PROJECTION[\"Transverse_Mercator\"], \n  PARAMETER[\"central_meridian\", -2.0], \n  PARAMETER[\"latitude_of_origin\", 49.0], \n  PARAMETER[\"scale_factor\", 0.9996012717], \n  PARAMETER[\"false_easting\", 400000.0], \n  PARAMETER[\"false_northing\", -100000.0], \n  UNIT[\"m\", 1.0], \n  AXIS[\"Easting\", EAST], \n  AXIS[\"Northing\", NORTH], \n  AUTHORITY[\"EPSG\",\"27700\"]]"
+    },
+    "srs": "EPSG:27700",
+    "nativeBoundingBox": {
+      "minx": 264970.869,
+      "maxx": 270013.039,
+      "miny": 840102.83,
+      "maxy": 845199.878,
+      "crs": {
+        "@class": "projected",
+        "$": "EPSG:27700"
+      }
+    },
+    "latLonBoundingBox": {
+      "minx": -4.253489380362922,
+      "maxx": -4.166763617166525,
+      "miny": 57.43113026169678,
+      "maxy": 57.47835325998932,
+      "crs": "EPSG:4326"
+    },
+    "projectionPolicy": "FORCE_DECLARED",
+    "enabled": true,
+    "store": {
+      "@class": "dataStore",
+      "name": "s:sas",
+      "href": "http://localhost:1111/geoserver/rest/workspaces/s/datastores/sas.json"
+    },
+    "serviceConfiguration": false,
+    "simpleConversionEnabled": false,
+    "maxFeatures": 0,
+    "numDecimals": 0,
+    "padWithZeros": false,
+    "forcedDecimal": false,
+    "overridingServiceSRS": false,
+    "skipNumberMatched": false,
+    "circularArcPresent": false,
+    "attributes": {
+      "attribute": [
+        {
+          "name": "geometry",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "org.locationtech.jts.geom.Polygon"
+        },
+        {
+          "name": "osid",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "toid",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "versiondate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Date"
+        },
+        {
+          "name": "versionavailablefromdate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Timestamp"
+        },
+        {
+          "name": "versionavailabletodate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Timestamp"
+        },
+        {
+          "name": "firstdigitalcapturedate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Date"
+        },
+        {
+          "name": "changetype",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "geometry_area_m2",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.Double"
+        },
+        {
+          "name": "geometry_evidencedate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Date"
+        },
+        {
+          "name": "geometry_updatedate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Date"
+        },
+        {
+          "name": "geometry_capturemethod",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "theme",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "description",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "description_evidencedate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Date"
+        },
+        {
+          "name": "description_updatedate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Date"
+        },
+        {
+          "name": "description_capturemethod",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "oslandcovertiera",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "oslandcovertierb",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "oslandcover_evidencedate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Date"
+        },
+        {
+          "name": "oslandcover_updatedate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Date"
+        },
+        {
+          "name": "oslandcover_capturemethod",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "oslandusetiera",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "oslandusetierb",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "oslanduse_evidencedate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Date"
+        },
+        {
+          "name": "oslanduse_updatedate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Date"
+        },
+        {
+          "name": "oslanduse_capturemethod",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "height_absoluteroofbase_m",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.Double"
+        },
+        {
+          "name": "height_relativeroofbase_m",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.Double"
+        },
+        {
+          "name": "height_absolutemax_m",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.Double"
+        },
+        {
+          "name": "height_relativemax_m",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.Double"
+        },
+        {
+          "name": "height_absolutemin_m",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.Double"
+        },
+        {
+          "name": "height_confidencelevel",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "height_evidencedate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Date"
+        },
+        {
+          "name": "height_updatedate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Date"
+        },
+        {
+          "name": "associatedstructure",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "isobscured",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.Boolean"
+        },
+        {
+          "name": "physicallevel",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "capturespecification",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "containingsitecount",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.Integer"
+        },
+        {
+          "name": "smallestsite_siteid",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "smallestsite_landusetiera",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "smallestsite_landusetierb",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "largestsite_landusetiera",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "largestsite_landusetierb",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "nlud_code",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "nlud_orderdescription",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "nlud_groupdescription",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "address_classificationcode",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "address_primarydescription",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "address_secondarydescription",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "lowertierlocalauthority_gsscode",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "lowertierlocalauthority_count",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.Integer"
+        },
+        {
+          "name": "status",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.lang.String"
+        },
+        {
+          "name": "status_updatedate",
+          "minOccurs": 0,
+          "maxOccurs": 1,
+          "nillable": true,
+          "binding": "java.sql.Date"
+        }
+      ]
+    }
+  }
+}

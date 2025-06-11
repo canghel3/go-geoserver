@@ -6,8 +6,8 @@ import (
 	"os"
 )
 
-func GeoserverInfo(client internal.HTTPClient) *internal.GeoserverData {
-	return &internal.GeoserverData{
+func GeoserverInfo(client internal.HTTPClient) internal.GeoserverData {
+	return internal.GeoserverData{
 		Client: client,
 		Connection: internal.GeoserverConnection{
 			URL: GeoserverUrl,

@@ -15,7 +15,7 @@ import (
 )
 
 type WMSRequester struct {
-	data *internal.GeoserverData
+	data internal.GeoserverData
 }
 
 func (wmsR *WMSRequester) GetCapabilities(version wms.WMSVersion) ([]byte, error) {

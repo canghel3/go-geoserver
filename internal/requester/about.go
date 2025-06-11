@@ -11,7 +11,7 @@ import (
 )
 
 type AboutRequester struct {
-	data *internal.GeoserverData
+	data internal.GeoserverData
 }
 
 func (ar *AboutRequester) Manifest() (*about.Manifest, error) {

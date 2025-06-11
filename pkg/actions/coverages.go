@@ -12,11 +12,11 @@ import (
 
 type Coverages struct {
 	store     string
-	data      *internal.GeoserverData
+	data      internal.GeoserverData
 	requester *requester.Requester
 }
 
-func newCoverages(store string, data *internal.GeoserverData) *Coverages {
+func newCoverages(store string, data internal.GeoserverData) *Coverages {
 	return &Coverages{
 		store:     store,
 		data:      data,

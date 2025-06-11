@@ -16,7 +16,7 @@ type Requester struct {
 	logging        *LoggingRequester
 }
 
-func NewRequester(data *internal.GeoserverData) *Requester {
+func NewRequester(data internal.GeoserverData) *Requester {
 	return &Requester{
 		about: &AboutRequester{
 			data: data,

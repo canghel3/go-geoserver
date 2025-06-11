@@ -22,7 +22,7 @@ const (
 	CSV        DataStoreType = "csv"
 )
 
-func newDataStoresActions(info *internal.GeoserverData) *DataStores {
+func newDataStoresActions(info internal.GeoserverData) *DataStores {
 	r := requester.NewRequester(info)
 	return &DataStores{
 		info:      info,
@@ -36,7 +36,7 @@ type DataStoreList struct {
 }
 
 type DataStores struct {
-	info      *internal.GeoserverData
+	info      internal.GeoserverData
 	requester *requester.Requester
 }
 

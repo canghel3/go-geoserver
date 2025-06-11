@@ -11,7 +11,7 @@ import (
 )
 
 type FontsRequester struct {
-	data *internal.GeoserverData
+	data internal.GeoserverData
 }
 
 func (fr *FontsRequester) Get() (*fonts.Fonts, error) {

@@ -33,7 +33,7 @@ const (
 	WorldImage       CoverageStoreType = "WorldImage"
 )
 
-func newCoverageStoreActions(info *internal.GeoserverData) *CoverageStores {
+func newCoverageStoreActions(info internal.GeoserverData) *CoverageStores {
 	r := requester.NewRequester(info)
 	return &CoverageStores{
 		info:      info,
@@ -44,11 +44,11 @@ func newCoverageStoreActions(info *internal.GeoserverData) *CoverageStores {
 type CoverageStoreList struct {
 	options   *models.CoverageStoreOptions
 	requester *requester.Requester
-	data      *internal.GeoserverData
+	data      internal.GeoserverData
 }
 
 type CoverageStores struct {
-	info      *internal.GeoserverData
+	info      internal.GeoserverData
 	requester *requester.Requester
 }
 

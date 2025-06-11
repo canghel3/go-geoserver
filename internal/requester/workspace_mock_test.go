@@ -132,7 +132,7 @@ func TestWorkspaceRequester_Delete(t *testing.T) {
 		var enotfound *customerrors.NotFoundError
 		err := workspaceRequester.Delete(testdata.Workspace, false)
 		assert.Error(t, err)
-		assert.EqualError(t, err, fmt.Sprintf("workspace %s does not exist", testdata.Workspace))
+		assert.EqualError(t, err, fmt.Sprintf("workspace %s not found", testdata.Workspace))
 		assert.ErrorAs(t, err, &enotfound)
 	})
 
@@ -217,7 +217,7 @@ func TestWorkspaceRequester_Get(t *testing.T) {
 		wksp, err := workspaceRequester.Get(testdata.Workspace)
 		assert.Nil(t, wksp)
 		assert.Error(t, err)
-		assert.EqualError(t, err, fmt.Sprintf("workspace %s does not exist", testdata.Workspace))
+		assert.EqualError(t, err, fmt.Sprintf("workspace %s not found", testdata.Workspace))
 		assert.ErrorAs(t, err, &enotfound)
 	})
 
@@ -382,7 +382,7 @@ func TestWorkspaceRequester_Update(t *testing.T) {
 		var econflict *customerrors.NotFoundError
 		err := workspaceRequester.Update(testdata.Workspace, "newName")
 		assert.Error(t, err)
-		assert.EqualError(t, err, fmt.Sprintf("workspace %s does not exist", testdata.Workspace))
+		assert.EqualError(t, err, fmt.Sprintf("workspace %s not found", testdata.Workspace))
 		assert.ErrorAs(t, err, &econflict)
 	})
 
