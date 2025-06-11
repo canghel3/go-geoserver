@@ -1,18 +1,17 @@
 package logging
 
+import "github.com/canghel3/go-geoserver/internal/models"
+
 // Log represents a log entry
 type Log struct {
-	ID        string `json:"id"`
-	Message   string `json:"message"`
-	Level     string `json:"level"`
-	Timestamp string `json:"timestamp"`
-	Source    string `json:"source"`
-	Details   string `json:"details,omitempty"`
+	Level         string `json:"level"`
+	Location      string `json:"location"`
+	StdOutLogging bool   `json:"stdOutLogging"`
 }
 
 // LogResponse represents a response containing logs
 type LogResponse struct {
-	Logs []Log `json:"logs"`
+	Log Log `json:"logging"`
 }
 
 // LogRequest represents a request to create a log entry
@@ -21,4 +20,13 @@ type LogRequest struct {
 	Level         string `json:"level"`
 	Source        string `json:"source"`
 	StdOutLogging bool   `json:"stdOutLogging"`
+}
+
+func NewLog(message, level, source string) *models.Log {
+	return &models.Log{
+		Message:       message,
+		Level:         level,
+		Source:        source,
+		StdOutLogging: false,
+	}
 }

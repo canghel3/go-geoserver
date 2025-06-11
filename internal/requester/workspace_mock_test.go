@@ -23,7 +23,7 @@ const (
 )
 
 func TestWorkspaceRequester_Create(t *testing.T) {
-	t.Run("201 CREATED", func(t *testing.T) {
+	t.Run("201 Created", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)
@@ -41,7 +41,7 @@ func TestWorkspaceRequester_Create(t *testing.T) {
 		assert.NoError(t, err)
 	})
 
-	t.Run("409 CONFLICT", func(t *testing.T) {
+	t.Run("409 Conflict", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)
@@ -62,7 +62,7 @@ func TestWorkspaceRequester_Create(t *testing.T) {
 		assert.ErrorAs(t, err, &econflict)
 	})
 
-	t.Run("500 INTERNAL SERVER ERROR", func(t *testing.T) {
+	t.Run("500 Internal Server Error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)
@@ -97,7 +97,7 @@ func TestWorkspaceRequester_Create(t *testing.T) {
 }
 
 func TestWorkspaceRequester_Delete(t *testing.T) {
-	t.Run("200 OK", func(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)
@@ -115,7 +115,7 @@ func TestWorkspaceRequester_Delete(t *testing.T) {
 		assert.NoError(t, err)
 	})
 
-	t.Run("404 NOT FOUND", func(t *testing.T) {
+	t.Run("404 Not Found", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)
@@ -136,7 +136,7 @@ func TestWorkspaceRequester_Delete(t *testing.T) {
 		assert.ErrorAs(t, err, &enotfound)
 	})
 
-	t.Run("500 INTERNAL SERVER ERROR", func(t *testing.T) {
+	t.Run("500 Internal Server Error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)
@@ -171,7 +171,7 @@ func TestWorkspaceRequester_Delete(t *testing.T) {
 }
 
 func TestWorkspaceRequester_Get(t *testing.T) {
-	t.Run("200 OK", func(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		content, err := testdata.Read(singleWorkspaceResponse)
@@ -199,7 +199,7 @@ func TestWorkspaceRequester_Get(t *testing.T) {
 		assert.Equal(t, expectedWorkspace.Workspace, *wksp)
 	})
 
-	t.Run("404 NOT FOUND", func(t *testing.T) {
+	t.Run("404 Not Found", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)
@@ -221,7 +221,7 @@ func TestWorkspaceRequester_Get(t *testing.T) {
 		assert.ErrorAs(t, err, &enotfound)
 	})
 
-	t.Run("500 INTERNAL SERVER ERROR", func(t *testing.T) {
+	t.Run("500 Internal Server Error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)
@@ -256,7 +256,7 @@ func TestWorkspaceRequester_Get(t *testing.T) {
 }
 
 func TestWorkspaceRequester_GetAll(t *testing.T) {
-	t.Run("200 OK", func(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		content, err := testdata.Read(multiWorkspace)
@@ -284,7 +284,7 @@ func TestWorkspaceRequester_GetAll(t *testing.T) {
 		assert.Equal(t, expectedWorkspace.Workspaces.Workspace, wksp)
 	})
 
-	t.Run("500 INTERNAL SERVER ERROR", func(t *testing.T) {
+	t.Run("500 Internal Server Error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)
@@ -347,7 +347,7 @@ func TestWorkspaceRequester_GetAll(t *testing.T) {
 }
 
 func TestWorkspaceRequester_Update(t *testing.T) {
-	t.Run("200 OK", func(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)
@@ -365,7 +365,7 @@ func TestWorkspaceRequester_Update(t *testing.T) {
 		assert.NoError(t, err)
 	})
 
-	t.Run("404 NOT FOUND", func(t *testing.T) {
+	t.Run("404 Not Found", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)
@@ -386,7 +386,7 @@ func TestWorkspaceRequester_Update(t *testing.T) {
 		assert.ErrorAs(t, err, &econflict)
 	})
 
-	t.Run("500 INTERNAL SERVER ERROR", func(t *testing.T) {
+	t.Run("500 Internal Server Error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		mockClient := mocks.NewMockHTTPClient(ctrl)

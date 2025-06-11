@@ -17,7 +17,7 @@ type LoggingRequester struct {
 }
 
 // Get retrieves logs from the server
-func (lr *LoggingRequester) Get() (*logging.LogResponse, error) {
+func (lr *LoggingRequester) Get() (*logging.Log, error) {
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/logs", lr.data.Connection.URL), nil)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (lr *LoggingRequester) Get() (*logging.LogResponse, error) {
 		if err = json.Unmarshal(body, logResponse); err != nil {
 			return nil, err
 		}
-		return logResponse, nil
+		return &logResponse.Log, nil
 	default:
 		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
@@ -57,7 +57,6 @@ func (lr *LoggingRequester) Put(content []byte) error {
 
 	request.SetBasicAuth(lr.data.Connection.Credentials.Username, lr.data.Connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
-	request.Header.Add("Accept", "application/json")
 
 	response, err := lr.data.Client.Do(request)
 	if err != nil {
@@ -65,15 +64,15 @@ func (lr *LoggingRequester) Put(content []byte) error {
 	}
 	defer response.Body.Close()
 
-	body, err := io.ReadAll(response.Body)
-	if err != nil {
-		return err
-	}
-
 	switch response.StatusCode {
-	case http.StatusOK, http.StatusCreated, http.StatusNoContent:
+	case http.StatusOK, http.StatusCreated:
 		return nil
 	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return err
+		}
+
 		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
