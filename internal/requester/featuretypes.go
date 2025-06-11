@@ -76,7 +76,7 @@ func (ftr *FeatureTypeRequester) Delete(store, feature string, recurse bool) err
 	}
 }
 
-func (ftr *FeatureTypeRequester) Get(store, feature string) (*featuretypes.GetFeatureType, error) {
+func (ftr *FeatureTypeRequester) Get(store, feature string) (*featuretypes.FeatureType, error) {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes/%s.json", ftr.data.Connection.URL, ftr.data.Workspace, store, feature)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -131,7 +131,7 @@ func (ftr *FeatureTypeRequester) Update(store, feature string, content []byte) e
 	}
 
 	switch response.StatusCode {
-	case http.StatusCreated:
+	case http.StatusOK, http.StatusCreated:
 		return nil
 	default:
 		body, err := io.ReadAll(response.Body)

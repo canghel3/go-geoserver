@@ -20,10 +20,10 @@ func New(name, nativeName string, options ...options.FeatureTypeOption) models.F
 }
 
 type GetFeatureTypeWrapper struct {
-	FeatureType GetFeatureType `json:"featureType"`
+	FeatureType FeatureType `json:"featureType"`
 }
 
-type GetFeatureType struct {
+type FeatureType struct {
 	Name                   string             `json:"name"`
 	NativeName             string             `json:"nativeName"`
 	Namespace              Namespace          `json:"namespace"`

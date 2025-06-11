@@ -49,14 +49,8 @@ func (lr *LoggingRequester) Get() (*logging.LogResponse, error) {
 	}
 }
 
-// Put creates a new log entry
-func (lr *LoggingRequester) Put(logRequest *logging.LogRequest) error {
-	jsonData, err := json.Marshal(logRequest)
-	if err != nil {
-		return err
-	}
-
-	request, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/geoserver/rest/logs", lr.data.Connection.URL), bytes.NewBuffer(jsonData))
+func (lr *LoggingRequester) Put(content []byte) error {
+	request, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/geoserver/rest/logs", lr.data.Connection.URL), bytes.NewBuffer(content))
 	if err != nil {
 		return err
 	}

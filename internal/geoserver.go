@@ -23,7 +23,7 @@ type GeoserverCredentials struct {
 	Password string
 }
 
-func (gi *GeoserverData) Clone() GeoserverData {
+func (gi GeoserverData) Clone() GeoserverData {
 	return GeoserverData{
 		Client:     gi.Client,
 		Connection: gi.Connection,

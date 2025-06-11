@@ -17,8 +17,8 @@ type LogResponse struct {
 
 // LogRequest represents a request to create a log entry
 type LogRequest struct {
-	Message string `json:"message"`
-	Level   string `json:"level"`
-	Source  string `json:"source"`
-	Details string `json:"details,omitempty"`
+	Message       string `json:"message"`
+	Level         string `json:"level"`
+	Source        string `json:"source"`
+	StdOutLogging bool   `json:"stdOutLogging"`
 }

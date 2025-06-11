@@ -44,11 +44,11 @@ func (ft *FeatureTypes) Publish(featureType models.FeatureType) error {
 	return ft.requester.FeatureTypes().Create(ft.store, content)
 }
 
-func (ft *FeatureTypes) Get(name string) (*featuretypes.GetFeatureType, error) {
+func (ft *FeatureTypes) Get(name string) (*featuretypes.FeatureType, error) {
 	return ft.requester.FeatureTypes().Get(ft.store, name)
 }
 
-func (ft *FeatureTypes) GetAll() ([]featuretypes.GetFeatureType, error) {
+func (ft *FeatureTypes) GetAll() ([]featuretypes.FeatureType, error) {
 	return nil, errors.New("not implemented")
 }
 
