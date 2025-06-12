@@ -10,16 +10,8 @@ import (
 	"github.com/canghel3/go-geoserver/pkg/datastores"
 	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
 	"github.com/canghel3/go-geoserver/pkg/options"
+	"github.com/canghel3/go-geoserver/pkg/types"
 	"strings"
-)
-
-type DataStoreType string
-
-const (
-	PostGIS    DataStoreType = "postgis"
-	Shapefile  DataStoreType = "shapefile"
-	GeoPackage DataStoreType = "geopkg"
-	CSV        DataStoreType = "csv"
 )
 
 func newDataStoresActions(info internal.GeoserverData) *DataStores {
@@ -83,7 +75,7 @@ func (dsl DataStoreList) PostGIS(name string, connectionParams postgis.Connectio
 		"user":     connectionParams.User,
 		"passwd":   connectionParams.Password,
 		"port":     connectionParams.Port,
-		"dbtype":   string(PostGIS),
+		"dbtype":   string(types.PostGIS),
 	}
 
 	for _, option := range options {
@@ -124,7 +116,7 @@ func (dsl DataStoreList) GeoPackage(name string, filepath string, options ...opt
 
 	cp := datastores.ConnectionParams{
 		"database": url,
-		"dbtype":   string(GeoPackage),
+		"dbtype":   string(types.GeoPackage),
 	}
 
 	for _, option := range options {
@@ -165,7 +157,7 @@ func (dsl DataStoreList) Shapefile(name string, filepath string, options ...opti
 
 	cp := datastores.ConnectionParams{
 		"url":      url,
-		"filetype": string(Shapefile),
+		"filetype": string(types.Shapefile),
 	}
 
 	for _, option := range options {
@@ -232,7 +224,7 @@ func (dsl DataStoreList) CSV(name string, filepath string, options ...options.CS
 
 	cp := datastores.ConnectionParams{
 		"url":    filepath,
-		"dbtype": string(CSV),
+		"dbtype": string(types.CSV),
 	}
 
 	for _, option := range options {

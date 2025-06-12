@@ -6,7 +6,7 @@ import (
 )
 
 func ExampleWorkspace_DataStores() {
-
+	//TODO: write example
 }
 
 func ExampleDataStores_Create() {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/shared"
+	"github.com/canghel3/go-geoserver/pkg/types"
 	"github.com/canghel3/go-geoserver/pkg/wms"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -13,7 +14,7 @@ func TestWMS_GetMap(t *testing.T) {
 	err := addTestWorkspace()
 	assert.NoError(t, err)
 
-	err = addTestDataStore()
+	err = addTestDataStore(types.GeoPackage)
 	assert.NoError(t, err)
 
 	err = addTestVectorLayer()

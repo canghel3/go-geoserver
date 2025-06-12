@@ -18,9 +18,9 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 	//create workspace
 	geoserverClient.Workspaces().Create(testdata.Workspace, true)
 
-	t.Run("200 OK", func(t *testing.T) {
-		t.Run("GENERIC OPTIONS", func(t *testing.T) {
-			t.Run("DESCRIPTION", func(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
+		t.Run("Generic Options", func(t *testing.T) {
+			t.Run("Description", func(t *testing.T) {
 				var description = "generic description"
 				var name = testdata.DatastorePostgis + "WITH_DESCRIPTION"
 				err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create(options.DataStore.Description(description)).PostGIS(name, postgis.ConnectionParams{
@@ -60,7 +60,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 			})
 		})
 
-		t.Run("POSTGIS", func(t *testing.T) {
+		t.Run("PostGIS", func(t *testing.T) {
 			err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create().PostGIS(testdata.DatastorePostgis, postgis.ConnectionParams{
 				Host:     testdata.PostgisHost,
 				Database: testdata.PostgisDb,
@@ -99,7 +99,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 			})
 		})
 
-		t.Run("SHAPEFILE", func(t *testing.T) {
+		t.Run("Shapefile", func(t *testing.T) {
 			err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create().Shapefile(testdata.DatastoreShapefile, testdata.FileShapefile)
 			assert.NoError(t, err)
 
@@ -108,11 +108,11 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 			assert.NotNil(t, store)
 		})
 
-		t.Run("DIRECTORY OF SHAPEFILES", func(t *testing.T) {
+		t.Run("Directory Of Shapefiles", func(t *testing.T) {
 			t.Skip()
 		})
 
-		t.Run("GEOPACKAGE", func(t *testing.T) {
+		t.Run("GeoPackage", func(t *testing.T) {
 			err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create().GeoPackage(testdata.DatastoreGeoPackage, testdata.FileGeoPackage)
 			assert.NoError(t, err)
 

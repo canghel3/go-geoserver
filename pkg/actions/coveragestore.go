@@ -9,28 +9,8 @@ import (
 	"github.com/canghel3/go-geoserver/internal/validator"
 	"github.com/canghel3/go-geoserver/pkg/coveragestores"
 	"github.com/canghel3/go-geoserver/pkg/options"
+	"github.com/canghel3/go-geoserver/pkg/types"
 	"strings"
-)
-
-type CoverageStoreType string
-
-const (
-	AIG              CoverageStoreType = "AIG"
-	ArcGrid          CoverageStoreType = "ArcGrid"
-	DTED             CoverageStoreType = "DTED"
-	EHdr             CoverageStoreType = "EHdr"
-	ENVIHdr          CoverageStoreType = "ENVIHdr"
-	ERDASImg         CoverageStoreType = "ERDASImg"
-	GeoPackageMosaic CoverageStoreType = "GeoPackage (mosaic)"
-	GeoTIFF          CoverageStoreType = "GeoTIFF"
-	ImageMosaic      CoverageStoreType = "ImageMosaic"
-	ImagePyramid     CoverageStoreType = "ImagePyramid"
-	NITF             CoverageStoreType = "NITF"
-	RPFTOC           CoverageStoreType = "RPFTOC"
-	RST              CoverageStoreType = "RST"
-	SRP              CoverageStoreType = "SRP"
-	VRT              CoverageStoreType = "VRT"
-	WorldImage       CoverageStoreType = "WorldImage"
 )
 
 func newCoverageStoreActions(info internal.GeoserverData) *CoverageStores {
@@ -100,7 +80,7 @@ func (csl CoverageStoreList) AIG(name string, filepath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(AIG),
+			Type:        string(types.AIG),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -139,7 +119,7 @@ func (csl CoverageStoreList) ArcGrid(name string, filepath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(ArcGrid),
+			Type:        string(types.ArcGrid),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -178,7 +158,7 @@ func (csl CoverageStoreList) DTED(name string, filepath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(DTED),
+			Type:        string(types.DTED),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -217,7 +197,7 @@ func (csl CoverageStoreList) EHdr(name string, filepath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(EHdr),
+			Type:        string(types.EHdr),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -256,7 +236,7 @@ func (csl CoverageStoreList) ENVIHdr(name string, filepath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(ENVIHdr),
+			Type:        string(types.ENVIHdr),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -295,7 +275,7 @@ func (csl CoverageStoreList) ERDASImg(name string, filepath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(ERDASImg),
+			Type:        string(types.ERDASImg),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -334,7 +314,7 @@ func (csl CoverageStoreList) GeoPackage(name string, filepath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(GeoPackageMosaic),
+			Type:        string(types.GeoPackageMosaic),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -373,7 +353,7 @@ func (csl CoverageStoreList) GeoTIFF(name string, filepath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(GeoTIFF),
+			Type:        string(types.GeoTIFF),
 			Default:     false,
 			Enabled:     true,
 			URL:         url,
@@ -405,7 +385,7 @@ func (csl CoverageStoreList) ImageMosaic(name string, dirpath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(ImageMosaic),
+			Type:        string(types.ImageMosaic),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -437,7 +417,7 @@ func (csl CoverageStoreList) ImagePyramid(name string, dirpath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(ImagePyramid),
+			Type:        string(types.ImagePyramid),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -476,7 +456,7 @@ func (csl CoverageStoreList) NITF(name string, filepath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(NITF),
+			Type:        string(types.NITF),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -515,7 +495,7 @@ func (csl CoverageStoreList) RPFTOC(name string, filepath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(RPFTOC),
+			Type:        string(types.RPFTOC),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -554,7 +534,7 @@ func (csl CoverageStoreList) RST(name string, filepath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(RST),
+			Type:        string(types.RST),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -593,7 +573,7 @@ func (csl CoverageStoreList) SRP(name string, filepath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(SRP),
+			Type:        string(types.SRP),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -632,7 +612,7 @@ func (csl CoverageStoreList) VRT(name string, filepath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(VRT),
+			Type:        string(types.VRT),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -671,7 +651,7 @@ func (csl CoverageStoreList) WorldImage(name string, filepath string) error {
 		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
-			Type:        string(WorldImage),
+			Type:        string(types.WorldImage),
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
