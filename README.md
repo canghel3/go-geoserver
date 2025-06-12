@@ -1,9 +1,9 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/canghel3/go-geoserver)](https://goreportcard.com/report/github.com/canghel3/go-geoserver)
 [![codecov](https://codecov.io/gh/canghel3/go-geoserver/graph/badge.svg?token=OTMJR61Q1H)](https://codecov.io/gh/canghel3/go-geoserver)
 
-# Geoserver Go Client
+# GeoServer Go Client
 
-Making interactions with [GeoServer](https://geoserver.org/) frustration-less in Go.
+Simplifying interactions with [GeoServer](https://geoserver.org/) in Go.
 
 This client provides a simple and idiomatic way to talk to GeoServer’s REST API from your Go applications.
 
