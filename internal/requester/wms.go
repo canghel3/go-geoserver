@@ -68,6 +68,8 @@ func (wmsR *WMSRequester) GetMap(width, height uint16, layers []string, bbox sha
 		q.Add("crs", bbox.SRS)
 	case wms.Version111:
 		q.Add("srs", bbox.SRS)
+	case wms.Version110:
+		q.Add("srs", bbox.SRS)
 	}
 
 	for _, option := range options {
