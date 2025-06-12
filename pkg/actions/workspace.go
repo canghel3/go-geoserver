@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"encoding/json"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
 	"github.com/canghel3/go-geoserver/internal/validator"
@@ -25,7 +26,18 @@ func (ws *Workspaces) Create(name string, _default bool) error {
 		return err
 	}
 
-	return ws.requester.Workspaces().Create(name, _default)
+	data := workspace.WorkspaceCreationWrapper{
+		Workspace: workspace.WorkspaceCreation{
+			Name: name,
+		},
+	}
+
+	content, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	return ws.requester.Workspaces().Create(content, _default)
 }
 
 func (ws *Workspaces) Get(name string) (*workspace.WorkspaceRetrieval, error) {
@@ -52,7 +64,18 @@ func (ws *Workspaces) Update(oldName, newName string) error {
 		return err
 	}
 
-	return ws.requester.Workspaces().Update(oldName, newName)
+	data := workspace.WorkspaceUpdateWrapper{
+		Workspace: workspace.WorkspaceUpdate{
+			Name: newName,
+		},
+	}
+
+	content, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	return ws.requester.Workspaces().Update(content, oldName)
 }
 
 func (ws *Workspaces) Delete(name string, recurse bool) error {

@@ -21,6 +21,17 @@ type CoverageWrapper struct {
 	Coverage Coverage `json:"coverage"`
 }
 
+type CoveragesWrapper struct {
+	Coverages Coverages `json:"coverages"`
+}
+
+type Coverages struct {
+	Entries []struct {
+		Name string `json:"name"`
+		Href string `json:"href"`
+	} `json:"coverage"`
+}
+
 // Coverage contains details about a coverage.
 // This structure contains many fields with pointer values because otherwise empty values would not be omitted from the json marshaller.
 type Coverage struct {

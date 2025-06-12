@@ -29,19 +29,21 @@ func (fr *FontsRequester) Get() (*fonts.Fonts, error) {
 	}
 	defer response.Body.Close()
 
-	body, err := io.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
-
 	switch response.StatusCode {
 	case http.StatusOK:
-		fonts := &fonts.Fonts{}
-		if err = json.Unmarshal(body, fonts); err != nil {
+		var font fonts.Fonts
+		err = json.NewDecoder(response.Body).Decode(&font)
+		if err != nil {
 			return nil, err
 		}
-		return fonts, nil
+
+		return &font, nil
 	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return nil, err
+		}
+
 		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }

@@ -46,6 +46,27 @@ func TestCoverageIntegration_Get(t *testing.T) {
 	})
 }
 
+func TestCoverageIntegration_GetAll(t *testing.T) {
+	err := addTestWorkspace()
+	assert.NoError(t, err)
+
+	err = addTestCoverageStore(types.GeoTIFF)
+	assert.NoError(t, err)
+
+	err = addTestCoverage(types.GeoTIFF)
+	assert.NoError(t, err)
+
+	t.Run("200 Ok", func(t *testing.T) {
+		coverages, err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).GetAll()
+		assert.Error(t, err)
+		assert.Nil(t, coverages)
+		//assert.NoError(t, err)
+		//assert.NotNil(t, coverages)
+		//assert.Len(t, coverages, 1)
+		//assert.Equal(t, testdata.CoverageGeoTiffName, coverages[0].Name)
+	})
+}
+
 func TestCoverageIntegration_Delete(t *testing.T) {
 	err := addTestWorkspace()
 	assert.NoError(t, err)

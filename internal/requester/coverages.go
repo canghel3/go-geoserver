@@ -3,7 +3,6 @@ package requester
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/pkg/coverages"
@@ -46,9 +45,40 @@ func (cr *CoverageRequester) Create(store string, content []byte) error {
 	}
 }
 
-// TODO: implement
-func (cr *CoverageRequester) GetAll(store string) ([]coverages.Coverage, error) {
-	return nil, errors.New("not implemented")
+func (cr *CoverageRequester) GetAll(store string) (*coverages.Coverages, error) {
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", cr.data.Connection.URL, cr.data.Workspace, store)
+
+	request, err := http.NewRequest(http.MethodGet, target, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	request.SetBasicAuth(cr.data.Connection.Credentials.Username, cr.data.Connection.Credentials.Password)
+	request.Header.Add("Content-Type", "application/json")
+
+	response, err := cr.data.Client.Do(request)
+	if err != nil {
+		return nil, err
+	}
+
+	switch response.StatusCode {
+	case http.StatusOK:
+		var coveragesWrapper coverages.CoveragesWrapper
+
+		err = json.NewDecoder(response.Body).Decode(&coveragesWrapper)
+		if err != nil {
+			return nil, err
+		}
+
+		return &coveragesWrapper.Coverages, nil
+	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+	}
 }
 
 func (cr *CoverageRequester) Get(store, coverage string) (*coverages.Coverage, error) {

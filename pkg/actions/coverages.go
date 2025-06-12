@@ -48,7 +48,7 @@ func (c *Coverages) Get(name string) (*coverages.Coverage, error) {
 	return c.requester.Coverages().Get(c.store, name)
 }
 
-func (c *Coverages) GetAll() ([]coverages.Coverage, error) {
+func (c *Coverages) GetAll() (*coverages.Coverages, error) {
 	return c.requester.Coverages().GetAll(c.store)
 }
 

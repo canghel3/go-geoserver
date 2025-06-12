@@ -61,6 +61,44 @@ func TestLoggingRequester_Get(t *testing.T) {
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		loggingRequester := &LoggingRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		_, err := loggingRequester.Get()
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
+	})
+
+	t.Run("Invalid JSON", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader("{")),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		loggingRequester := &LoggingRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		_, err := loggingRequester.Get()
+		assert.Error(t, err)
+		assert.EqualError(t, err, "unexpected EOF")
+	})
+
 	t.Run("Client Error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
@@ -111,6 +149,25 @@ func TestLoggingRequester_Put(t *testing.T) {
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
+	})
+
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		loggingRequester := &LoggingRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		err := loggingRequester.Put(nil)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
 	})
 
 	t.Run("Client Error", func(t *testing.T) {

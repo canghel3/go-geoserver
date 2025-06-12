@@ -13,6 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"io"
 	"net/http"
+	"strings"
 	"testing"
 )
 
@@ -37,7 +38,7 @@ func TestWorkspaceRequester_Create(t *testing.T) {
 
 		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		err := workspaceRequester.Create(testdata.Workspace, false)
+		err := workspaceRequester.Create(nil, false)
 		assert.NoError(t, err)
 	})
 
@@ -55,11 +56,10 @@ func TestWorkspaceRequester_Create(t *testing.T) {
 
 		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var econflict *customerrors.ConflictError
-		err := workspaceRequester.Create(testdata.Workspace, false)
+		err := workspaceRequester.Create(nil, false)
 		assert.Error(t, err)
+		assert.IsType(t, &customerrors.ConflictError{}, err)
 		assert.EqualError(t, err, "workspace already exists")
-		assert.ErrorAs(t, err, &econflict)
 	})
 
 	t.Run("500 Internal Server Error", func(t *testing.T) {
@@ -76,11 +76,29 @@ func TestWorkspaceRequester_Create(t *testing.T) {
 
 		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var econflict *customerrors.GeoserverError
-		err := workspaceRequester.Create(testdata.Workspace, false)
+		err := workspaceRequester.Create(nil, false)
 		assert.Error(t, err)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("received status code %d from geoserver: some error", http.StatusInternalServerError))
-		assert.ErrorAs(t, err, &econflict)
+	})
+
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		err := workspaceRequester.Create(nil, false)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
 	})
 
 	t.Run("Client Error", func(t *testing.T) {
@@ -90,7 +108,7 @@ func TestWorkspaceRequester_Create(t *testing.T) {
 		mockClient.EXPECT().Do(gomock.Any()).Return(nil, errors.New("client error"))
 
 		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
-		err := workspaceRequester.Create(testdata.Workspace, false)
+		err := workspaceRequester.Create(nil, false)
 		assert.Error(t, err)
 		assert.EqualError(t, err, "client error")
 	})
@@ -129,11 +147,10 @@ func TestWorkspaceRequester_Delete(t *testing.T) {
 
 		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var enotfound *customerrors.NotFoundError
 		err := workspaceRequester.Delete(testdata.Workspace, false)
 		assert.Error(t, err)
+		assert.IsType(t, &customerrors.NotFoundError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("workspace %s not found", testdata.Workspace))
-		assert.ErrorAs(t, err, &enotfound)
 	})
 
 	t.Run("500 Internal Server Error", func(t *testing.T) {
@@ -150,11 +167,29 @@ func TestWorkspaceRequester_Delete(t *testing.T) {
 
 		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var econflict *customerrors.GeoserverError
 		err := workspaceRequester.Delete(testdata.Workspace, false)
 		assert.Error(t, err)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("received status code %d from geoserver: some error", http.StatusInternalServerError))
-		assert.ErrorAs(t, err, &econflict)
+	})
+
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		err := workspaceRequester.Delete(testdata.Workspace, false)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
 	})
 
 	t.Run("Client Error", func(t *testing.T) {
@@ -213,12 +248,11 @@ func TestWorkspaceRequester_Get(t *testing.T) {
 
 		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var enotfound *customerrors.NotFoundError
 		wksp, err := workspaceRequester.Get(testdata.Workspace)
 		assert.Nil(t, wksp)
 		assert.Error(t, err)
+		assert.IsType(t, &customerrors.NotFoundError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("workspace %s not found", testdata.Workspace))
-		assert.ErrorAs(t, err, &enotfound)
 	})
 
 	t.Run("500 Internal Server Error", func(t *testing.T) {
@@ -235,11 +269,48 @@ func TestWorkspaceRequester_Get(t *testing.T) {
 
 		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var econflict *customerrors.GeoserverError
 		_, err := workspaceRequester.Get(testdata.Workspace)
 		assert.Error(t, err)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("received status code %d from geoserver: some error", http.StatusInternalServerError))
-		assert.ErrorAs(t, err, &econflict)
+	})
+
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		_, err := workspaceRequester.Get(testdata.Workspace)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
+	})
+
+	t.Run("Invalid JSON", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader("{")),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		_, err := workspaceRequester.Get(testdata.Workspace)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "unexpected EOF")
 	})
 
 	t.Run("Client Error", func(t *testing.T) {
@@ -298,11 +369,29 @@ func TestWorkspaceRequester_GetAll(t *testing.T) {
 
 		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var econflict *customerrors.GeoserverError
 		_, err := workspaceRequester.GetAll()
 		assert.Error(t, err)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("received status code %d from geoserver: some error", http.StatusInternalServerError))
-		assert.ErrorAs(t, err, &econflict)
+	})
+
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		_, err := workspaceRequester.GetAll()
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
 	})
 
 	t.Run("No workspaces exist", func(t *testing.T) {
@@ -361,7 +450,7 @@ func TestWorkspaceRequester_Update(t *testing.T) {
 
 		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		err := workspaceRequester.Update(testdata.Workspace, "newName")
+		err := workspaceRequester.Update(nil, testdata.Workspace)
 		assert.NoError(t, err)
 	})
 
@@ -379,11 +468,10 @@ func TestWorkspaceRequester_Update(t *testing.T) {
 
 		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var econflict *customerrors.NotFoundError
-		err := workspaceRequester.Update(testdata.Workspace, "newName")
+		err := workspaceRequester.Update(nil, testdata.Workspace)
 		assert.Error(t, err)
+		assert.IsType(t, &customerrors.NotFoundError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("workspace %s not found", testdata.Workspace))
-		assert.ErrorAs(t, err, &econflict)
 	})
 
 	t.Run("500 Internal Server Error", func(t *testing.T) {
@@ -400,11 +488,29 @@ func TestWorkspaceRequester_Update(t *testing.T) {
 
 		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var econflict *customerrors.GeoserverError
-		err := workspaceRequester.Update(testdata.Workspace, "newName")
+		err := workspaceRequester.Update(nil, testdata.Workspace)
 		assert.Error(t, err)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("received status code %d from geoserver: some error", http.StatusInternalServerError))
-		assert.ErrorAs(t, err, &econflict)
+	})
+
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		err := workspaceRequester.Update(nil, testdata.Workspace)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
 	})
 
 	t.Run("Client Error", func(t *testing.T) {
@@ -414,7 +520,7 @@ func TestWorkspaceRequester_Update(t *testing.T) {
 		mockClient.EXPECT().Do(gomock.Any()).Return(nil, errors.New("client error"))
 
 		workspaceRequester := &WorkspaceRequester{data: testdata.GeoserverInfo(mockClient)}
-		err := workspaceRequester.Update(testdata.Workspace, "newName")
+		err := workspaceRequester.Update(nil, testdata.Workspace)
 		assert.Error(t, err)
 		assert.EqualError(t, err, "client error")
 	})

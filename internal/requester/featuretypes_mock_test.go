@@ -74,6 +74,25 @@ func TestFeatureTypeRequester_Create(t *testing.T) {
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		featureTypeRequester := &FeatureTypeRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		err := featureTypeRequester.Create(testdata.DatastorePostgis, nil)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
+	})
+
 	t.Run("Client Error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
@@ -153,6 +172,44 @@ func TestFeatureTypeRequester_Get(t *testing.T) {
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		featureTypeRequester := &FeatureTypeRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		_, err := featureTypeRequester.Get(testdata.DatastorePostgis, testdata.FeatureTypePostgis)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
+	})
+
+	t.Run("Invalid JSON", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader("{")),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		featureTypeRequester := &FeatureTypeRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		_, err := featureTypeRequester.Get(testdata.DatastorePostgis, testdata.FeatureTypePostgis)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "unexpected EOF")
+	})
+
 	t.Run("Client Error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
@@ -225,6 +282,25 @@ func TestFeatureTypeRequester_Delete(t *testing.T) {
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		featureTypeRequester := &FeatureTypeRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		err := featureTypeRequester.Delete(testdata.DatastorePostgis, testdata.FeatureTypePostgis, true)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
+	})
+
 	t.Run("Client Error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
@@ -294,6 +370,25 @@ func TestFeatureTypeRequester_Update(t *testing.T) {
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
+	})
+
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		featureTypeRequester := &FeatureTypeRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		err := featureTypeRequester.Update(testdata.DatastorePostgis, testdata.FeatureTypePostgis, nil)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
 	})
 
 	t.Run("Client Error", func(t *testing.T) {

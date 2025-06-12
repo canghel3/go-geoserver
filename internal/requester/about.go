@@ -29,19 +29,21 @@ func (ar *AboutRequester) Manifest() (*about.Manifest, error) {
 	}
 	defer response.Body.Close()
 
-	body, err := io.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
-
 	switch response.StatusCode {
 	case http.StatusOK:
-		manifest := &about.ManifestResponse{}
-		if err = json.Unmarshal(body, manifest); err != nil {
+		var manifest about.ManifestResponse
+		err = json.NewDecoder(response.Body).Decode(&manifest)
+		if err != nil {
 			return nil, err
 		}
+
 		return &manifest.Manifest, nil
 	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return nil, err
+		}
+
 		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
@@ -61,19 +63,21 @@ func (ar *AboutRequester) Version() (*about.Version, error) {
 	}
 	defer response.Body.Close()
 
-	body, err := io.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
-
 	switch response.StatusCode {
 	case http.StatusOK:
-		version := &about.VersionResponse{}
-		if err = json.Unmarshal(body, version); err != nil {
+		var version about.VersionResponse
+		err = json.NewDecoder(response.Body).Decode(&version)
+		if err != nil {
 			return nil, err
 		}
+
 		return &version.About, nil
 	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return nil, err
+		}
+
 		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
@@ -93,19 +97,21 @@ func (ar *AboutRequester) Status() (*about.Status, error) {
 	}
 	defer response.Body.Close()
 
-	body, err := io.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
-
 	switch response.StatusCode {
 	case http.StatusOK:
-		status := &about.StatusResponse{}
-		if err = json.Unmarshal(body, status); err != nil {
+		var status about.StatusResponse
+		err = json.NewDecoder(response.Body).Decode(&status)
+		if err != nil {
 			return nil, err
 		}
+
 		return &status.Status, nil
 	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return nil, err
+		}
+
 		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
@@ -125,19 +131,21 @@ func (ar *AboutRequester) SystemStatus() (*about.Metrics, error) {
 	}
 	defer response.Body.Close()
 
-	body, err := io.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
-
 	switch response.StatusCode {
 	case http.StatusOK:
-		metrics := &about.MetricsResponse{}
-		if err = json.Unmarshal(body, metrics); err != nil {
+		var metrics about.MetricsResponse
+		err = json.NewDecoder(response.Body).Decode(&metrics)
+		if err != nil {
 			return nil, err
 		}
+
 		return &metrics.Metrics, nil
 	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return nil, err
+		}
+
 		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }

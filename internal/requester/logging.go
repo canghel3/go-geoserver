@@ -32,19 +32,21 @@ func (lr *LoggingRequester) Get() (*logging.Log, error) {
 	}
 	defer response.Body.Close()
 
-	body, err := io.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
-
 	switch response.StatusCode {
 	case http.StatusOK:
-		logResponse := &logging.LogResponse{}
-		if err = json.Unmarshal(body, logResponse); err != nil {
+		var log logging.LogResponse
+		err = json.NewDecoder(response.Body).Decode(&log)
+		if err != nil {
 			return nil, err
 		}
-		return &logResponse.Log, nil
+
+		return &log.Log, nil
 	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return nil, err
+		}
+
 		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }

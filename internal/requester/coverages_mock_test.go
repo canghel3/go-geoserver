@@ -15,7 +15,10 @@ import (
 	"testing"
 )
 
-const coverageFile = "../testdata/coverages/coverage.json"
+const (
+	coverageFile  = "../testdata/coverages/coverage.json"
+	coveragesFile = "../testdata/coverages/coverages.json"
+)
 
 func TestCoverageRequester_Create(t *testing.T) {
 	t.Run("200 Ok", func(t *testing.T) {
@@ -72,6 +75,25 @@ func TestCoverageRequester_Create(t *testing.T) {
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
+	})
+
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		coverageRequester := &CoverageRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		err := coverageRequester.Create(testdata.CoverageStoreGeoTiff, nil)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
 	})
 
 	t.Run("Client Error", func(t *testing.T) {
@@ -153,6 +175,139 @@ func TestCoverageRequester_Get(t *testing.T) {
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		coverageRequester := &CoverageRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		_, err := coverageRequester.Get(testdata.CoverageStoreGeoTiff, testdata.CoverageGeoTiffName)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
+	})
+
+	t.Run("Invalid JSON", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader("{")),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		coverageRequester := &CoverageRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		_, err := coverageRequester.Get(testdata.CoverageStoreGeoTiff, testdata.CoverageGeoTiffName)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "unexpected EOF")
+	})
+
+	t.Run("Client Error", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockClient.EXPECT().Do(gomock.Any()).Return(nil, errors.New("client error"))
+
+		coverageRequester := &CoverageRequester{data: testdata.GeoserverInfo(mockClient)}
+		_, err := coverageRequester.Get(testdata.CoverageStoreGeoTiff, testdata.CoverageGeoTiffName)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "client error")
+	})
+}
+
+func TestCoverageRequester_GetAll(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		content, err := testdata.Read(coveragesFile)
+		assert.NoError(t, err)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(bytes.NewReader(content)),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		coverageRequester := &CoverageRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		cov, err := coverageRequester.GetAll(testdata.CoverageStoreGeoTiff)
+		assert.NoError(t, err)
+		assert.NotNil(t, cov)
+		assert.Len(t, cov.Entries, 1)
+	})
+
+	t.Run("500 Internal Server Error", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader("some error")),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		coverageRequester := &CoverageRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		_, err := coverageRequester.GetAll(testdata.CoverageStoreGeoTiff)
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
+		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
+	})
+
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		coverageRequester := &CoverageRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		_, err := coverageRequester.GetAll(testdata.CoverageStoreGeoTiff)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
+	})
+
+	t.Run("Invalid JSON", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader("{")),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		coverageRequester := &CoverageRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		_, err := coverageRequester.GetAll(testdata.CoverageStoreGeoTiff)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "unexpected EOF")
+	})
+
 	t.Run("Client Error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
@@ -223,6 +378,25 @@ func TestCoverageRequester_Delete(t *testing.T) {
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
+	})
+
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		coverageRequester := &CoverageRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		err := coverageRequester.Delete(testdata.CoverageStoreGeoTiff, testdata.CoverageGeoTiffName, true)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
 	})
 
 	t.Run("Client Error", func(t *testing.T) {

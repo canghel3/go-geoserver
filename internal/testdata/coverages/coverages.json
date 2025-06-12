@@ -1,0 +1,10 @@
+{
+  "coverages": {
+    "coverage": [
+      {
+        "name": "sample",
+        "href": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND/coveragestores/ss/coverages/sample.json"
+      }
+    ]
+  }
+}

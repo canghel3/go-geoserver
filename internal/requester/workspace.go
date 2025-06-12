@@ -15,18 +15,7 @@ type WorkspaceRequester struct {
 	data internal.GeoserverData
 }
 
-func (wr *WorkspaceRequester) Create(name string, _default bool) error {
-	data := workspace.WorkspaceCreationWrapper{
-		Workspace: workspace.WorkspaceCreation{
-			Name: name,
-		},
-	}
-
-	content, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
+func (wr *WorkspaceRequester) Create(content []byte, _default bool) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces?default=%v", wr.data.Connection.URL, _default)
 	request, err := http.NewRequest(http.MethodPost, target, bytes.NewBuffer(content))
 	if err != nil {
@@ -135,18 +124,7 @@ func (wr *WorkspaceRequester) GetAll() ([]workspace.MultiWorkspace, error) {
 	}
 }
 
-func (wr *WorkspaceRequester) Update(oldName, newName string) error {
-	data := workspace.WorkspaceUpdateWrapper{
-		Workspace: workspace.WorkspaceUpdate{
-			Name: newName,
-		},
-	}
-
-	content, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
+func (wr *WorkspaceRequester) Update(content []byte, oldName string) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", wr.data.Connection.URL, oldName)
 	request, err := http.NewRequest(http.MethodPut, target, bytes.NewReader(content))
 	if err != nil {

@@ -70,6 +70,46 @@ func TestAboutRequester_Manifest(t *testing.T) {
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		aboutRequester := &AboutRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		manifest, err := aboutRequester.Manifest()
+		assert.Nil(t, manifest)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
+	})
+
+	t.Run("Invalid JSON", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader("{")),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		aboutRequester := &AboutRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		manifest, err := aboutRequester.Manifest()
+		assert.Nil(t, manifest)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "unexpected EOF")
+	})
+
 	t.Run("Client Error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
@@ -129,6 +169,46 @@ func TestAboutRequester_Version(t *testing.T) {
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
+	})
+
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		aboutRequester := &AboutRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		version, err := aboutRequester.Version()
+		assert.Nil(t, version)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
+	})
+
+	t.Run("Invalid JSON", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader("{")),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		aboutRequester := &AboutRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		version, err := aboutRequester.Version()
+		assert.Nil(t, version)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "unexpected EOF")
 	})
 
 	t.Run("Client Error", func(t *testing.T) {
@@ -192,6 +272,46 @@ func TestAboutRequester_SystemStatus(t *testing.T) {
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		aboutRequester := &AboutRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		systemStatus, err := aboutRequester.SystemStatus()
+		assert.Nil(t, systemStatus)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
+	})
+
+	t.Run("Invalid JSON", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader("{")),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		aboutRequester := &AboutRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		systemStatus, err := aboutRequester.SystemStatus()
+		assert.Nil(t, systemStatus)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "unexpected EOF")
+	})
+
 	t.Run("Client Error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
@@ -251,6 +371,46 @@ func TestAboutRequester_Status(t *testing.T) {
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
+	})
+
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		aboutRequester := &AboutRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		status, err := aboutRequester.Status()
+		assert.Nil(t, status)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
+	})
+
+	t.Run("Invalid JSON", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader("{")),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		aboutRequester := &AboutRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		status, err := aboutRequester.Status()
+		assert.Nil(t, status)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "unexpected EOF")
 	})
 
 	t.Run("Client Error", func(t *testing.T) {

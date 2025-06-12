@@ -57,6 +57,25 @@ func TestWMSRequester_GetCapabilities(t *testing.T) {
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		wmsRequester := &WMSRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		_, err := wmsRequester.GetCapabilities(wms.Version130)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
+	})
+
 	t.Run("Client Error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
@@ -172,6 +191,25 @@ func TestWMSRequester_GetMap(t *testing.T) {
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
+	})
+
+	t.Run("Invalid Body", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusInternalServerError,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(&testdata.ErrorReader{}),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		wmsRequester := &WMSRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		_, err := wmsRequester.GetMap(0, 0, nil, shared.BBOX{}, wms.Version130, wms.PNG)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "reader error")
 	})
 
 	t.Run("Client Error", func(t *testing.T) {
