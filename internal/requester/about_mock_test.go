@@ -63,11 +63,10 @@ func TestAboutRequester_Manifest(t *testing.T) {
 
 		aboutRequester := &AboutRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		manifest, err := aboutRequester.Manifest()
 		assert.Nil(t, manifest)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
@@ -125,11 +124,10 @@ func TestAboutRequester_Version(t *testing.T) {
 
 		aboutRequester := &AboutRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		version, err := aboutRequester.Version()
 		assert.Nil(t, version)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
@@ -187,11 +185,10 @@ func TestAboutRequester_SystemStatus(t *testing.T) {
 
 		aboutRequester := &AboutRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		systemStatus, err := aboutRequester.SystemStatus()
 		assert.Nil(t, systemStatus)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
@@ -249,11 +246,10 @@ func TestAboutRequester_Status(t *testing.T) {
 
 		aboutRequester := &AboutRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		status, err := aboutRequester.Status()
 		assert.Nil(t, status)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 

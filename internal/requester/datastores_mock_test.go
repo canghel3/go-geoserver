@@ -68,10 +68,9 @@ func TestDataStoreRequester_Create(t *testing.T) {
 
 		dataStoreRequester := &DataStoreRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		err := dataStoreRequester.Create(nil)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
@@ -128,10 +127,9 @@ func TestDataStoreRequester_Get(t *testing.T) {
 
 		dataStoreRequester := &DataStoreRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.NotFoundError
 		_, err := dataStoreRequester.Get(testdata.DatastorePostgis)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.NotFoundError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("datastore %s not found", testdata.DatastorePostgis))
 	})
 
@@ -149,10 +147,9 @@ func TestDataStoreRequester_Get(t *testing.T) {
 
 		dataStoreRequester := &DataStoreRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		_, err := dataStoreRequester.Get(testdata.DatastorePostgis)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
@@ -202,10 +199,9 @@ func TestDataStoreRequester_Delete(t *testing.T) {
 
 		dataStoreRequester := &DataStoreRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.NotFoundError
 		err := dataStoreRequester.Delete(testdata.DatastorePostgis, true)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.NotFoundError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("datastore %s not found", testdata.DatastorePostgis))
 	})
 
@@ -223,10 +219,9 @@ func TestDataStoreRequester_Delete(t *testing.T) {
 
 		dataStoreRequester := &DataStoreRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		err := dataStoreRequester.Delete(testdata.DatastorePostgis, true)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 

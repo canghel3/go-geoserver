@@ -68,10 +68,9 @@ func TestFeatureTypeRequester_Create(t *testing.T) {
 
 		featureTypeRequester := &FeatureTypeRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		err := featureTypeRequester.Create(testdata.DatastorePostgis, nil)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
@@ -128,10 +127,9 @@ func TestFeatureTypeRequester_Get(t *testing.T) {
 
 		featureTypeRequester := &FeatureTypeRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.NotFoundError
 		_, err := featureTypeRequester.Get(testdata.DatastorePostgis, testdata.FeatureTypePostgis)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.NotFoundError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("featuretype %s not found", testdata.FeatureTypePostgis))
 	})
 
@@ -149,10 +147,9 @@ func TestFeatureTypeRequester_Get(t *testing.T) {
 
 		featureTypeRequester := &FeatureTypeRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		_, err := featureTypeRequester.Get(testdata.DatastorePostgis, testdata.FeatureTypePostgis)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
@@ -202,10 +199,9 @@ func TestFeatureTypeRequester_Delete(t *testing.T) {
 
 		featureTypeRequester := &FeatureTypeRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.NotFoundError
 		err := featureTypeRequester.Delete(testdata.DatastorePostgis, testdata.FeatureTypePostgis, true)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.NotFoundError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("featuretype %s not found", testdata.FeatureTypePostgis))
 	})
 
@@ -223,10 +219,9 @@ func TestFeatureTypeRequester_Delete(t *testing.T) {
 
 		featureTypeRequester := &FeatureTypeRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		err := featureTypeRequester.Delete(testdata.DatastorePostgis, testdata.FeatureTypePostgis, true)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
@@ -295,10 +290,9 @@ func TestFeatureTypeRequester_Update(t *testing.T) {
 
 		featureTypeRequester := &FeatureTypeRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		err := featureTypeRequester.Update(testdata.DatastorePostgis, testdata.FeatureTypePostgis, nil)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 

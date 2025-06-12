@@ -153,13 +153,13 @@ func TestWorkspaceIntegration_Get(t *testing.T) {
 	//create required resources
 	geoserverClient.Workspaces().Create(testdata.Workspace, false)
 
-	t.Run("200 OK", func(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
 		wksp, err := geoserverClient.Workspaces().Get(testdata.Workspace)
 		assert.NoError(t, err)
 		assert.Equal(t, testdata.Workspace, wksp.Name)
 	})
 
-	t.Run("404 NOT FOUND", func(t *testing.T) {
+	t.Run("404 Not Found", func(t *testing.T) {
 		var suffix = "_NOT_FOUND"
 		wksp, err := geoserverClient.Workspaces().Get(testdata.Workspace + suffix)
 		assert.Nil(t, wksp)
@@ -179,14 +179,14 @@ func TestWorkspaceIntegration_Update(t *testing.T) {
 	geoserverClient.Workspaces().Create(testdata.Workspace, false)
 	var toRemove string
 
-	t.Run("200 OK", func(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
 		var suffix = "_UPDATED"
 		toRemove = testdata.Workspace + suffix
 		err := geoserverClient.Workspaces().Update(testdata.Workspace, testdata.Workspace+suffix)
 		assert.NoError(t, err)
 	})
 
-	t.Run("404 NOT FOUND", func(t *testing.T) {
+	t.Run("404 Not Found", func(t *testing.T) {
 		var suffix = "_NOT_FOUND"
 		err := geoserverClient.Workspaces().Update(testdata.Workspace, testdata.Workspace+suffix)
 		assert.EqualError(t, err, fmt.Sprintf("workspace %s not found", testdata.Workspace))
@@ -204,12 +204,12 @@ func TestWorkspaceIntegration_Delete(t *testing.T) {
 	//create required resources
 	geoserverClient.Workspaces().Create(testdata.Workspace, false)
 
-	t.Run("200 OK", func(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
 		err := geoserverClient.Workspaces().Delete(testdata.Workspace, false)
 		assert.NoError(t, err)
 	})
 
-	t.Run("404 NOT FOUND", func(t *testing.T) {
+	t.Run("404 Not Found", func(t *testing.T) {
 		err := geoserverClient.Workspaces().Delete(testdata.Workspace, false)
 		assert.EqualError(t, err, fmt.Sprintf("workspace %s not found", testdata.Workspace))
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
@@ -219,7 +219,7 @@ func TestWorkspaceIntegration_Delete(t *testing.T) {
 func TestWorkspaceIntegration_GetAll(t *testing.T) {
 	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
 
-	t.Run("200 OK", func(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("EMPTY", func(t *testing.T) {
 			wksp, err := geoserverClient.Workspaces().GetAll()
 			assert.Empty(t, wksp)

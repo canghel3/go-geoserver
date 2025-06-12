@@ -54,10 +54,9 @@ func TestFontsRequester_Get(t *testing.T) {
 
 		fontsRequester := &FontsRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		_, err := fontsRequester.Get()
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 

@@ -17,7 +17,7 @@ func TestWMS_GetMap(t *testing.T) {
 	err = addTestDataStore(types.GeoPackage)
 	assert.NoError(t, err)
 
-	err = addTestVectorLayer()
+	err = addTestVectorLayer(types.GeoPackage)
 	assert.NoError(t, err)
 
 	t.Run("Version", func(t *testing.T) {

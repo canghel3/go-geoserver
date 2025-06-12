@@ -51,10 +51,9 @@ func TestWMSRequester_GetCapabilities(t *testing.T) {
 
 		wmsRequester := &WMSRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		_, err := wmsRequester.GetCapabilities(wms.Version130)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
@@ -169,10 +168,9 @@ func TestWMSRequester_GetMap(t *testing.T) {
 
 		wmsRequester := &WMSRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		_, err := wmsRequester.GetMap(0, 0, nil, shared.BBOX{}, wms.Version130, wms.PNG)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 

@@ -55,10 +55,9 @@ func TestLoggingRequester_Get(t *testing.T) {
 
 		loggingRequester := &LoggingRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		_, err := loggingRequester.Get()
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 
@@ -108,10 +107,9 @@ func TestLoggingRequester_Put(t *testing.T) {
 
 		loggingRequester := &LoggingRequester{data: testdata.GeoserverInfo(mockClient)}
 
-		var geoserverError *customerrors.GeoserverError
 		err := loggingRequester.Put(nil)
 		assert.Error(t, err)
-		assert.ErrorAs(t, err, &geoserverError)
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
 		assert.EqualError(t, err, "received status code 500 from geoserver: some error")
 	})
 

@@ -19,10 +19,9 @@ const (
 	FeatureTypePostgisNativeName    = "init"
 	FeatureTypeGeoPackage           = "buildings"
 	FeatureTypeGeoPackageNativeName = "bld_fts_buildingpart"
-	FeatureTypeTitle                = "sample"
 
-	CoverageName       = "sample"
-	CoverageNativeName = "sample"
+	CoverageGeoTiffName       = "sample"
+	CoverageGeoTiffNativeName = "sample"
 
 	PostgisHost     = "postgis"
 	PostgisPort     = "5432"

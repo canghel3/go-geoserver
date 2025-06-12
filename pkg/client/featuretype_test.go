@@ -18,7 +18,7 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 	//create workspace
 	geoserverClient.Workspaces().Create(testdata.Workspace, true)
 
-	t.Run("200 OK", func(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("POSTGIS", func(t *testing.T) {
 			//create datastore
 			err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create().PostGIS(testdata.DatastorePostgis, postgis.ConnectionParams{
@@ -95,7 +95,7 @@ func TestFeatureTypeIntegration_Get(t *testing.T) {
 	err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
 	assert.NoError(t, err)
 
-	t.Run("200 OK", func(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
 		get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
 		assert.NoError(t, err)
 		assert.NotNil(t, get)
@@ -104,7 +104,7 @@ func TestFeatureTypeIntegration_Get(t *testing.T) {
 		assert.Equal(t, get.Srs, "EPSG:4326")
 	})
 
-	t.Run("404 NOT FOUND", func(t *testing.T) {
+	t.Run("404 Not Found", func(t *testing.T) {
 		get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis + "_DOES_NOT_EXIST")
 		assert.Error(t, err)
 		assert.Nil(t, get)
@@ -137,7 +137,7 @@ func TestFeatureTypeIntegration_Delete(t *testing.T) {
 	err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
 	assert.NoError(t, err)
 
-	t.Run("200 OK", func(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
 		err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Delete(testdata.FeatureTypePostgis, true)
 		assert.NoError(t, err)
 
@@ -148,7 +148,7 @@ func TestFeatureTypeIntegration_Delete(t *testing.T) {
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 	})
 
-	t.Run("404 NOT FOUND", func(t *testing.T) {
+	t.Run("404 Not Found", func(t *testing.T) {
 		err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Delete(testdata.FeatureTypePostgis, true)
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.NotFoundError{}, err)

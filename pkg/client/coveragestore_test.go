@@ -14,7 +14,7 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 	//create workspace
 	geoserverClient.Workspaces().Create(testdata.Workspace, true)
 
-	t.Run("200 OK", func(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("GENERIC OPTIONS", func(t *testing.T) {
 			t.Skip()
 		})
