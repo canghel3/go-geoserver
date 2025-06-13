@@ -26,7 +26,7 @@ func NewGeoserverClient(url, username, password string, options ...options.Geose
 	}
 
 	for _, option := range options {
-		option(gc.info)
+		option(&gc.info)
 	}
 
 	return gc
@@ -59,5 +59,3 @@ func (s *GeoserverClient) WMS(version wms.WMSVersion) *actions.WMS {
 func (s *GeoserverClient) Logging() *actions.Logging {
 	return actions.NewLoggingActions(s.info.Clone())
 }
-
-//TODO: implement wfs and others

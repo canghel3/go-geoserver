@@ -46,7 +46,7 @@ func TestAboutRequester_Manifest(t *testing.T) {
 		assert.Len(t, manifest.Resources, 2)
 		assert.Equal(t, float64(1), manifest.Resources[0].ManifestVersion)
 		assert.Equal(t, float64(1), manifest.Resources[1].ManifestVersion)
-		assert.Equal(t, int64(1535553538488), manifest.Resources[0].BndLastModified)
+		assert.Equal(t, float64(1535553538488), manifest.Resources[0].BndLastModified)
 	})
 
 	t.Run("500 Internal Server Error", func(t *testing.T) {

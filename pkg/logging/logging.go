@@ -14,6 +14,10 @@ type LogResponse struct {
 	Log Log `json:"logging"`
 }
 
+type LogRequestWrapper struct {
+	LogRequest LogRequest `json:"logging"`
+}
+
 // LogRequest represents a request to create a log entry
 type LogRequest struct {
 	Message       string `json:"message"`
@@ -22,8 +26,8 @@ type LogRequest struct {
 	StdOutLogging bool   `json:"stdOutLogging"`
 }
 
-func NewLog(message, level, source string) *models.Log {
-	return &models.Log{
+func NewLog(message, level, source string) models.Log {
+	return models.Log{
 		Message:       message,
 		Level:         level,
 		Source:        source,

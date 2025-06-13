@@ -18,7 +18,7 @@ type LoggingRequester struct {
 
 // Get retrieves logs from the server
 func (lr *LoggingRequester) Get() (*logging.Log, error) {
-	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/logs", lr.data.Connection.URL), nil)
+	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/logging", lr.data.Connection.URL), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func (lr *LoggingRequester) Get() (*logging.Log, error) {
 }
 
 func (lr *LoggingRequester) Put(content []byte) error {
-	request, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/geoserver/rest/logs", lr.data.Connection.URL), bytes.NewBuffer(content))
+	request, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/geoserver/rest/logging", lr.data.Connection.URL), bytes.NewBuffer(content))
 	if err != nil {
 		return err
 	}

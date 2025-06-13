@@ -15,7 +15,7 @@ type FontsRequester struct {
 }
 
 func (fr *FontsRequester) Get() (*fonts.Fonts, error) {
-	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/fonts", fr.data.Connection.URL), nil)
+	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/fonts", fr.data.Connection.URL), nil)
 	if err != nil {
 		return nil, err
 	}

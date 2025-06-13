@@ -25,7 +25,7 @@ func (l *Logging) Get() (*logging.Log, error) {
 
 // Put creates a new log entry
 func (l *Logging) Put(log models.Log) error {
-	content, err := json.Marshal(log)
+	content, err := json.Marshal(logging.LogRequestWrapper{LogRequest: logging.LogRequest(log)})
 	if err != nil {
 		return err
 	}
