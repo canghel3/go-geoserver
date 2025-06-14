@@ -76,8 +76,8 @@ func (csl CoverageStoreList) AIG(name string, filepath string) error {
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.AIG),
@@ -115,8 +115,8 @@ func (csl CoverageStoreList) ArcGrid(name string, filepath string) error {
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.ArcGrid),
@@ -154,8 +154,8 @@ func (csl CoverageStoreList) DTED(name string, filepath string) error {
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.DTED),
@@ -193,8 +193,8 @@ func (csl CoverageStoreList) EHdr(name string, filepath string) error {
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.EHdr),
@@ -232,8 +232,8 @@ func (csl CoverageStoreList) ENVIHdr(name string, filepath string) error {
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.ENVIHdr),
@@ -271,8 +271,8 @@ func (csl CoverageStoreList) ERDASImg(name string, filepath string) error {
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.ERDASImg),
@@ -310,8 +310,8 @@ func (csl CoverageStoreList) GeoPackage(name string, filepath string) error {
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.GeoPackageMosaic),
@@ -349,8 +349,8 @@ func (csl CoverageStoreList) GeoTIFF(name string, filepath string) error {
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.GeoTIFF),
@@ -381,8 +381,8 @@ func (csl CoverageStoreList) ImageMosaic(name string, dirpath string) error {
 		return err
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.ImageMosaic),
@@ -413,8 +413,8 @@ func (csl CoverageStoreList) ImagePyramid(name string, dirpath string) error {
 		return err
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.ImagePyramid),
@@ -452,8 +452,8 @@ func (csl CoverageStoreList) NITF(name string, filepath string) error {
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.NITF),
@@ -491,8 +491,8 @@ func (csl CoverageStoreList) RPFTOC(name string, filepath string) error {
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.RPFTOC),
@@ -530,8 +530,8 @@ func (csl CoverageStoreList) RST(name string, filepath string) error {
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.RST),
@@ -569,8 +569,8 @@ func (csl CoverageStoreList) SRP(name string, filepath string) error {
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.SRP),
@@ -608,8 +608,8 @@ func (csl CoverageStoreList) VRT(name string, filepath string) error {
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.VRT),
@@ -647,8 +647,8 @@ func (csl CoverageStoreList) WorldImage(name string, filepath string) error {
 		url = fmt.Sprintf("file:%s", filepath)
 	}
 
-	data := coveragestores.GenericCoverageStoreCreationWrapper{
-		CoverageStore: coveragestores.GenericCoverageStoreCreationModel{
+	data := models.GenericCoverageStoreCreationWrapper{
+		CoverageStore: models.GenericCoverageStoreCreationModel{
 			Name:        name,
 			Description: csl.options.Description,
 			Type:        string(types.WorldImage),

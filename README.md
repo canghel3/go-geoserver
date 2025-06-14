@@ -3,9 +3,7 @@
 
 # GeoServer Go Client
 
-Simplifying interactions with [GeoServer](https://geoserver.org/) in Go.
-
-This client provides a simple and idiomatic way to talk to GeoServer’s REST API from your Go applications.
+A golang library made to simplify interacting with [GeoServer](https://geoserver.org/), providing a straightforward and idiomatic way to talk to GeoServer’s REST API from your Go applications.
 
 ## ✨ Features
 

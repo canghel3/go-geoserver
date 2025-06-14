@@ -21,5 +21,23 @@ type CoverageStore struct {
 	Coverages                  string                   `json:"coverages,omitempty"`
 }
 
+type ConnectionParameters struct {
+	Entry []Entry `json:"entry"`
+}
+
+func (cp *ConnectionParameters) Get(key string) (value string, ok bool) {
+	for _, entry := range cp.Entry {
+		if entry.Key == key {
+			return entry.Value, true
+		}
+	}
+	return value, false
+}
+
+type Entry struct {
+	Key   string `json:"@key"`
+	Value string `json:"$"`
+}
+
 type AllCoverageStoreRetrievalWrapper struct {
 }
