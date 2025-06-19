@@ -12,8 +12,7 @@ import (
 )
 
 func TestDataStoreIntegration_Create(t *testing.T) {
-	err := addTestWorkspace()
-	assert.NoError(t, err)
+	addTestWorkspace(t)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("Generic Options", func(t *testing.T) {
@@ -143,17 +142,12 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 		//yes, geoserver actually responds with 500 for a conflict error
 		assert.ErrorContains(t, err, fmt.Sprintf(`Store '%s' already exists in workspace '%s'`, testdata.DatastorePostgis, testdata.Workspace))
 	})
-
-	err = geoclient.Workspaces().Delete(testdata.Workspace, true)
-	assert.NoError(t, err)
 }
 
 func TestDataStoreIntegration_Get(t *testing.T) {
-	err := addTestWorkspace()
-	assert.NoError(t, err)
+	addTestWorkspace(t)
 
-	err = addTestDataStore(types.PostGIS)
-	assert.NoError(t, err)
+	addTestDataStore(t, types.PostGIS)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("POSTGIS", func(t *testing.T) {
@@ -179,15 +173,13 @@ func TestDataStoreIntegration_GetAll(t *testing.T) {
 }
 
 func TestDataStoreIntegration_Delete(t *testing.T) {
-	err := addTestWorkspace()
-	assert.NoError(t, err)
+	addTestWorkspace(t)
 
-	err = addTestDataStore(types.PostGIS)
-	assert.NoError(t, err)
+	addTestDataStore(t, types.PostGIS)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("POSTGIS", func(t *testing.T) {
-			err = geoclient.Workspace(testdata.Workspace).DataStores().Delete(testdata.DatastorePostgis, true)
+			err := geoclient.Workspace(testdata.Workspace).DataStores().Delete(testdata.DatastorePostgis, true)
 			assert.NoError(t, err)
 
 			//try to retrieve the workspace
@@ -199,7 +191,7 @@ func TestDataStoreIntegration_Delete(t *testing.T) {
 	})
 
 	t.Run("404 Not Found", func(t *testing.T) {
-		err = geoclient.Workspace(testdata.Workspace).DataStores().Delete(testdata.DatastorePostgis, true)
+		err := geoclient.Workspace(testdata.Workspace).DataStores().Delete(testdata.DatastorePostgis, true)
 		assert.Error(t, err)
 		assert.IsType(t, err, &customerrors.NotFoundError{})
 		assert.EqualError(t, err, fmt.Sprintf("datastore %s not found", testdata.DatastorePostgis))
@@ -208,9 +200,6 @@ func TestDataStoreIntegration_Delete(t *testing.T) {
 	t.Run("500 Internal Server Error", func(t *testing.T) {
 		//TODO: try to delete store that contains a feature inside with recurse set to false
 	})
-
-	err = geoclient.Workspaces().Delete(testdata.Workspace, true)
-	assert.NoError(t, err)
 }
 
 func TestDataStoreIntegration_Update(t *testing.T) {

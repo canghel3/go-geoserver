@@ -10,29 +10,23 @@ import (
 )
 
 func TestCoverageIntegration_Create(t *testing.T) {
-	err := addTestWorkspace()
-	assert.NoError(t, err)
+	addTestWorkspace(t)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("GeoTIFF", func(t *testing.T) {
-			err = addTestCoverageStore(types.GeoTIFF)
-			assert.NoError(t, err)
+			addTestCoverageStore(t, types.GeoTIFF)
 
-			err = addTestCoverage(types.GeoTIFF)
-			assert.NoError(t, err)
+			addTestCoverage(t, types.GeoTIFF)
 		})
 	})
 }
 
 func TestCoverageIntegration_Get(t *testing.T) {
-	err := addTestWorkspace()
-	assert.NoError(t, err)
+	addTestWorkspace(t)
 
-	err = addTestCoverageStore(types.GeoTIFF)
-	assert.NoError(t, err)
+	addTestCoverageStore(t, types.GeoTIFF)
 
-	err = addTestCoverage(types.GeoTIFF)
-	assert.NoError(t, err)
+	addTestCoverage(t, types.GeoTIFF)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("GeoTIFF", func(t *testing.T) {
@@ -47,14 +41,11 @@ func TestCoverageIntegration_Get(t *testing.T) {
 }
 
 func TestCoverageIntegration_GetAll(t *testing.T) {
-	err := addTestWorkspace()
-	assert.NoError(t, err)
+	addTestWorkspace(t)
 
-	err = addTestCoverageStore(types.GeoTIFF)
-	assert.NoError(t, err)
+	addTestCoverageStore(t, types.GeoTIFF)
 
-	err = addTestCoverage(types.GeoTIFF)
-	assert.NoError(t, err)
+	addTestCoverage(t, types.GeoTIFF)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		coverages, err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).GetAll()
@@ -68,22 +59,19 @@ func TestCoverageIntegration_GetAll(t *testing.T) {
 }
 
 func TestCoverageIntegration_Delete(t *testing.T) {
-	err := addTestWorkspace()
-	assert.NoError(t, err)
+	addTestWorkspace(t)
 
-	err = addTestCoverageStore(types.GeoTIFF)
-	assert.NoError(t, err)
+	addTestCoverageStore(t, types.GeoTIFF)
 
-	err = addTestCoverage(types.GeoTIFF)
-	assert.NoError(t, err)
+	addTestCoverage(t, types.GeoTIFF)
 
 	t.Run("200 Ok", func(t *testing.T) {
-		err = geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Delete(testdata.CoverageGeoTiffName, true)
+		err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Delete(testdata.CoverageGeoTiffName, true)
 		assert.NoError(t, err)
 	})
 
 	t.Run("404 Not Found", func(t *testing.T) {
-		err = geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Delete(testdata.CoverageGeoTiffName, true)
+		err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Delete(testdata.CoverageGeoTiffName, true)
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("coverage %s not found", testdata.CoverageGeoTiffName))

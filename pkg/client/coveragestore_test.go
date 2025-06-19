@@ -9,6 +9,7 @@ import (
 func TestCoverageStoreIntegration_Create(t *testing.T) {
 	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
 
+	addTestWorkspace(t)
 	geoserverClient.Workspaces().Delete(testdata.Workspace, true)
 
 	//create workspace
@@ -28,4 +29,14 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 			assert.NotNil(t, store)
 		})
 	})
+}
+
+func TestCoverageStoreIntegration_Delete(t *testing.T) {
+	t.Run("200 Ok", func(t *testing.T) {
+
+	})
+}
+
+func TestCoverageStoreIntegration_Get(t *testing.T) {
+
 }

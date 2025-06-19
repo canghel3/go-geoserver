@@ -11,14 +11,11 @@ import (
 )
 
 func TestWMS_GetMap(t *testing.T) {
-	err := addTestWorkspace()
-	assert.NoError(t, err)
+	addTestWorkspace(t)
 
-	err = addTestDataStore(types.GeoPackage)
-	assert.NoError(t, err)
+	addTestDataStore(t, types.GeoPackage)
 
-	err = addTestVectorLayer(types.GeoPackage)
-	assert.NoError(t, err)
+	addTestVectorLayer(t, types.GeoPackage)
 
 	t.Run("Version", func(t *testing.T) {
 		t.Run("1.1.1", func(t *testing.T) {

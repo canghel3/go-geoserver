@@ -12,88 +12,119 @@ import (
 	"testing"
 )
 
+const (
+	VectorsTestDataDir = "../../internal/testdata/vectors"
+	RastersTestDataDir = "../../internal/testdata/rasters"
+)
+
 var (
-	geoclient          = NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
-	VectorsTestdataDir = filepath.Join("..", "..", "internal", "testdata", "vectors")
-	RastersTestdataDir = filepath.Join("..", "..", "internal", "testdata", "rasters")
+	geoclient = NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
 )
 
 func TestMain(m *testing.M) {
 	// VECTORS SETUP
-	err := testdata.Copy(filepath.Join(VectorsTestdataDir, testdata.FileShapefile), filepath.Join(testdata.GeoserverDataDir, testdata.FileShapefile))
-	if err != nil {
-		panic(err)
-	}
+	copyFileToGeoserver(testdata.FileShapefile, true)
+	copyFileToGeoserver(testdata.FileGeoPackage, true)
 
-	err = testdata.Copy(filepath.Join(VectorsTestdataDir, testdata.FileGeoPackage), filepath.Join(testdata.GeoserverDataDir, testdata.FileGeoPackage))
-	if err != nil {
-		panic(err)
-	}
-
-	// RASTERS SETUP
-	err = testdata.Copy(filepath.Join(RastersTestdataDir, testdata.FileGeoTiff), filepath.Join(testdata.GeoserverDataDir, testdata.FileGeoTiff))
-	if err != nil {
-		panic(err)
-	}
+	//RASTERS SETUP
+	copyFileToGeoserver(testdata.FileGeoTiff, false)
 
 	code := m.Run()
 	os.Exit(code)
 }
 
-func addTestWorkspace() error {
-	geoclient.Workspaces().Delete(testdata.Workspace, true)
+// copies the file parameter to the testdata.GeoserverDataDir. panics on error
+func copyFileToGeoserver(file string, isVector bool) {
+	var src string
+	if isVector {
+		src = filepath.Join(VectorsTestDataDir, file)
+	} else {
+		src = filepath.Join(RastersTestDataDir, file)
+	}
 
-	return geoclient.Workspaces().Create(testdata.Workspace, false)
+	err := testdata.Copy(src, filepath.Join(testdata.GeoserverDataDir, file))
+	if err != nil {
+		panic(err)
+	}
 }
 
-func addTestDataStore(type_ types.DataStoreType) error {
+func addTestWorkspace(t *testing.T) {
+	geoclient.Workspaces().Delete(testdata.Workspace, true)
+
+	if err := geoclient.Workspaces().Create(testdata.Workspace, false); err != nil {
+		t.FailNow()
+	}
+}
+
+func addTestDataStore(t *testing.T, type_ types.DataStoreType) {
 	switch type_ {
 	case types.PostGIS:
-		return geoclient.Workspace(testdata.Workspace).DataStores().Create().PostGIS(testdata.DatastorePostgis, postgis.ConnectionParams{
+		if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().PostGIS(testdata.DatastorePostgis, postgis.ConnectionParams{
 			Host:     testdata.PostgisHost,
 			Database: testdata.PostgisDb,
 			User:     testdata.PostgisUsername,
 			Password: testdata.PostgisPassword,
 			Port:     testdata.PostgisPort,
 			SSL:      testdata.PostgisSsl,
-		})
+		}); err != nil {
+			t.FailNow()
+		}
+		return
 	case types.GeoPackage:
-		return geoclient.Workspace(testdata.Workspace).DataStores().Create().GeoPackage(testdata.DatastoreGeoPackage, testdata.FileGeoPackage)
+		if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().GeoPackage(testdata.DatastoreGeoPackage, testdata.FileGeoPackage); err != nil {
+			t.FailNow()
+		}
+		return
 	case types.Shapefile:
-		return geoclient.Workspace(testdata.Workspace).DataStores().Create().Shapefile(testdata.DatastoreShapefile, testdata.FileShapefile)
+		if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().Shapefile(testdata.DatastoreShapefile, testdata.FileShapefile); err != nil {
+			t.FailNow()
+		}
+		return
 	}
 
-	return customerrors.NewUnsupportedError("unsupported data store type")
+	t.Fatal(customerrors.NewUnsupportedError("unsupported data store type"))
 }
 
-func addTestVectorLayer(type_ types.DataStoreType) error {
+func addTestVectorLayer(t *testing.T, type_ types.DataStoreType) {
 	switch type_ {
 	case types.PostGIS:
 		feature := featuretypes.New(testdata.FeatureTypePostgis, testdata.FeatureTypePostgisNativeName)
-		return geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
+		if err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature); err != nil {
+			t.FailNow()
+		}
+		return
 	case types.GeoPackage:
 		feature := featuretypes.New(testdata.FeatureTypeGeoPackage, testdata.FeatureTypeGeoPackageNativeName)
-		return geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastoreGeoPackage).Publish(feature)
+		if err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastoreGeoPackage).Publish(feature); err != nil {
+			t.FailNow()
+		}
+		return
 	}
 
-	return customerrors.NewUnsupportedError("unsupported vector layer type")
+	t.Fatal(customerrors.NewUnsupportedError("unsupported vector layer type"))
 }
 
-func addTestCoverageStore(type_ types.CoverageStoreType) error {
+func addTestCoverageStore(t *testing.T, type_ types.CoverageStoreType) {
 	switch type_ {
 	case types.GeoTIFF:
-		return geoclient.Workspace(testdata.Workspace).CoverageStores().Create().GeoTIFF(testdata.CoverageStoreGeoTiff, testdata.FileGeoTiff)
+		if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().GeoTIFF(testdata.CoverageStoreGeoTiff, testdata.FileGeoTiff); err != nil {
+			t.FailNow()
+		}
+		return
 	}
 
-	return customerrors.NewUnsupportedError("unsupported coverage store type")
+	t.Fatal(customerrors.NewUnsupportedError("unsupported coverage store type"))
 }
 
-func addTestCoverage(type_ types.CoverageStoreType) error {
+func addTestCoverage(t *testing.T, type_ types.CoverageStoreType) {
 	switch type_ {
 	case types.GeoTIFF:
 		coverage := coverages.New(testdata.CoverageGeoTiffName, testdata.CoverageGeoTiffNativeName)
-		return geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Publish(coverage)
+		if err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Publish(coverage); err != nil {
+			t.FailNow()
+		}
+		return
 	}
 
-	return customerrors.NewUnsupportedError("unsupported coverage store type")
+	t.Fatal(customerrors.NewUnsupportedError("unsupported coverage store type"))
 }
