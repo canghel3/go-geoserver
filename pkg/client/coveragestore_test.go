@@ -23,6 +23,29 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 			assert.NoError(t, err)
 			assert.NotNil(t, store)
 		})
+
+		//TODO: can be created with GDAL https://gdal.org/en/stable/drivers/raster/index.html
+		t.Run("EHdr", func(t *testing.T) {
+
+		})
+
+		t.Run("ENVIHdr", func(t *testing.T) {
+
+		})
+
+		t.Run("GeoPackage", func(t *testing.T) {
+
+		})
+
+		t.Run("NITF", func(t *testing.T) {
+
+		})
+
+		t.Run("RST", func(t *testing.T) {
+
+		})
+
+		t.Run("VRT", func(t *testing.T) {})
 	})
 }
 

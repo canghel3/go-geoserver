@@ -12,6 +12,8 @@ import (
 	"testing"
 )
 
+// GDAL raster drivers: https://gdal.org/en/stable/drivers/raster/index.html
+
 const (
 	VectorsTestDataDir = "../../internal/testdata/vectors"
 	RastersTestDataDir = "../../internal/testdata/rasters"
