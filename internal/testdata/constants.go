@@ -33,5 +33,5 @@ const (
 	FileShapefile  = "ne_110m_coastline.shp"
 	FileGeoPackage = "bld_fts_buildingpart.gpkg"
 
-	FileGeoTiff = "sample.tif"
+	FileGeoTiff = "geotiff/sample.tif"
 )

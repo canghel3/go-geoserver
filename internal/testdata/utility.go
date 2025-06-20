@@ -4,6 +4,7 @@ import (
 	"github.com/canghel3/go-geoserver/internal"
 	"io"
 	"os"
+	"path/filepath"
 )
 
 func GeoserverInfo(client internal.HTTPClient) internal.GeoserverData {
@@ -31,6 +32,11 @@ func Copy(src, dst string) error {
 		return err
 	}
 	defer sr.Close()
+
+	err = os.MkdirAll(filepath.Dir(dst), 0755)
+	if err != nil {
+		return err
+	}
 
 	ds, err := os.Create(dst)
 	if err != nil {

@@ -24,7 +24,6 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 			assert.NotNil(t, store)
 		})
 
-		//TODO: can be created with GDAL https://gdal.org/en/stable/drivers/raster/index.html
 		t.Run("EHdr", func(t *testing.T) {
 
 		})
