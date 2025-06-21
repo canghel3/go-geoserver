@@ -180,17 +180,17 @@ func (csl CoverageStoreList) DTED(name string, filepath string) error {
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) EHdr(name string, filepath string) error {
-	err := validator.CoverageStore.EHdr(filepath)
+func (csl CoverageStoreList) EHdr(name string, dir string) error {
+	err := validator.CoverageStore.EHdr(dir)
 	if err != nil {
 		return err
 	}
 
 	var url string
-	if strings.HasPrefix(filepath, "file:") {
-		url = filepath
+	if strings.HasPrefix(dir, "file:") {
+		url = dir
 	} else {
-		url = fmt.Sprintf("file:%s", filepath)
+		url = fmt.Sprintf("file:%s", dir)
 	}
 
 	data := models.GenericCoverageStoreCreationWrapper{

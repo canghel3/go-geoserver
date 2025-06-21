@@ -14,6 +14,8 @@ const (
 	DatastoreGeoPackage = "GEOPACKAGE"
 
 	CoverageStoreGeoTiff = "GEOTIFF"
+	CoverageStoreEHdr    = "EHDR"
+	CoverageStoreENVIHdr = "ENVIHDR"
 
 	FeatureTypePostgis              = "init"
 	FeatureTypePostgisNativeName    = "init"
@@ -32,6 +34,10 @@ const (
 
 	FileShapefile  = "ne_110m_coastline.shp"
 	FileGeoPackage = "bld_fts_buildingpart.gpkg"
+	FileGeoTiff    = "geotiff/sample.tif"
+	FileEHdr       = "ehdr/output.bil"
+	FileENVIHdr    = "envihdr/output.dat"
 
-	FileGeoTiff = "geotiff/sample.tif"
+	DirENVIHdr = "envihdr"
+	DirEHdr    = "ehdr"
 )

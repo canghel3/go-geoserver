@@ -26,7 +26,7 @@ func Read(file string) ([]byte, error) {
 	return os.ReadFile(file)
 }
 
-func Copy(src, dst string) error {
+func CopyFile(src, dst string) error {
 	sr, err := os.Open(src)
 	if err != nil {
 		return err
@@ -47,6 +47,32 @@ func Copy(src, dst string) error {
 	_, err = io.Copy(ds, sr)
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func CopyDir(src string, dst string) error {
+	srcInfo, err := os.Stat(src)
+	if err != nil {
+		return err
+	}
+
+	err = os.MkdirAll(dst, srcInfo.Mode())
+	if err != nil {
+		return err
+	}
+
+	entries, err := os.ReadDir(src)
+	if err != nil {
+		return err
+	}
+
+	for _, entry := range entries {
+		err = CopyFile(filepath.Join(src, entry.Name()), filepath.Join(dst, entry.Name()))
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

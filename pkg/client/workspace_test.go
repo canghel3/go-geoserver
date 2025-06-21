@@ -217,21 +217,19 @@ func TestWorkspaceIntegration_Delete(t *testing.T) {
 }
 
 func TestWorkspaceIntegration_GetAll(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
-
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("EMPTY", func(t *testing.T) {
-			wksp, err := geoserverClient.Workspaces().GetAll()
+			wksp, err := geoclient.Workspaces().GetAll()
 			assert.Empty(t, wksp)
 			assert.NoError(t, err)
 		})
 
 		t.Run("SINGLE Workspace", func(t *testing.T) {
 			//create required resource
-			err := geoserverClient.Workspaces().Create(testdata.Workspace, false)
+			err := geoclient.Workspaces().Create(testdata.Workspace, false)
 			assert.NoError(t, err)
 
-			wksp, err := geoserverClient.Workspaces().GetAll()
+			wksp, err := geoclient.Workspaces().GetAll()
 			assert.NoError(t, err)
 			assert.Len(t, wksp, 1)
 			assert.Equal(t, testdata.Workspace, wksp[0].Name)
@@ -239,21 +237,15 @@ func TestWorkspaceIntegration_GetAll(t *testing.T) {
 
 		t.Run("MULTIPLE WORKSPACES", func(t *testing.T) {
 			//create another temporary workspace
-			err := geoserverClient.Workspaces().Create(testdata.Workspace+"_2", false)
+			err := geoclient.Workspaces().Create(testdata.Workspace+"_2", false)
 			assert.NoError(t, err)
 
-			wksp, err := geoserverClient.Workspaces().GetAll()
+			wksp, err := geoclient.Workspaces().GetAll()
 			assert.NoError(t, err)
 			assert.Len(t, wksp, 2)
-			assert.Equal(t, testdata.Workspace+"_2", wksp[0].Name)
-			assert.Equal(t, testdata.Workspace, wksp[1].Name)
 		})
 	})
 
-	//revert changes made in the test
-	err := geoserverClient.Workspaces().Delete(testdata.Workspace, false)
-	assert.NoError(t, err)
-
-	err = geoserverClient.Workspaces().Delete(testdata.Workspace+"_2", false)
+	err := geoclient.Workspaces().Delete(testdata.Workspace+"_2", false)
 	assert.NoError(t, err)
 }

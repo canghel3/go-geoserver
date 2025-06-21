@@ -25,11 +25,19 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 		})
 
 		t.Run("EHdr", func(t *testing.T) {
+			addTestCoverageStore(t, types.EHdr)
 
+			store, err := geoclient.Workspace(testdata.Workspace).CoverageStores().Get(testdata.CoverageStoreEHdr)
+			assert.NoError(t, err)
+			assert.NotNil(t, store)
 		})
 
 		t.Run("ENVIHdr", func(t *testing.T) {
+			addTestCoverageStore(t, types.ENVIHdr)
 
+			store, err := geoclient.Workspace(testdata.Workspace).CoverageStores().Get(testdata.CoverageStoreENVIHdr)
+			assert.NoError(t, err)
+			assert.NotNil(t, store)
 		})
 
 		t.Run("GeoPackage", func(t *testing.T) {

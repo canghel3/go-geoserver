@@ -153,6 +153,94 @@ func TestCoverageStoreValidator_GeoTIFF(t *testing.T) {
 	}
 }
 
+func TestCoverageStoreValidator_EHdr(t *testing.T) {
+	tests := []struct {
+		name         string
+		dir          string
+		wantErr      bool
+		errorMessage string
+	}{
+		{
+			name:    "Valid EHdr filepath",
+			dir:     "/path/to/directory/file.bil",
+			wantErr: false,
+		},
+		{
+			name:         "Empty EHdr filepath",
+			dir:          "",
+			wantErr:      true,
+			errorMessage: "empty url",
+		},
+		{
+			name:         "Invalid EHdr extension",
+			dir:          "/path/to/directory/file.csv",
+			wantErr:      true,
+			errorMessage: "EHdr file extension must be .bil",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			csv := CoverageStoreValidator{}
+			err := csv.EHdr(tt.dir)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.EqualError(t, err, tt.errorMessage)
+
+				var inputError *customerrors.InputError
+				assert.ErrorAs(t, err, &inputError)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestCoverageStoreValidator_ENVIHdr(t *testing.T) {
+	tests := []struct {
+		name         string
+		dir          string
+		wantErr      bool
+		errorMessage string
+	}{
+		{
+			name:    "Valid ENVIHdr filepath",
+			dir:     "/path/to/directory/file.dat",
+			wantErr: false,
+		},
+		{
+			name:         "Empty ENVIHdr filepath",
+			dir:          "",
+			wantErr:      true,
+			errorMessage: "empty url",
+		},
+		{
+			name:         "Invalid ENVIHdr extension",
+			dir:          "/path/to/directory/file.csv",
+			wantErr:      true,
+			errorMessage: "ENVIHdr file extension must be .dat",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			csv := CoverageStoreValidator{}
+			err := csv.ENVIHdr(tt.dir)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.EqualError(t, err, tt.errorMessage)
+
+				var inputError *customerrors.InputError
+				assert.ErrorAs(t, err, &inputError)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
 func TestCoverageStoreValidator_WorldImage(t *testing.T) {
 	tests := []struct {
 		name         string
@@ -315,18 +403,6 @@ func TestCoverageStoreValidator_NotImplementedMethods(t *testing.T) {
 
 	t.Run("DTED", func(t *testing.T) {
 		err := csv.DTED("test")
-		assert.Error(t, err)
-		assert.EqualError(t, err, "not implemented")
-	})
-
-	t.Run("EHdr", func(t *testing.T) {
-		err := csv.EHdr("test")
-		assert.Error(t, err)
-		assert.EqualError(t, err, "not implemented")
-	})
-
-	t.Run("ENVIHdr", func(t *testing.T) {
-		err := csv.ENVIHdr("test")
 		assert.Error(t, err)
 		assert.EqualError(t, err, "not implemented")
 	})

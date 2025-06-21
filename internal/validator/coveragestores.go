@@ -32,11 +32,29 @@ func (csv CoverageStoreValidator) DTED(url string) error {
 }
 
 func (csv CoverageStoreValidator) EHdr(url string) error {
-	return errors.New("not implemented")
+	if len(url) == 0 {
+		return customerrors.WrapInputError(errors.New("empty url"))
+	}
+
+	ext := filepath.Ext(url)
+	if ext != ".bil" {
+		return customerrors.WrapInputError(errors.New("EHdr file extension must be .bil"))
+	}
+
+	return nil
 }
 
 func (csv CoverageStoreValidator) ENVIHdr(url string) error {
-	return errors.New("not implemented")
+	if len(url) == 0 {
+		return customerrors.WrapInputError(errors.New("empty url"))
+	}
+
+	ext := filepath.Ext(url)
+	if ext != ".dat" {
+		return customerrors.WrapInputError(errors.New("ENVIHdr file extension must be .dat"))
+	}
+
+	return nil
 }
 
 func (csv CoverageStoreValidator) ERDASImg(url string) error {

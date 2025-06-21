@@ -14,9 +14,9 @@ import (
 
 // GDAL raster drivers: https://gdal.org/en/stable/drivers/raster/index.html
 
-const (
-	VectorsTestDataDir = "../../internal/testdata/vectors"
-	RastersTestDataDir = "../../internal/testdata/rasters"
+var (
+	VectorsTestDataDir = VectorsTestDataPath()
+	RastersTestDataDir = RastersTestDataPath()
 )
 
 var (
@@ -30,6 +30,8 @@ func TestMain(m *testing.M) {
 
 	//RASTERS SETUP
 	copyFileToGeoserver(testdata.FileGeoTiff, false)
+	copyDirToGeoserver(testdata.DirEHdr, false)
+	copyDirToGeoserver(testdata.DirENVIHdr, false)
 
 	code := m.Run()
 	os.Exit(code)
@@ -44,7 +46,21 @@ func copyFileToGeoserver(file string, isVector bool) {
 		src = filepath.Join(RastersTestDataDir, file)
 	}
 
-	err := testdata.Copy(src, filepath.Join(testdata.GeoserverDataDir, file))
+	err := testdata.CopyFile(src, filepath.Join(testdata.GeoserverDataDir, file))
+	if err != nil {
+		panic(err)
+	}
+}
+
+func copyDirToGeoserver(dir string, isVector bool) {
+	var src string
+	if isVector {
+		src = filepath.Join(VectorsTestDataDir, dir)
+	} else {
+		src = filepath.Join(RastersTestDataDir, dir)
+	}
+
+	err := testdata.CopyDir(src, filepath.Join(testdata.GeoserverDataDir, dir))
 	if err != nil {
 		panic(err)
 	}
@@ -113,6 +129,16 @@ func addTestCoverageStore(t *testing.T, type_ types.CoverageStoreType) {
 			t.FailNow()
 		}
 		return
+	case types.EHdr:
+		if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().EHdr(testdata.CoverageStoreEHdr, testdata.FileEHdr); err != nil {
+			t.FailNow()
+		}
+		return
+	case types.ENVIHdr:
+		if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().ENVIHdr(testdata.CoverageStoreENVIHdr, testdata.FileENVIHdr); err != nil {
+			t.FailNow()
+		}
+		return
 	}
 
 	t.Fatal(customerrors.NewUnsupportedError("unsupported coverage store type"))
@@ -129,4 +155,37 @@ func addTestCoverage(t *testing.T, type_ types.CoverageStoreType) {
 	}
 
 	t.Fatal(customerrors.NewUnsupportedError("unsupported coverage store type"))
+}
+
+func findGoModRoot() (string, error) {
+	dir, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	for {
+		if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
+			return dir, nil
+		}
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			return "", os.ErrNotExist
+		}
+		dir = parent
+	}
+}
+
+func VectorsTestDataPath() string {
+	root, err := findGoModRoot()
+	if err != nil {
+		panic(err)
+	}
+	return filepath.Join(root, "internal/testdata/vectors")
+}
+
+func RastersTestDataPath() string {
+	root, err := findGoModRoot()
+	if err != nil {
+		panic(err)
+	}
+	return filepath.Join(root, "internal/testdata/rasters")
 }
