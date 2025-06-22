@@ -9,9 +9,11 @@ const (
 	Workspace            = "PLAYGROUND"
 	InvalidWorkspaceName = "SO_!@#MEINVALIDNAME"
 
-	DatastorePostgis    = "POSTGIS"
-	DatastoreShapefile  = "SHAPEFILE"
-	DatastoreGeoPackage = "GEOPACKAGE"
+	DatastorePostgis         = "POSTGIS"
+	DatastoreShapefile       = "SHAPEFILE"
+	DatastoreGeoPackage      = "GEOPACKAGE"
+	DatastoreDirOfShapefiles = "SHAPEFILES"
+	DatastoreCSV             = "CSV"
 
 	PostgisHost     = "postgis"
 	PostgisPort     = "5432"
@@ -36,8 +38,8 @@ const (
 	CoverageGeoTiffName       = "sample"
 	CoverageGeoTiffNativeName = "sample"
 
-	FileShapefile        = "ne_110m_coastline.shp"
-	FileGeoPackage       = "bld_fts_buildingpart.gpkg"
+	FileShapefile        = "shp/ne_110m_coastline.shp"
+	FileGeoPackage       = "gpkg/bld_fts_buildingpart.gpkg"
 	FileGeoTiff          = "geotiff/sample.tif"
 	FileEHdr             = "ehdr/output.bil"
 	FileENVIHdr          = "envihdr/output.dat"
@@ -45,6 +47,8 @@ const (
 	FileNITF             = "nitf/output.ntf"
 	FileRST              = "rst/output.rst"
 	FileVRT              = "vrt/output.vrt"
+	FileCSVLatLon        = "csv/latlon.csv"
+	FileCSVWkt           = "csv/wkt.csv"
 
 	DirGeoTiff          = "geotiff"
 	DirENVIHdr          = "envihdr"
@@ -53,4 +57,5 @@ const (
 	DirNITF             = "nitf"
 	DirRST              = "rst"
 	DirVRT              = "vrt"
+	DirShapefiles       = "shps"
 )

@@ -41,6 +41,7 @@ func (cs *CoverageStores) Reset(name string) error {
 func (cs *CoverageStores) Use(name string) *Coverages {
 	return newCoverages(name, cs.info.Clone())
 }
+
 func (cs *CoverageStores) Create(options ...options.CoverageStoreOption) CoverageStoreList {
 	csl := CoverageStoreList{
 		requester: cs.requester,
@@ -63,122 +64,122 @@ func (cs *CoverageStores) Delete(name string, recurse bool) error {
 	return cs.requester.CoverageStores().Delete(name, recurse)
 }
 
-func (csl CoverageStoreList) AIG(name string, filepath string) error {
-	err := validator.CoverageStore.AIG(filepath)
-	if err != nil {
-		return err
-	}
+//func (csl CoverageStoreList) AIG(name string, filepath string) error {
+//	err := validator.CoverageStore.AIG(filepath)
+//	if err != nil {
+//		return err
+//	}
+//
+//	var url string
+//	if strings.HasPrefix(filepath, "file:") {
+//		url = filepath
+//	} else {
+//		url = fmt.Sprintf("file:%s", filepath)
+//	}
+//
+//	data := models.GenericCoverageStoreCreationWrapper{
+//		CoverageStore: models.GenericCoverageStoreCreationModel{
+//			Name:        name,
+//			Description: csl.options.Description,
+//			Type:        string(types.AIG),
+//			Workspace: struct {
+//				Name string `json:"name"`
+//				Link string `json:"link"`
+//			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
+//			Default: csl.options.Default,
+//			Enabled: true,
+//			URL:     url,
+//			Coverages: struct {
+//				Link string `json:"link"`
+//			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
+//		},
+//	}
+//
+//	content, err := json.Marshal(data)
+//	if err != nil {
+//		return err
+//	}
+//
+//	return csl.requester.CoverageStores().Create(content)
+//}
+//
+//func (csl CoverageStoreList) ArcGrid(name string, filepath string) error {
+//	err := validator.CoverageStore.ArcGrid(filepath)
+//	if err != nil {
+//		return err
+//	}
+//
+//	var url string
+//	if strings.HasPrefix(filepath, "file:") {
+//		url = filepath
+//	} else {
+//		url = fmt.Sprintf("file:%s", filepath)
+//	}
+//
+//	data := models.GenericCoverageStoreCreationWrapper{
+//		CoverageStore: models.GenericCoverageStoreCreationModel{
+//			Name:        name,
+//			Description: csl.options.Description,
+//			Type:        string(types.ArcGrid),
+//			Workspace: struct {
+//				Name string `json:"name"`
+//				Link string `json:"link"`
+//			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
+//			Default: csl.options.Default,
+//			Enabled: true,
+//			URL:     url,
+//			Coverages: struct {
+//				Link string `json:"link"`
+//			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
+//		},
+//	}
+//
+//	content, err := json.Marshal(data)
+//	if err != nil {
+//		return err
+//	}
+//
+//	return csl.requester.CoverageStores().Create(content)
+//}
 
-	var url string
-	if strings.HasPrefix(filepath, "file:") {
-		url = filepath
-	} else {
-		url = fmt.Sprintf("file:%s", filepath)
-	}
-
-	data := models.GenericCoverageStoreCreationWrapper{
-		CoverageStore: models.GenericCoverageStoreCreationModel{
-			Name:        name,
-			Description: csl.options.Description,
-			Type:        string(types.AIG),
-			Workspace: struct {
-				Name string `json:"name"`
-				Link string `json:"link"`
-			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     url,
-			Coverages: struct {
-				Link string `json:"link"`
-			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
-		},
-	}
-
-	content, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
-	return csl.requester.CoverageStores().Create(content)
-}
-
-func (csl CoverageStoreList) ArcGrid(name string, filepath string) error {
-	err := validator.CoverageStore.ArcGrid(filepath)
-	if err != nil {
-		return err
-	}
-
-	var url string
-	if strings.HasPrefix(filepath, "file:") {
-		url = filepath
-	} else {
-		url = fmt.Sprintf("file:%s", filepath)
-	}
-
-	data := models.GenericCoverageStoreCreationWrapper{
-		CoverageStore: models.GenericCoverageStoreCreationModel{
-			Name:        name,
-			Description: csl.options.Description,
-			Type:        string(types.ArcGrid),
-			Workspace: struct {
-				Name string `json:"name"`
-				Link string `json:"link"`
-			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     url,
-			Coverages: struct {
-				Link string `json:"link"`
-			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
-		},
-	}
-
-	content, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
-	return csl.requester.CoverageStores().Create(content)
-}
-
-func (csl CoverageStoreList) DTED(name string, filepath string) error {
-	err := validator.CoverageStore.DTED(filepath)
-	if err != nil {
-		return err
-	}
-
-	var url string
-	if strings.HasPrefix(filepath, "file:") {
-		url = filepath
-	} else {
-		url = fmt.Sprintf("file:%s", filepath)
-	}
-
-	data := models.GenericCoverageStoreCreationWrapper{
-		CoverageStore: models.GenericCoverageStoreCreationModel{
-			Name:        name,
-			Description: csl.options.Description,
-			Type:        string(types.DTED),
-			Workspace: struct {
-				Name string `json:"name"`
-				Link string `json:"link"`
-			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     url,
-			Coverages: struct {
-				Link string `json:"link"`
-			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
-		},
-	}
-
-	content, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
-	return csl.requester.CoverageStores().Create(content)
-}
+//func (csl CoverageStoreList) DTED(name string, filepath string) error {
+//	err := validator.CoverageStore.DTED(filepath)
+//	if err != nil {
+//		return err
+//	}
+//
+//	var url string
+//	if strings.HasPrefix(filepath, "file:") {
+//		url = filepath
+//	} else {
+//		url = fmt.Sprintf("file:%s", filepath)
+//	}
+//
+//	data := models.GenericCoverageStoreCreationWrapper{
+//		CoverageStore: models.GenericCoverageStoreCreationModel{
+//			Name:        name,
+//			Description: csl.options.Description,
+//			Type:        string(types.DTED),
+//			Workspace: struct {
+//				Name string `json:"name"`
+//				Link string `json:"link"`
+//			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
+//			Default: csl.options.Default,
+//			Enabled: true,
+//			URL:     url,
+//			Coverages: struct {
+//				Link string `json:"link"`
+//			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
+//		},
+//	}
+//
+//	content, err := json.Marshal(data)
+//	if err != nil {
+//		return err
+//	}
+//
+//	return csl.requester.CoverageStores().Create(content)
+//}
 
 func (csl CoverageStoreList) EHdr(name string, dir string) error {
 	err := validator.CoverageStore.EHdr(dir)
@@ -258,44 +259,44 @@ func (csl CoverageStoreList) ENVIHdr(name string, filepath string) error {
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) ERDASImg(name string, filepath string) error {
-	err := validator.CoverageStore.ERDASImg(filepath)
-	if err != nil {
-		return err
-	}
-
-	var url string
-	if strings.HasPrefix(filepath, "file:") {
-		url = filepath
-	} else {
-		url = fmt.Sprintf("file:%s", filepath)
-	}
-
-	data := models.GenericCoverageStoreCreationWrapper{
-		CoverageStore: models.GenericCoverageStoreCreationModel{
-			Name:        name,
-			Description: csl.options.Description,
-			Type:        string(types.ERDASImg),
-			Workspace: struct {
-				Name string `json:"name"`
-				Link string `json:"link"`
-			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     url,
-			Coverages: struct {
-				Link string `json:"link"`
-			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
-		},
-	}
-
-	content, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
-	return csl.requester.CoverageStores().Create(content)
-}
+//func (csl CoverageStoreList) ERDASImg(name string, filepath string) error {
+//	err := validator.CoverageStore.ERDASImg(filepath)
+//	if err != nil {
+//		return err
+//	}
+//
+//	var url string
+//	if strings.HasPrefix(filepath, "file:") {
+//		url = filepath
+//	} else {
+//		url = fmt.Sprintf("file:%s", filepath)
+//	}
+//
+//	data := models.GenericCoverageStoreCreationWrapper{
+//		CoverageStore: models.GenericCoverageStoreCreationModel{
+//			Name:        name,
+//			Description: csl.options.Description,
+//			Type:        string(types.ERDASImg),
+//			Workspace: struct {
+//				Name string `json:"name"`
+//				Link string `json:"link"`
+//			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
+//			Default: csl.options.Default,
+//			Enabled: true,
+//			URL:     url,
+//			Coverages: struct {
+//				Link string `json:"link"`
+//			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
+//		},
+//	}
+//
+//	content, err := json.Marshal(data)
+//	if err != nil {
+//		return err
+//	}
+//
+//	return csl.requester.CoverageStores().Create(content)
+//}
 
 func (csl CoverageStoreList) GeoPackage(name string, filepath string) error {
 	err := validator.CoverageStore.GeoPackage(filepath)
@@ -375,69 +376,69 @@ func (csl CoverageStoreList) GeoTIFF(name string, filepath string) error {
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) ImageMosaic(name string, dirpath string) error {
-	err := validator.CoverageStore.ImageMosaic(dirpath)
-	if err != nil {
-		return err
-	}
-
-	data := models.GenericCoverageStoreCreationWrapper{
-		CoverageStore: models.GenericCoverageStoreCreationModel{
-			Name:        name,
-			Description: csl.options.Description,
-			Type:        string(types.ImageMosaic),
-			Workspace: struct {
-				Name string `json:"name"`
-				Link string `json:"link"`
-			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     dirpath,
-			Coverages: struct {
-				Link string `json:"link"`
-			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
-		},
-	}
-
-	content, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
-	return csl.requester.CoverageStores().Create(content)
-}
-
-func (csl CoverageStoreList) ImagePyramid(name string, dirpath string) error {
-	err := validator.CoverageStore.ImagePyramid(dirpath)
-	if err != nil {
-		return err
-	}
-
-	data := models.GenericCoverageStoreCreationWrapper{
-		CoverageStore: models.GenericCoverageStoreCreationModel{
-			Name:        name,
-			Description: csl.options.Description,
-			Type:        string(types.ImagePyramid),
-			Workspace: struct {
-				Name string `json:"name"`
-				Link string `json:"link"`
-			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     dirpath,
-			Coverages: struct {
-				Link string `json:"link"`
-			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
-		},
-	}
-
-	content, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
-	return csl.requester.CoverageStores().Create(content)
-}
+//func (csl CoverageStoreList) ImageMosaic(name string, dirpath string) error {
+//	err := validator.CoverageStore.ImageMosaic(dirpath)
+//	if err != nil {
+//		return err
+//	}
+//
+//	data := models.GenericCoverageStoreCreationWrapper{
+//		CoverageStore: models.GenericCoverageStoreCreationModel{
+//			Name:        name,
+//			Description: csl.options.Description,
+//			Type:        string(types.ImageMosaic),
+//			Workspace: struct {
+//				Name string `json:"name"`
+//				Link string `json:"link"`
+//			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
+//			Default: csl.options.Default,
+//			Enabled: true,
+//			URL:     dirpath,
+//			Coverages: struct {
+//				Link string `json:"link"`
+//			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
+//		},
+//	}
+//
+//	content, err := json.Marshal(data)
+//	if err != nil {
+//		return err
+//	}
+//
+//	return csl.requester.CoverageStores().Create(content)
+//}
+//
+//func (csl CoverageStoreList) ImagePyramid(name string, dirpath string) error {
+//	err := validator.CoverageStore.ImagePyramid(dirpath)
+//	if err != nil {
+//		return err
+//	}
+//
+//	data := models.GenericCoverageStoreCreationWrapper{
+//		CoverageStore: models.GenericCoverageStoreCreationModel{
+//			Name:        name,
+//			Description: csl.options.Description,
+//			Type:        string(types.ImagePyramid),
+//			Workspace: struct {
+//				Name string `json:"name"`
+//				Link string `json:"link"`
+//			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
+//			Default: csl.options.Default,
+//			Enabled: true,
+//			URL:     dirpath,
+//			Coverages: struct {
+//				Link string `json:"link"`
+//			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
+//		},
+//	}
+//
+//	content, err := json.Marshal(data)
+//	if err != nil {
+//		return err
+//	}
+//
+//	return csl.requester.CoverageStores().Create(content)
+//}
 
 func (csl CoverageStoreList) NITF(name string, filepath string) error {
 	err := validator.CoverageStore.NITF(filepath)
@@ -478,44 +479,44 @@ func (csl CoverageStoreList) NITF(name string, filepath string) error {
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) RPFTOC(name string, filepath string) error {
-	err := validator.CoverageStore.RPFTOC(filepath)
-	if err != nil {
-		return err
-	}
-
-	var url string
-	if strings.HasPrefix(filepath, "file:") {
-		url = filepath
-	} else {
-		url = fmt.Sprintf("file:%s", filepath)
-	}
-
-	data := models.GenericCoverageStoreCreationWrapper{
-		CoverageStore: models.GenericCoverageStoreCreationModel{
-			Name:        name,
-			Description: csl.options.Description,
-			Type:        string(types.RPFTOC),
-			Workspace: struct {
-				Name string `json:"name"`
-				Link string `json:"link"`
-			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     url,
-			Coverages: struct {
-				Link string `json:"link"`
-			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
-		},
-	}
-
-	content, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
-	return csl.requester.CoverageStores().Create(content)
-}
+//func (csl CoverageStoreList) RPFTOC(name string, filepath string) error {
+//	err := validator.CoverageStore.RPFTOC(filepath)
+//	if err != nil {
+//		return err
+//	}
+//
+//	var url string
+//	if strings.HasPrefix(filepath, "file:") {
+//		url = filepath
+//	} else {
+//		url = fmt.Sprintf("file:%s", filepath)
+//	}
+//
+//	data := models.GenericCoverageStoreCreationWrapper{
+//		CoverageStore: models.GenericCoverageStoreCreationModel{
+//			Name:        name,
+//			Description: csl.options.Description,
+//			Type:        string(types.RPFTOC),
+//			Workspace: struct {
+//				Name string `json:"name"`
+//				Link string `json:"link"`
+//			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
+//			Default: csl.options.Default,
+//			Enabled: true,
+//			URL:     url,
+//			Coverages: struct {
+//				Link string `json:"link"`
+//			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
+//		},
+//	}
+//
+//	content, err := json.Marshal(data)
+//	if err != nil {
+//		return err
+//	}
+//
+//	return csl.requester.CoverageStores().Create(content)
+//}
 
 func (csl CoverageStoreList) RST(name string, filepath string) error {
 	err := validator.CoverageStore.RST(filepath)
@@ -556,44 +557,44 @@ func (csl CoverageStoreList) RST(name string, filepath string) error {
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) SRP(name string, filepath string) error {
-	err := validator.CoverageStore.SRP(filepath)
-	if err != nil {
-		return err
-	}
-
-	var url string
-	if strings.HasPrefix(filepath, "file:") {
-		url = filepath
-	} else {
-		url = fmt.Sprintf("file:%s", filepath)
-	}
-
-	data := models.GenericCoverageStoreCreationWrapper{
-		CoverageStore: models.GenericCoverageStoreCreationModel{
-			Name:        name,
-			Description: csl.options.Description,
-			Type:        string(types.SRP),
-			Workspace: struct {
-				Name string `json:"name"`
-				Link string `json:"link"`
-			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     url,
-			Coverages: struct {
-				Link string `json:"link"`
-			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
-		},
-	}
-
-	content, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
-	return csl.requester.CoverageStores().Create(content)
-}
+//func (csl CoverageStoreList) SRP(name string, filepath string) error {
+//	err := validator.CoverageStore.SRP(filepath)
+//	if err != nil {
+//		return err
+//	}
+//
+//	var url string
+//	if strings.HasPrefix(filepath, "file:") {
+//		url = filepath
+//	} else {
+//		url = fmt.Sprintf("file:%s", filepath)
+//	}
+//
+//	data := models.GenericCoverageStoreCreationWrapper{
+//		CoverageStore: models.GenericCoverageStoreCreationModel{
+//			Name:        name,
+//			Description: csl.options.Description,
+//			Type:        string(types.SRP),
+//			Workspace: struct {
+//				Name string `json:"name"`
+//				Link string `json:"link"`
+//			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
+//			Default: csl.options.Default,
+//			Enabled: true,
+//			URL:     url,
+//			Coverages: struct {
+//				Link string `json:"link"`
+//			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
+//		},
+//	}
+//
+//	content, err := json.Marshal(data)
+//	if err != nil {
+//		return err
+//	}
+//
+//	return csl.requester.CoverageStores().Create(content)
+//}
 
 func (csl CoverageStoreList) VRT(name string, filepath string) error {
 	err := validator.CoverageStore.VRT(filepath)
@@ -634,41 +635,41 @@ func (csl CoverageStoreList) VRT(name string, filepath string) error {
 	return csl.requester.CoverageStores().Create(content)
 }
 
-func (csl CoverageStoreList) WorldImage(name string, filepath string) error {
-	err := validator.CoverageStore.WorldImage(filepath)
-	if err != nil {
-		return err
-	}
-
-	var url string
-	if strings.HasPrefix(filepath, "file:") {
-		url = filepath
-	} else {
-		url = fmt.Sprintf("file:%s", filepath)
-	}
-
-	data := models.GenericCoverageStoreCreationWrapper{
-		CoverageStore: models.GenericCoverageStoreCreationModel{
-			Name:        name,
-			Description: csl.options.Description,
-			Type:        string(types.WorldImage),
-			Workspace: struct {
-				Name string `json:"name"`
-				Link string `json:"link"`
-			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     url,
-			Coverages: struct {
-				Link string `json:"link"`
-			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
-		},
-	}
-
-	content, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
-	return csl.requester.CoverageStores().Create(content)
-}
+//func (csl CoverageStoreList) WorldImage(name string, filepath string) error {
+//	err := validator.CoverageStore.WorldImage(filepath)
+//	if err != nil {
+//		return err
+//	}
+//
+//	var url string
+//	if strings.HasPrefix(filepath, "file:") {
+//		url = filepath
+//	} else {
+//		url = fmt.Sprintf("file:%s", filepath)
+//	}
+//
+//	data := models.GenericCoverageStoreCreationWrapper{
+//		CoverageStore: models.GenericCoverageStoreCreationModel{
+//			Name:        name,
+//			Description: csl.options.Description,
+//			Type:        string(types.WorldImage),
+//			Workspace: struct {
+//				Name string `json:"name"`
+//				Link string `json:"link"`
+//			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
+//			Default: csl.options.Default,
+//			Enabled: true,
+//			URL:     url,
+//			Coverages: struct {
+//				Link string `json:"link"`
+//			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
+//		},
+//	}
+//
+//	content, err := json.Marshal(data)
+//	if err != nil {
+//		return err
+//	}
+//
+//	return csl.requester.CoverageStores().Create(content)
+//}

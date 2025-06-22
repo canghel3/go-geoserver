@@ -57,15 +57,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 		})
 
 		t.Run("PostGIS", func(t *testing.T) {
-			err := geoclient.Workspace(testdata.Workspace).DataStores().Create().PostGIS(testdata.DatastorePostgis, postgis.ConnectionParams{
-				Host:     testdata.PostgisHost,
-				Database: testdata.PostgisDb,
-				User:     testdata.PostgisUsername,
-				Password: testdata.PostgisPassword,
-				Port:     testdata.PostgisPort,
-				SSL:      testdata.PostgisSsl,
-			})
-			assert.NoError(t, err)
+			addTestDataStore(t, types.PostGIS)
 
 			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastorePostgis)
 			assert.NoError(t, err)
@@ -96,8 +88,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 		})
 
 		t.Run("Shapefile", func(t *testing.T) {
-			err := geoclient.Workspace(testdata.Workspace).DataStores().Create().Shapefile(testdata.DatastoreShapefile, testdata.FileShapefile)
-			assert.NoError(t, err)
+			addTestDataStore(t, types.Shapefile)
 
 			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreShapefile)
 			assert.NoError(t, err)
@@ -105,16 +96,29 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 		})
 
 		t.Run("Directory Of Shapefiles", func(t *testing.T) {
-			t.Skip()
-		})
-
-		t.Run("GeoPackage", func(t *testing.T) {
-			err := geoclient.Workspace(testdata.Workspace).DataStores().Create().GeoPackage(testdata.DatastoreGeoPackage, testdata.FileGeoPackage)
-			assert.NoError(t, err)
+			addTestDataStore(t, types.DirOfShapefiles)
 
 			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreShapefile)
 			assert.NoError(t, err)
 			assert.NotNil(t, store)
+		})
+
+		t.Run("GeoPackage", func(t *testing.T) {
+			addTestDataStore(t, types.GeoPackage)
+
+			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreShapefile)
+			assert.NoError(t, err)
+			assert.NotNil(t, store)
+		})
+
+		t.Run("Csv", func(t *testing.T) {
+			t.Run("Lat Lon", func(t *testing.T) {
+
+			})
+
+			t.Run("Wkt", func(t *testing.T) {
+
+			})
 		})
 	})
 

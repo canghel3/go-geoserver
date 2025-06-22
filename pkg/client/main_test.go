@@ -24,9 +24,11 @@ func TestMain(m *testing.M) {
 	// VECTORS SETUP
 	copyFileToGeoserver(testdata.FileShapefile, true)
 	copyFileToGeoserver(testdata.FileGeoPackage, true)
+	copyFileToGeoserver(testdata.FileCSVLatLon, true)
+	copyFileToGeoserver(testdata.FileCSVWkt, true)
+	copyDirToGeoserver(testdata.DirShapefiles, true)
 
 	//RASTERS SETUP
-
 	copyDirToGeoserver(testdata.DirGeoTiff, false)
 	copyDirToGeoserver(testdata.DirEHdr, false)
 	copyDirToGeoserver(testdata.DirENVIHdr, false)
@@ -97,6 +99,16 @@ func addTestDataStore(t *testing.T, type_ types.DataStoreType) {
 		return
 	case types.Shapefile:
 		if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().Shapefile(testdata.DatastoreShapefile, testdata.FileShapefile); err != nil {
+			t.Fatal(err)
+		}
+		return
+	case types.DirOfShapefiles:
+		if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().Shapefiles(testdata.DatastoreDirOfShapefiles, testdata.DirShapefiles); err != nil {
+			t.Fatal(err)
+		}
+		return
+	case types.CSV:
+		if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().CSV(testdata.DatastoreDirOfShapefiles, testdata.DirShapefiles); err != nil {
 			t.Fatal(err)
 		}
 		return
@@ -201,7 +213,7 @@ func vectorsTestDataPath() string {
 	if err != nil {
 		panic(err)
 	}
-	return filepath.Join(root, "internal/testdata/vectors")
+	return filepath.Join(root, "internal/testdata/featuretypes")
 }
 
 func rastersTestDataPath() string {
@@ -209,5 +221,5 @@ func rastersTestDataPath() string {
 	if err != nil {
 		panic(err)
 	}
-	return filepath.Join(root, "internal/testdata/rasters")
+	return filepath.Join(root, "internal/testdata/coverages")
 }

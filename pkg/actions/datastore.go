@@ -189,8 +189,16 @@ func (dsl DataStoreList) Shapefiles(name string, dir string, options ...options.
 		return err
 	}
 
+	var url string
+	if strings.HasPrefix(dir, "file:") {
+		url = dir
+	} else {
+		url = fmt.Sprintf("file:%s", dir)
+	}
+
 	cp := datastores.ConnectionParams{
-		"url": dir,
+		"url":    url,
+		"fstype": string(types.DirOfShapefiles),
 	}
 
 	for _, option := range options {
@@ -250,30 +258,30 @@ func (dsl DataStoreList) CSV(name string, filepath string, options ...options.CS
 	return dsl.requester.DataStores().Create(content)
 }
 
-func (dsl DataStoreList) WebFeatureService(name, getCapabilitiesUrl string, options ...options.WFSOptions) error {
-	cp := datastores.ConnectionParams{
-		"GET_CAPABILITIES_URL": getCapabilitiesUrl,
-	}
-
-	for _, option := range options {
-		option(&cp)
-	}
-
-	data := datastores.GenericDataStoreCreationWrapper{
-		DataStore: datastores.GenericDataStoreCreationModel{
-			Name:                       name,
-			Description:                dsl.options.Description,
-			DisableOnConnectionFailure: dsl.options.DisableOnConnectionFailure,
-			ConnectionParameters: datastores.ConnectionParameters{
-				Entry: cp.ToDatastoreEntries(),
-			},
-		},
-	}
-
-	content, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
-	return dsl.requester.DataStores().Create(content)
-}
+//func (dsl DataStoreList) WebFeatureService(name, getCapabilitiesUrl string, options ...options.WFSOptions) error {
+//	cp := datastores.ConnectionParams{
+//		"GET_CAPABILITIES_URL": getCapabilitiesUrl,
+//	}
+//
+//	for _, option := range options {
+//		option(&cp)
+//	}
+//
+//	data := datastores.GenericDataStoreCreationWrapper{
+//		DataStore: datastores.GenericDataStoreCreationModel{
+//			Name:                       name,
+//			Description:                dsl.options.Description,
+//			DisableOnConnectionFailure: dsl.options.DisableOnConnectionFailure,
+//			ConnectionParameters: datastores.ConnectionParameters{
+//				Entry: cp.ToDatastoreEntries(),
+//			},
+//		},
+//	}
+//
+//	content, err := json.Marshal(data)
+//	if err != nil {
+//		return err
+//	}
+//
+//	return dsl.requester.DataStores().Create(content)
+//}
