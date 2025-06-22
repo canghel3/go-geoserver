@@ -3,7 +3,6 @@ package requester
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
@@ -144,5 +143,5 @@ func (ftr *FeatureTypeRequester) Update(store, feature string, content []byte) e
 }
 
 func (ftr *FeatureTypeRequester) Reset(name string) error {
-	return errors.New("not implemented")
+	return customerrors.NewNotImplementedError("not implemented")
 }

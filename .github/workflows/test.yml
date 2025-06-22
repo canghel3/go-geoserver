@@ -15,8 +15,8 @@ jobs:
 
       - name: Setup geoserver data directory
         run: |
-          sudo mkdir -p /tmp/data
-          sudo chmod 777 /tmp/data
+          mkdir -p /tmp/data
+          chmod 777 /tmp/data
 
       - name: Start services
         run: docker compose up -d

@@ -3,7 +3,6 @@ package requester
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
@@ -46,7 +45,7 @@ func (dr *DataStoreRequester) Create(content []byte) error {
 
 // TODO: implement
 func (dr *DataStoreRequester) GetAll() ([]datastores.DataStore, error) {
-	return nil, errors.New("not implemented")
+	return nil, customerrors.NewNotImplementedError("not implemented")
 }
 
 func (dr *DataStoreRequester) Get(name string) (*datastores.DataStore, error) {
@@ -87,7 +86,7 @@ func (dr *DataStoreRequester) Get(name string) (*datastores.DataStore, error) {
 
 // TODO: implement
 func (dr *DataStoreRequester) Update() error {
-	return errors.New("not implemented")
+	return customerrors.NewNotImplementedError("not implemented")
 }
 
 func (dr *DataStoreRequester) Delete(name string, recurse bool) error {
@@ -120,5 +119,5 @@ func (dr *DataStoreRequester) Delete(name string, recurse bool) error {
 }
 
 func (dr *DataStoreRequester) Reset(name string) error {
-	return errors.New("not implemented")
+	return customerrors.NewNotImplementedError("not implemented")
 }

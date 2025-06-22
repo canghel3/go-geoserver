@@ -2,11 +2,11 @@ package actions
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/models"
 	"github.com/canghel3/go-geoserver/internal/requester"
+	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"github.com/canghel3/go-geoserver/pkg/featuretypes"
 )
 
@@ -49,11 +49,11 @@ func (ft *FeatureTypes) Get(name string) (*featuretypes.FeatureType, error) {
 }
 
 func (ft *FeatureTypes) GetAll() ([]featuretypes.FeatureType, error) {
-	return nil, errors.New("not implemented")
+	return nil, customerrors.NewNotImplementedError("not implemented")
 }
 
 func (ft *FeatureTypes) Update(featureType models.FeatureType) error {
-	return errors.New("not implemented")
+	return customerrors.NewNotImplementedError("not implemented")
 }
 
 func (ft *FeatureTypes) Delete(name string, recurse bool) error {
@@ -62,5 +62,5 @@ func (ft *FeatureTypes) Delete(name string, recurse bool) error {
 
 // Reset the cache of the specified feature type.
 func (ft *FeatureTypes) Reset(name string) error {
-	return errors.New("not implemented")
+	return customerrors.NewNotImplementedError("not implemented")
 }

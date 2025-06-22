@@ -5,7 +5,7 @@
 
 A GoLang library made to simplify interactions with [GeoServer](https://geoserver.org/), providing a straightforward and idiomatic way to talk to GeoServer’s REST API from your Go applications.
 
-## ✨ Features
+## Features
 
 - Support for managing:
     - Workspaces
@@ -21,24 +21,27 @@ Tested Vector Data Sources:
 - Shapefile
 
 Tested Raster Data Sources:
+- EHdr
+- ENVIHdr
 - GeoTIFF
+- NITF
+- RST
+- VRT
 
-## 🛠️ Work In Progress - in order of priority
+## Work In Progress - in order of priority
 
-Support:
-
-- WMS, WFS, WCS, WMTS 
 - Styles
 - Layer Groups
 - Caching
+- WMS, WFS, WCS, WMTS
 
-## 📦 Installation
+## Installation
 
 ```go
 go get github.com/canghel3/go-geoserver
 ```
 
-## 🧪 Usage Examples
+## Usage Examples
 
 ### Client Initialization
 

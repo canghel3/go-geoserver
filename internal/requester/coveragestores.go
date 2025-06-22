@@ -3,7 +3,6 @@ package requester
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/pkg/coveragestores"
@@ -46,7 +45,7 @@ func (cr *CoverageStoreRequester) Create(content []byte) error {
 
 // TODO: implement
 func (cr *CoverageStoreRequester) GetAll() ([]coveragestores.CoverageStore, error) {
-	return nil, errors.New("not implemented")
+	return nil, customerrors.NewNotImplementedError("not implemented")
 }
 
 func (cr *CoverageStoreRequester) Get(name string) (*coveragestores.CoverageStore, error) {
@@ -87,7 +86,7 @@ func (cr *CoverageStoreRequester) Get(name string) (*coveragestores.CoverageStor
 
 // TODO: implement
 func (cr *CoverageStoreRequester) Update() error {
-	return errors.New("not implemented")
+	return customerrors.NewNotImplementedError("not implemented")
 }
 
 func (cr *CoverageStoreRequester) Delete(name string, recurse bool) error {
@@ -120,5 +119,5 @@ func (cr *CoverageStoreRequester) Delete(name string, recurse bool) error {
 }
 
 func (cr *CoverageStoreRequester) Reset(name string) error {
-	return errors.New("not implemented")
+	return customerrors.NewNotImplementedError("not implemented")
 }

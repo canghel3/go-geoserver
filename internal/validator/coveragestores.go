@@ -24,11 +24,11 @@ func (csv CoverageStoreValidator) ArcGrid(url string) error {
 }
 
 func (csv CoverageStoreValidator) AIG(url string) error {
-	return errors.New("not implemented")
+	return customerrors.NewNotImplementedError("not implemented")
 }
 
 func (csv CoverageStoreValidator) DTED(url string) error {
-	return errors.New("not implemented")
+	return customerrors.NewNotImplementedError("not implemented")
 }
 
 func (csv CoverageStoreValidator) EHdr(url string) error {
@@ -58,27 +58,54 @@ func (csv CoverageStoreValidator) ENVIHdr(url string) error {
 }
 
 func (csv CoverageStoreValidator) ERDASImg(url string) error {
-	return errors.New("not implemented")
+	return customerrors.NewNotImplementedError("not implemented")
 }
 
 func (csv CoverageStoreValidator) NITF(url string) error {
-	return errors.New("not implemented")
+	if len(url) == 0 {
+		return customerrors.WrapInputError(errors.New("empty url"))
+	}
+
+	ext := filepath.Ext(url)
+	if ext != ".ntf" {
+		return customerrors.WrapInputError(errors.New("NITF file extension must be .ntf"))
+	}
+
+	return nil
 }
 
 func (csv CoverageStoreValidator) RPFTOC(url string) error {
-	return errors.New("not implemented")
+	return customerrors.NewNotImplementedError("not implemented")
 }
 
 func (csv CoverageStoreValidator) RST(url string) error {
-	return errors.New("not implemented")
+	if len(url) == 0 {
+		return customerrors.WrapInputError(errors.New("empty url"))
+	}
+
+	ext := filepath.Ext(url)
+	if ext != ".rst" {
+		return customerrors.WrapInputError(errors.New("RST file extension must be .rst"))
+	}
+
+	return nil
 }
 
 func (csv CoverageStoreValidator) SRP(url string) error {
-	return errors.New("not implemented")
+	return customerrors.NewNotImplementedError("not implemented")
 }
 
 func (csv CoverageStoreValidator) VRT(url string) error {
-	return errors.New("not implemented")
+	if len(url) == 0 {
+		return customerrors.WrapInputError(errors.New("empty url"))
+	}
+
+	ext := filepath.Ext(url)
+	if ext != ".vrt" {
+		return customerrors.WrapInputError(errors.New("VRT file extension must be .vrt"))
+	}
+
+	return nil
 }
 
 func (csv CoverageStoreValidator) GeoPackage(url string) error {

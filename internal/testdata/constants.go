@@ -13,18 +13,6 @@ const (
 	DatastoreShapefile  = "SHAPEFILE"
 	DatastoreGeoPackage = "GEOPACKAGE"
 
-	CoverageStoreGeoTiff = "GEOTIFF"
-	CoverageStoreEHdr    = "EHDR"
-	CoverageStoreENVIHdr = "ENVIHDR"
-
-	FeatureTypePostgis              = "init"
-	FeatureTypePostgisNativeName    = "init"
-	FeatureTypeGeoPackage           = "buildings"
-	FeatureTypeGeoPackageNativeName = "bld_fts_buildingpart"
-
-	CoverageGeoTiffName       = "sample"
-	CoverageGeoTiffNativeName = "sample"
-
 	PostgisHost     = "postgis"
 	PostgisPort     = "5432"
 	PostgisUsername = "geoserver"
@@ -32,12 +20,37 @@ const (
 	PostgisDb       = "vectors"
 	PostgisSsl      = "disable"
 
-	FileShapefile  = "ne_110m_coastline.shp"
-	FileGeoPackage = "bld_fts_buildingpart.gpkg"
-	FileGeoTiff    = "geotiff/sample.tif"
-	FileEHdr       = "ehdr/output.bil"
-	FileENVIHdr    = "envihdr/output.dat"
+	FeatureTypePostgis              = "init"
+	FeatureTypePostgisNativeName    = "init"
+	FeatureTypeGeoPackage           = "buildings"
+	FeatureTypeGeoPackageNativeName = "bld_fts_buildingpart"
 
-	DirENVIHdr = "envihdr"
-	DirEHdr    = "ehdr"
+	CoverageStoreGeoTiff    = "GEOTIFF"
+	CoverageStoreEHdr       = "EHDR"
+	CoverageStoreENVIHdr    = "ENVIHDR"
+	CoverageStoreGeoPackage = "GEOPACKAGE"
+	CoverageStoreNITF       = "NITF"
+	CoverageStoreRST        = "RST"
+	CoverageStoreVRT        = "VRT"
+
+	CoverageGeoTiffName       = "sample"
+	CoverageGeoTiffNativeName = "sample"
+
+	FileShapefile        = "ne_110m_coastline.shp"
+	FileGeoPackage       = "bld_fts_buildingpart.gpkg"
+	FileGeoTiff          = "geotiff/sample.tif"
+	FileEHdr             = "ehdr/output.bil"
+	FileENVIHdr          = "envihdr/output.dat"
+	FileGeoPackageRaster = "gpkg/output.gpkg"
+	FileNITF             = "nitf/output.ntf"
+	FileRST              = "rst/output.rst"
+	FileVRT              = "vrt/output.vrt"
+
+	DirGeoTiff          = "geotiff"
+	DirENVIHdr          = "envihdr"
+	DirEHdr             = "ehdr"
+	DirGeoPackageRaster = "gpkg"
+	DirNITF             = "nitf"
+	DirRST              = "rst"
+	DirVRT              = "vrt"
 )

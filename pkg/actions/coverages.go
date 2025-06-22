@@ -2,12 +2,12 @@ package actions
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/models"
 	"github.com/canghel3/go-geoserver/internal/requester"
 	"github.com/canghel3/go-geoserver/pkg/coverages"
+	"github.com/canghel3/go-geoserver/pkg/customerrors"
 )
 
 type Coverages struct {
@@ -53,7 +53,7 @@ func (c *Coverages) GetAll() (*coverages.Coverages, error) {
 }
 
 func (c *Coverages) Update() error {
-	return errors.New("not implemented")
+	return customerrors.NewNotImplementedError("not implemented")
 }
 
 func (c *Coverages) Delete(name string, recurse bool) error {

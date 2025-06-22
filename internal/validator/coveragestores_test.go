@@ -50,9 +50,91 @@ func TestCoverageStoreValidator_ArcGrid(t *testing.T) {
 			if tt.wantErr {
 				assert.Error(t, err)
 				assert.EqualError(t, err, tt.errorMessage)
+				assert.IsType(t, err, &customerrors.InputError{})
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
 
-				var inputError *customerrors.InputError
-				assert.ErrorAs(t, err, &inputError)
+func TestCoverageStoreValidator_EHdr(t *testing.T) {
+	tests := []struct {
+		name         string
+		dir          string
+		wantErr      bool
+		errorMessage string
+	}{
+		{
+			name:    "Valid EHdr filepath",
+			dir:     "/path/to/directory/file.bil",
+			wantErr: false,
+		},
+		{
+			name:         "Empty EHdr filepath",
+			dir:          "",
+			wantErr:      true,
+			errorMessage: "empty url",
+		},
+		{
+			name:         "Invalid EHdr extension",
+			dir:          "/path/to/directory/file.csv",
+			wantErr:      true,
+			errorMessage: "EHdr file extension must be .bil",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			csv := CoverageStoreValidator{}
+			err := csv.EHdr(tt.dir)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.EqualError(t, err, tt.errorMessage)
+				assert.IsType(t, err, &customerrors.InputError{})
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestCoverageStoreValidator_ENVIHdr(t *testing.T) {
+	tests := []struct {
+		name         string
+		dir          string
+		wantErr      bool
+		errorMessage string
+	}{
+		{
+			name:    "Valid ENVIHdr filepath",
+			dir:     "/path/to/directory/file.dat",
+			wantErr: false,
+		},
+		{
+			name:         "Empty ENVIHdr filepath",
+			dir:          "",
+			wantErr:      true,
+			errorMessage: "empty url",
+		},
+		{
+			name:         "Invalid ENVIHdr extension",
+			dir:          "/path/to/directory/file.csv",
+			wantErr:      true,
+			errorMessage: "ENVIHdr file extension must be .dat",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			csv := CoverageStoreValidator{}
+			err := csv.ENVIHdr(tt.dir)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.EqualError(t, err, tt.errorMessage)
+				assert.IsType(t, err, &customerrors.InputError{})
 			} else {
 				assert.NoError(t, err)
 			}
@@ -94,9 +176,7 @@ func TestCoverageStoreValidator_GeoPackage(t *testing.T) {
 			if tt.wantErr {
 				assert.Error(t, err)
 				assert.EqualError(t, err, tt.errorMessage)
-
-				var inputError *customerrors.InputError
-				assert.ErrorAs(t, err, &inputError)
+				assert.IsType(t, err, &customerrors.InputError{})
 			} else {
 				assert.NoError(t, err)
 			}
@@ -143,9 +223,7 @@ func TestCoverageStoreValidator_GeoTIFF(t *testing.T) {
 			if tt.wantErr {
 				assert.Error(t, err)
 				assert.EqualError(t, err, tt.errorMessage)
-
-				var inputError *customerrors.InputError
-				assert.ErrorAs(t, err, &inputError)
+				assert.IsType(t, err, &customerrors.InputError{})
 			} else {
 				assert.NoError(t, err)
 			}
@@ -153,7 +231,7 @@ func TestCoverageStoreValidator_GeoTIFF(t *testing.T) {
 	}
 }
 
-func TestCoverageStoreValidator_EHdr(t *testing.T) {
+func TestCoverageStoreValidator_NITF(t *testing.T) {
 	tests := []struct {
 		name         string
 		dir          string
@@ -161,35 +239,32 @@ func TestCoverageStoreValidator_EHdr(t *testing.T) {
 		errorMessage string
 	}{
 		{
-			name:    "Valid EHdr filepath",
-			dir:     "/path/to/directory/file.bil",
+			name:    "Valid NITF filepath",
+			dir:     "/path/to/directory/file.ntf",
 			wantErr: false,
 		},
 		{
-			name:         "Empty EHdr filepath",
+			name:         "Empty NITF filepath",
 			dir:          "",
 			wantErr:      true,
 			errorMessage: "empty url",
 		},
 		{
-			name:         "Invalid EHdr extension",
+			name:         "Invalid NITF extension",
 			dir:          "/path/to/directory/file.csv",
 			wantErr:      true,
-			errorMessage: "EHdr file extension must be .bil",
+			errorMessage: "NITF file extension must be .ntf",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			csv := CoverageStoreValidator{}
-			err := csv.EHdr(tt.dir)
-
+			err := csv.NITF(tt.dir)
 			if tt.wantErr {
 				assert.Error(t, err)
 				assert.EqualError(t, err, tt.errorMessage)
-
-				var inputError *customerrors.InputError
-				assert.ErrorAs(t, err, &inputError)
+				assert.IsType(t, err, &customerrors.InputError{})
 			} else {
 				assert.NoError(t, err)
 			}
@@ -197,7 +272,7 @@ func TestCoverageStoreValidator_EHdr(t *testing.T) {
 	}
 }
 
-func TestCoverageStoreValidator_ENVIHdr(t *testing.T) {
+func TestCoverageStoreValidator_RST(t *testing.T) {
 	tests := []struct {
 		name         string
 		dir          string
@@ -205,35 +280,73 @@ func TestCoverageStoreValidator_ENVIHdr(t *testing.T) {
 		errorMessage string
 	}{
 		{
-			name:    "Valid ENVIHdr filepath",
-			dir:     "/path/to/directory/file.dat",
+			name:    "Valid RST filepath",
+			dir:     "/path/to/directory/file.rst",
 			wantErr: false,
 		},
 		{
-			name:         "Empty ENVIHdr filepath",
+			name:         "Empty RST filepath",
 			dir:          "",
 			wantErr:      true,
 			errorMessage: "empty url",
 		},
 		{
-			name:         "Invalid ENVIHdr extension",
+			name:         "Invalid RST extension",
 			dir:          "/path/to/directory/file.csv",
 			wantErr:      true,
-			errorMessage: "ENVIHdr file extension must be .dat",
+			errorMessage: "RST file extension must be .rst",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			csv := CoverageStoreValidator{}
-			err := csv.ENVIHdr(tt.dir)
-
+			err := csv.RST(tt.dir)
 			if tt.wantErr {
 				assert.Error(t, err)
 				assert.EqualError(t, err, tt.errorMessage)
+				assert.IsType(t, err, &customerrors.InputError{})
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
 
-				var inputError *customerrors.InputError
-				assert.ErrorAs(t, err, &inputError)
+func TestCoverageStoreValidator_VRT(t *testing.T) {
+	tests := []struct {
+		name         string
+		dir          string
+		wantErr      bool
+		errorMessage string
+	}{
+		{
+			name:    "Valid VRT filepath",
+			dir:     "/path/to/directory/file.vrt",
+			wantErr: false,
+		},
+		{
+			name:         "Empty VRT filepath",
+			dir:          "",
+			wantErr:      true,
+			errorMessage: "empty url",
+		},
+		{
+			name:         "Invalid VRT extension",
+			dir:          "/path/to/directory/file.csv",
+			wantErr:      true,
+			errorMessage: "VRT file extension must be .vrt",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			csv := CoverageStoreValidator{}
+			err := csv.VRT(tt.dir)
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.EqualError(t, err, tt.errorMessage)
+				assert.IsType(t, err, &customerrors.InputError{})
 			} else {
 				assert.NoError(t, err)
 			}
@@ -413,32 +526,14 @@ func TestCoverageStoreValidator_NotImplementedMethods(t *testing.T) {
 		assert.EqualError(t, err, "not implemented")
 	})
 
-	t.Run("NITF", func(t *testing.T) {
-		err := csv.NITF("test")
-		assert.Error(t, err)
-		assert.EqualError(t, err, "not implemented")
-	})
-
 	t.Run("RPFTOC", func(t *testing.T) {
 		err := csv.RPFTOC("test")
 		assert.Error(t, err)
 		assert.EqualError(t, err, "not implemented")
 	})
 
-	t.Run("RST", func(t *testing.T) {
-		err := csv.RST("test")
-		assert.Error(t, err)
-		assert.EqualError(t, err, "not implemented")
-	})
-
 	t.Run("SRP", func(t *testing.T) {
 		err := csv.SRP("test")
-		assert.Error(t, err)
-		assert.EqualError(t, err, "not implemented")
-	})
-
-	t.Run("VRT", func(t *testing.T) {
-		err := csv.VRT("test")
 		assert.Error(t, err)
 		assert.EqualError(t, err, "not implemented")
 	})

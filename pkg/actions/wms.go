@@ -6,6 +6,7 @@ import (
 	"errors"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
+	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"github.com/canghel3/go-geoserver/pkg/shared"
 	"github.com/canghel3/go-geoserver/pkg/wms"
 	"golang.org/x/image/tiff"
@@ -36,7 +37,7 @@ func (wm *WMS) GetCapabilities() (wms.Capabilities, error) {
 
 	switch wm.version {
 	case wms.Version111:
-		return nil, errors.New("not implemented")
+		return nil, customerrors.NewNotImplementedError("not implemented")
 		//unmarshal into v1.1.1 struct
 	case wms.Version130:
 		cap130 := wms.Capabilities1_3_0{}
@@ -170,23 +171,23 @@ func (mf MapFormats) Pdf() ([]byte, error) {
 }
 
 func (mf MapFormats) GeoRSS() (image.Image, error) {
-	return nil, errors.New("not implemented")
+	return nil, customerrors.NewNotImplementedError("not implemented")
 }
 
 func (mf MapFormats) KML() (image.Image, error) {
-	return nil, errors.New("not implemented")
+	return nil, customerrors.NewNotImplementedError("not implemented")
 }
 
 func (mf MapFormats) KMZ() (image.Image, error) {
-	return nil, errors.New("not implemented")
+	return nil, customerrors.NewNotImplementedError("not implemented")
 }
 
 func (mf MapFormats) MapML() (image.Image, error) {
-	return nil, errors.New("not implemented")
+	return nil, customerrors.NewNotImplementedError("not implemented")
 }
 
 func (mf MapFormats) MapMLHTMLViewer() ([]byte, error) {
-	return nil, errors.New("not implemented")
+	return nil, customerrors.NewNotImplementedError("not implemented")
 }
 
 func (mf MapFormats) OpenLayers() (*wms.OpenLayersTemplate, error) {
@@ -207,5 +208,5 @@ func (mf MapFormats) OpenLayers() (*wms.OpenLayersTemplate, error) {
 }
 
 func (mf MapFormats) UTFGrid() ([]byte, error) {
-	return nil, errors.New("not implemented")
+	return nil, customerrors.NewNotImplementedError("not implemented")
 }
