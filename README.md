@@ -15,10 +15,10 @@ A GoLang library made to simplify interactions with [GeoServer](https://geoserve
     - Coverages
 
 Tested Vector Data Sources:
-- CSV
 - GeoPackage
 - PostGIS
 - Shapefile
+- Directory of Shapefiles
 
 Tested Raster Data Sources:
 - EHdr

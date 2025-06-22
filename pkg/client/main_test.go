@@ -107,11 +107,11 @@ func addTestDataStore(t *testing.T, type_ types.DataStoreType) {
 			t.Fatal(err)
 		}
 		return
-	case types.CSV:
-		if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().CSV(testdata.DatastoreDirOfShapefiles, testdata.DirShapefiles); err != nil {
-			t.Fatal(err)
-		}
-		return
+		//case types.CSV:
+		//	if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().CSV(testdata.DatastoreDirOfShapefiles, testdata.DirShapefiles); err != nil {
+		//		t.Fatal(err)
+		//	}
+		//	return
 	}
 
 	t.Fatal(customerrors.NewUnsupportedError("unsupported data store type"))
@@ -153,11 +153,11 @@ func addTestCoverageStore(t *testing.T, type_ types.CoverageStoreType) {
 			t.Fatal(err)
 		}
 		return
-	case types.GeoPackageMosaic:
-		if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().GeoPackage(testdata.CoverageStoreGeoPackage, testdata.FileGeoPackageRaster); err != nil {
-			t.Fatal(err)
-		}
-		return
+	//case types.GeoPackageMosaic:
+	//	if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().GeoPackage(testdata.CoverageStoreGeoPackage, testdata.FileGeoPackageRaster); err != nil {
+	//		t.Fatal(err)
+	//	}
+	//	return
 	case types.NITF:
 		if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().NITF(testdata.CoverageStoreNITF, testdata.FileNITF); err != nil {
 			t.Fatal(err)

@@ -224,39 +224,39 @@ func (dsl DataStoreList) Shapefiles(name string, dir string, options ...options.
 	return dsl.requester.DataStores().Create(content)
 }
 
-func (dsl DataStoreList) CSV(name string, filepath string, options ...options.CSVOptions) error {
-	err := validator.DataStore.CSV(filepath)
-	if err != nil {
-		return err
-	}
-
-	cp := datastores.ConnectionParams{
-		"url":    filepath,
-		"dbtype": string(types.CSV),
-	}
-
-	for _, option := range options {
-		option(&cp)
-	}
-
-	data := datastores.GenericDataStoreCreationWrapper{
-		DataStore: datastores.GenericDataStoreCreationModel{
-			Name:                       name,
-			Description:                dsl.options.Description,
-			DisableOnConnectionFailure: dsl.options.DisableOnConnectionFailure,
-			ConnectionParameters: datastores.ConnectionParameters{
-				Entry: cp.ToDatastoreEntries(),
-			},
-		},
-	}
-
-	content, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-
-	return dsl.requester.DataStores().Create(content)
-}
+//func (dsl DataStoreList) CSV(name string, filepath string, options ...options.CSVOptions) error {
+//	err := validator.DataStore.CSV(filepath)
+//	if err != nil {
+//		return err
+//	}
+//
+//	cp := datastores.ConnectionParams{
+//		"url":    filepath,
+//		"dbtype": string(types.CSV),
+//	}
+//
+//	for _, option := range options {
+//		option(&cp)
+//	}
+//
+//	data := datastores.GenericDataStoreCreationWrapper{
+//		DataStore: datastores.GenericDataStoreCreationModel{
+//			Name:                       name,
+//			Description:                dsl.options.Description,
+//			DisableOnConnectionFailure: dsl.options.DisableOnConnectionFailure,
+//			ConnectionParameters: datastores.ConnectionParameters{
+//				Entry: cp.ToDatastoreEntries(),
+//			},
+//		},
+//	}
+//
+//	content, err := json.Marshal(data)
+//	if err != nil {
+//		return err
+//	}
+//
+//	return dsl.requester.DataStores().Create(content)
+//}
 
 //func (dsl DataStoreList) WebFeatureService(name, getCapabilitiesUrl string, options ...options.WFSOptions) error {
 //	cp := datastores.ConnectionParams{
