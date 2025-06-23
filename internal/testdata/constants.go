@@ -9,11 +9,12 @@ const (
 	Workspace            = "PLAYGROUND"
 	InvalidWorkspaceName = "SO_!@#MEINVALIDNAME"
 
-	DatastorePostgis         = "POSTGIS"
-	DatastoreShapefile       = "SHAPEFILE"
-	DatastoreGeoPackage      = "GEOPACKAGE"
-	DatastoreDirOfShapefiles = "SHAPEFILES"
-	DatastoreCSV             = "CSV"
+	DatastorePostgis           = "POSTGIS"
+	DatastoreShapefile         = "SHAPEFILE"
+	DatastoreGeoPackage        = "GEOPACKAGE"
+	DatastoreDirOfShapefiles   = "SHAPEFILES"
+	DatastoreCSV               = "CSV"
+	DatastoreWebFeatureService = "WEBFEATURESERVICE"
 
 	PostgisHost     = "postgis"
 	PostgisPort     = "5432"
@@ -21,6 +22,8 @@ const (
 	PostgisPassword = "geoserver"
 	PostgisDb       = "vectors"
 	PostgisSsl      = "disable"
+
+	DatastoreWFSUrl = "http://geoserver:8080/geoserver/wfs?service=wfs&version=1.3.0&request=GetCapabilities"
 
 	FeatureTypePostgis              = "init"
 	FeatureTypePostgisNativeName    = "init"

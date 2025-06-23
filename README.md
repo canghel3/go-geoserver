@@ -8,12 +8,12 @@ talk to GeoServer’s REST API from your Go applications.
 
 ## Features
 
-- **Core Management:**
-    - Workspaces
-    - Vector Data Sources (Data Store)
-    - Raster Data Sources (Coverage Store)
-    - Feature Types
-    - Coverages
+**Manage:**
+- Workspaces
+- Vector Data Sources (Data Store)
+- Raster Data Sources (Coverage Store)
+- Feature Types
+- Coverages
 
 ## Available Data Sources
 
@@ -24,9 +24,9 @@ talk to GeoServer’s REST API from your Go applications.
 | GeoPackage              | ✅      |
 | PostGIS                 | ✅      |
 | Shapefile               | ✅      |
-| Directory of Shapefiles | ✅      |
+| Directory of shapefiles | ✅      |
 | CSV                     | ❌      |
-| WebFeatureService       | ❌      |
+| WebFeatureService       | ✅      |
 
 ### Raster
 

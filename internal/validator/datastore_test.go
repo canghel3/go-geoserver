@@ -208,3 +208,47 @@ func TestDataStoreValidator_CSV(t *testing.T) {
 		})
 	}
 }
+
+func TestDataStoreValidator_WebFeatureService(t *testing.T) {
+	tests := []struct {
+		name         string
+		url          string
+		wantErr      bool
+		errorMessage string
+	}{
+		{
+			name:    "Valid WebFeatureService URL",
+			url:     "http://localhost:8080/geoserver",
+			wantErr: false,
+		},
+		{
+			name:         "Empty WebFeatureService URL",
+			url:          "",
+			wantErr:      true,
+			errorMessage: "empty wfs url",
+		},
+		{
+			name:         "Blank WebFeatureService URL",
+			url:          "   ",
+			wantErr:      true,
+			errorMessage: "empty wfs url",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			dsv := DataStoreValidator{}
+			err := dsv.WebFeatureService(tt.url)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.EqualError(t, err, tt.errorMessage)
+
+				var inputError *customerrors.InputError
+				assert.ErrorAs(t, err, &inputError)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}

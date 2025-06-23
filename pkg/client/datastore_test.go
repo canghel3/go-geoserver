@@ -120,6 +120,14 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 
 			})
 		})
+
+		t.Run("WebFeatureService", func(t *testing.T) {
+			addTestDataStore(t, types.WebFeatureService)
+
+			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreWebFeatureService)
+			assert.NoError(t, err)
+			assert.NotNil(t, store)
+		})
 	})
 
 	//NOTE: there is no 409 test because geoserver responds with 500 for a conflict error (:

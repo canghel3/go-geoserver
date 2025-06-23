@@ -3,7 +3,9 @@ package validator
 import (
 	"errors"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
+	"net/url"
 	"path/filepath"
+	"strings"
 )
 
 var DataStore DataStoreValidator
@@ -43,10 +45,7 @@ func (dsv DataStoreValidator) ShapefileDirectory(dir string) error {
 		return customerrors.WrapInputError(errors.New("empty directory path"))
 	}
 
-	// Note: In a real implementation, you might want to check if the directory exists
-	// and contains at least one shapefile, but for simplicity we'll just check if
-	// the path is not empty.
-
+	//TODO: check the directory contains some shapefiles
 	return nil
 }
 
@@ -54,6 +53,21 @@ func (dsv DataStoreValidator) CSV(url string) error {
 	if filepath.Ext(url) != ".csv" {
 		return customerrors.WrapInputError(errors.New("csv file extension must be .csv"))
 	}
+
+	return nil
+}
+
+func (dsv DataStoreValidator) WebFeatureService(u string) error {
+	if len(strings.TrimSpace(u)) == 0 {
+		return customerrors.WrapInputError(errors.New("empty wfs url"))
+	}
+
+	_, err := url.Parse(u)
+	if err != nil {
+		return customerrors.WrapInputError(err)
+	}
+
+	//TODO: should we also check if the service=wfs is sent?
 
 	return nil
 }

@@ -11,58 +11,92 @@ type WFSOptionGenerator struct{}
 
 type WFSOptions func(params *datastores.ConnectionParams)
 
+/*
+{
+                    "@key": "WFSDataStoreFactory:TRY_GZIP",
+                    "$": "true"
+                },
+                {
+                    "@key": "usedefaultsrs",
+                    "$": "false"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:AXIS_ORDER",
+                    "$": "Compliant"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:PROTOCOL",
+                    "$": "false"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:GET_CAPABILITIES_URL",
+                    "$": "http://geoserver:8080/geoserver/wfs?service=wfs"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:PASSWORD",
+                    "$": "crypt2:5yUM0gXhU2vRZOWg+pcdLqz8QmG6Tvi1ly8SBkdgwdE="
+                },
+                {
+                    "@key": "WFSDataStoreFactory:MAXFEATURES",
+                    "$": "0"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:FILTER_COMPLIANCE",
+                    "$": "0"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:TIMEOUT",
+                    "$": "3000"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:WFS_STRATEGY",
+                    "$": "auto"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:AXIS_ORDER_FILTER",
+                    "$": "Compliant"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:ENCODING",
+                    "$": "UTF-8"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:GML_COMPATIBLE_TYPENAMES",
+                    "$": "false"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:LENIENT",
+                    "$": "false"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:USERNAME",
+                    "$": "admin"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:GML_COMPLIANCE_LEVEL",
+                    "$": "0"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:MAX_CONNECTION_POOL_SIZE",
+                    "$": "6"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:BUFFER_SIZE",
+                    "$": "10"
+                },
+                {
+                    "@key": "namespace",
+                    "$": "http://PLAYGROUND"
+                },
+                {
+                    "@key": "WFSDataStoreFactory:USE_HTTP_CONNECTION_POOLING",
+                    "$": "true"
+                }
+*/
+
 // Timeout sets the connection timeout in seconds
 func (wog WFSOptionGenerator) Timeout(timeout uint) WFSOptions {
 	return func(params *datastores.ConnectionParams) {
 		(*params)["Time-out"] = strconv.FormatUint(uint64(timeout), 10)
-	}
-}
-
-// Username sets the username for authentication
-func (wog WFSOptionGenerator) Username(username string) WFSOptions {
-	return func(params *datastores.ConnectionParams) {
-		(*params)["Username"] = username
-	}
-}
-
-// Password sets the password for authentication
-func (wog WFSOptionGenerator) Password(password string) WFSOptions {
-	return func(params *datastores.ConnectionParams) {
-		(*params)["Password"] = password
-	}
-}
-
-// Protocol sets the protocol version (1.0.0, 1.1.0, 2.0.0)
-func (wog WFSOptionGenerator) Protocol(version string) WFSOptions {
-	return func(params *datastores.ConnectionParams) {
-		(*params)["Protocol"] = version
-	}
-}
-
-// BufferSize sets the buffer size for WFS requests
-func (wog WFSOptionGenerator) BufferSize(size uint) WFSOptions {
-	return func(params *datastores.ConnectionParams) {
-		(*params)["Buffer Size"] = strconv.FormatUint(uint64(size), 10)
-	}
-}
-
-// MaxFeatures sets the maximum number of features to retrieve
-func (wog WFSOptionGenerator) MaxFeatures(max uint) WFSOptions {
-	return func(params *datastores.ConnectionParams) {
-		(*params)["Maximum features"] = strconv.FormatUint(uint64(max), 10)
-	}
-}
-
-// UseDefaultSRS specifies whether to use the default SRS
-func (wog WFSOptionGenerator) UseDefaultSRS(use bool) WFSOptions {
-	return func(params *datastores.ConnectionParams) {
-		(*params)["Use Default SRS"] = strconv.FormatBool(use)
-	}
-}
-
-// OutputFormat sets the output format for WFS requests
-func (wog WFSOptionGenerator) OutputFormat(format string) WFSOptions {
-	return func(params *datastores.ConnectionParams) {
-		(*params)["Outputformat"] = format
 	}
 }

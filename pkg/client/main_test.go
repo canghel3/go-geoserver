@@ -108,11 +108,16 @@ func addTestDataStore(t *testing.T, type_ types.DataStoreType) {
 			t.Fatal(err)
 		}
 		return
-		//case types.CSV:
-		//	if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().CSV(testdata.DatastoreDirOfShapefiles, testdata.DirShapefiles); err != nil {
-		//		t.Fatal(err)
-		//	}
-		//	return
+	//case types.CSV:
+	//	if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().CSV(testdata.DatastoreDirOfShapefiles, testdata.DirShapefiles); err != nil {
+	//		t.Fatal(err)
+	//	}
+	//	return
+	case types.WebFeatureService:
+		if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().WebFeatureService(testdata.DatastoreWebFeatureService, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.DatastoreWFSUrl); err != nil {
+			t.Fatal(err)
+		}
+		return
 	}
 
 	t.Fatal(customerrors.NewUnsupportedError("unsupported data store type"))

@@ -258,30 +258,37 @@ func (dsl DataStoreList) Shapefiles(name string, dir string, options ...options.
 //	return dsl.requester.DataStores().Create(content)
 //}
 
-//func (dsl DataStoreList) WebFeatureService(name, getCapabilitiesUrl string, options ...options.WFSOptions) error {
-//	cp := datastores.ConnectionParams{
-//		"GET_CAPABILITIES_URL": getCapabilitiesUrl,
-//	}
-//
-//	for _, option := range options {
-//		option(&cp)
-//	}
-//
-//	data := datastores.GenericDataStoreCreationWrapper{
-//		DataStore: datastores.GenericDataStoreCreationModel{
-//			Name:                       name,
-//			Description:                dsl.options.Description,
-//			DisableOnConnectionFailure: dsl.options.DisableOnConnectionFailure,
-//			ConnectionParameters: datastores.ConnectionParameters{
-//				Entry: cp.ToDatastoreEntries(),
-//			},
-//		},
-//	}
-//
-//	content, err := json.Marshal(data)
-//	if err != nil {
-//		return err
-//	}
-//
-//	return dsl.requester.DataStores().Create(content)
-//}
+func (dsl DataStoreList) WebFeatureService(storeName, username, password, wfsCapabilitiesUrl string, options ...options.WFSOptions) error {
+	err := validator.DataStore.WebFeatureService(wfsCapabilitiesUrl)
+	if err != nil {
+		return err
+	}
+
+	cp := datastores.ConnectionParams{
+		"WFSDataStoreFactory:GET_CAPABILITIES_URL": wfsCapabilitiesUrl,
+		"WFSDataStoreFactory:USERNAME":             username,
+		"WFSDataStoreFactory:PASSWORD":             password,
+	}
+
+	for _, option := range options {
+		option(&cp)
+	}
+
+	data := datastores.GenericDataStoreCreationWrapper{
+		DataStore: datastores.GenericDataStoreCreationModel{
+			Name:                       storeName,
+			Description:                dsl.options.Description,
+			DisableOnConnectionFailure: dsl.options.DisableOnConnectionFailure,
+			ConnectionParameters: datastores.ConnectionParameters{
+				Entry: cp.ToDatastoreEntries(),
+			},
+		},
+	}
+
+	content, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	return dsl.requester.DataStores().Create(content)
+}
