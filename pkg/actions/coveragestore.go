@@ -22,7 +22,7 @@ func newCoverageStoreActions(info internal.GeoserverData) *CoverageStores {
 }
 
 type CoverageStoreList struct {
-	options   *models.CoverageStoreOptions
+	options   *models.GenericStoreOptions
 	requester *requester.Requester
 	data      internal.GeoserverData
 }
@@ -42,10 +42,10 @@ func (cs *CoverageStores) Use(name string) *Coverages {
 	return newCoverages(name, cs.info.Clone())
 }
 
-func (cs *CoverageStores) Create(options ...options.CoverageStoreOption) CoverageStoreList {
+func (cs *CoverageStores) Create(options ...options.GenericStoreOption) CoverageStoreList {
 	csl := CoverageStoreList{
 		requester: cs.requester,
-		options:   &models.CoverageStoreOptions{},
+		options:   &models.GenericStoreOptions{},
 		data:      cs.info.Clone(),
 	}
 
@@ -86,7 +86,7 @@ func (cs *CoverageStores) Delete(name string, recurse bool) error {
 //				Name string `json:"name"`
 //				Link string `json:"link"`
 //			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-//			Default: csl.options.Default,
+//			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
 //			Enabled: true,
 //			URL:     url,
 //			Coverages: struct {
@@ -125,7 +125,7 @@ func (cs *CoverageStores) Delete(name string, recurse bool) error {
 //				Name string `json:"name"`
 //				Link string `json:"link"`
 //			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-//			Default: csl.options.Default,
+//			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
 //			Enabled: true,
 //			URL:     url,
 //			Coverages: struct {
@@ -164,7 +164,7 @@ func (cs *CoverageStores) Delete(name string, recurse bool) error {
 //				Name string `json:"name"`
 //				Link string `json:"link"`
 //			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-//			Default: csl.options.Default,
+//			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
 //			Enabled: true,
 //			URL:     url,
 //			Coverages: struct {
@@ -203,9 +203,9 @@ func (csl CoverageStoreList) EHdr(name string, dir string) error {
 				Name string `json:"name"`
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     url,
+			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
+			Enabled:                  true,
+			URL:                      url,
 			Coverages: struct {
 				Link string `json:"link"`
 			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
@@ -242,9 +242,9 @@ func (csl CoverageStoreList) ENVIHdr(name string, filepath string) error {
 				Name string `json:"name"`
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     url,
+			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
+			Enabled:                  true,
+			URL:                      url,
 			Coverages: struct {
 				Link string `json:"link"`
 			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
@@ -281,9 +281,9 @@ func (csl CoverageStoreList) ERDASImg(name string, filepath string) error {
 				Name string `json:"name"`
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     url,
+			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
+			Enabled:                  true,
+			URL:                      url,
 			Coverages: struct {
 				Link string `json:"link"`
 			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
@@ -320,7 +320,7 @@ func (csl CoverageStoreList) ERDASImg(name string, filepath string) error {
 //				Name string `json:"name"`
 //				Link string `json:"link"`
 //			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-//			Default: csl.options.Default,
+//			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
 //			Enabled: true,
 //			URL:     url,
 //			Coverages: struct {
@@ -352,12 +352,12 @@ func (csl CoverageStoreList) GeoTIFF(name string, filepath string) error {
 
 	data := models.GenericCoverageStoreCreationWrapper{
 		CoverageStore: models.GenericCoverageStoreCreationModel{
-			Name:        name,
-			Description: csl.options.Description,
-			Type:        string(types.GeoTIFF),
-			Default:     false,
-			Enabled:     true,
-			URL:         url,
+			Name:                     name,
+			Description:              csl.options.Description,
+			Type:                     string(types.GeoTIFF),
+			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
+			Enabled:                  true,
+			URL:                      url,
 			Workspace: struct {
 				Name string `json:"name"`
 				Link string `json:"link"`
@@ -391,7 +391,7 @@ func (csl CoverageStoreList) GeoTIFF(name string, filepath string) error {
 //				Name string `json:"name"`
 //				Link string `json:"link"`
 //			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-//			Default: csl.options.Default,
+//			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
 //			Enabled: true,
 //			URL:     dirpath,
 //			Coverages: struct {
@@ -423,7 +423,7 @@ func (csl CoverageStoreList) GeoTIFF(name string, filepath string) error {
 //				Name string `json:"name"`
 //				Link string `json:"link"`
 //			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-//			Default: csl.options.Default,
+//			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
 //			Enabled: true,
 //			URL:     dirpath,
 //			Coverages: struct {
@@ -462,9 +462,9 @@ func (csl CoverageStoreList) NITF(name string, filepath string) error {
 				Name string `json:"name"`
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     url,
+			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
+			Enabled:                  true,
+			URL:                      url,
 			Coverages: struct {
 				Link string `json:"link"`
 			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
@@ -501,7 +501,7 @@ func (csl CoverageStoreList) NITF(name string, filepath string) error {
 //				Name string `json:"name"`
 //				Link string `json:"link"`
 //			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-//			Default: csl.options.Default,
+//			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
 //			Enabled: true,
 //			URL:     url,
 //			Coverages: struct {
@@ -540,9 +540,9 @@ func (csl CoverageStoreList) RST(name string, filepath string) error {
 				Name string `json:"name"`
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     url,
+			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
+			Enabled:                  true,
+			URL:                      url,
 			Coverages: struct {
 				Link string `json:"link"`
 			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
@@ -579,7 +579,7 @@ func (csl CoverageStoreList) RST(name string, filepath string) error {
 //				Name string `json:"name"`
 //				Link string `json:"link"`
 //			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-//			Default: csl.options.Default,
+//			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
 //			Enabled: true,
 //			URL:     url,
 //			Coverages: struct {
@@ -618,9 +618,9 @@ func (csl CoverageStoreList) VRT(name string, filepath string) error {
 				Name string `json:"name"`
 				Link string `json:"link"`
 			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-			Default: csl.options.Default,
-			Enabled: true,
-			URL:     url,
+			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
+			Enabled:                  true,
+			URL:                      url,
 			Coverages: struct {
 				Link string `json:"link"`
 			}{Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", csl.data.Connection.URL, csl.data.Workspace, name)},
@@ -657,7 +657,7 @@ func (csl CoverageStoreList) VRT(name string, filepath string) error {
 //				Name string `json:"name"`
 //				Link string `json:"link"`
 //			}{Name: csl.data.Workspace, Link: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", csl.data.Connection.URL, csl.data.Workspace)},
-//			Default: csl.options.Default,
+//			AutoDisableOnConnFailure: csl.options.AutoDisableOnConnFailure,
 //			Enabled: true,
 //			URL:     url,
 //			Coverages: struct {

@@ -1,8 +1,8 @@
 package models
 
-type CoverageStoreOptions struct {
-	Description string
-	Default     bool
+type GenericStoreOptions struct {
+	Description              string
+	AutoDisableOnConnFailure bool
 }
 
 type GenericCoverageStoreCreationWrapper struct {
@@ -10,12 +10,12 @@ type GenericCoverageStoreCreationWrapper struct {
 }
 
 type GenericCoverageStoreCreationModel struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Type        string `json:"type"`
-	Enabled     bool   `json:"enabled"`
-	Default     bool   `json:"__default__"`
-	Workspace   struct {
+	Name                     string `json:"name"`
+	Description              string `json:"description"`
+	Type                     string `json:"type"`
+	Enabled                  bool   `json:"enabled"`
+	AutoDisableOnConnFailure bool   `json:"disableOnConnFailure"`
+	Workspace                struct {
 		Name string `json:"name"`
 		Link string `json:"link"`
 	} `json:"workspace"`

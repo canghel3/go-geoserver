@@ -10,7 +10,6 @@ import (
 	"github.com/canghel3/go-geoserver/pkg/shared"
 	"github.com/canghel3/go-geoserver/pkg/wms"
 	"golang.org/x/image/tiff"
-	"html/template"
 	"image"
 	"image/gif"
 	"image/jpeg"
@@ -170,43 +169,43 @@ func (mf MapFormats) Pdf() ([]byte, error) {
 	return mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.PDF)
 }
 
-func (mf MapFormats) GeoRSS() (image.Image, error) {
-	return nil, customerrors.NewNotImplementedError("not implemented")
-}
+//func (mf MapFormats) GeoRSS() (image.Image, error) {
+//	return nil, customerrors.NewNotImplementedError("not implemented")
+//}
+//
+//func (mf MapFormats) KML() (image.Image, error) {
+//	return nil, customerrors.NewNotImplementedError("not implemented")
+//}
+//
+//func (mf MapFormats) KMZ() (image.Image, error) {
+//	return nil, customerrors.NewNotImplementedError("not implemented")
+//}
+//
+//func (mf MapFormats) MapML() (image.Image, error) {
+//	return nil, customerrors.NewNotImplementedError("not implemented")
+//}
+//
+//func (mf MapFormats) MapMLHTMLViewer() ([]byte, error) {
+//	return nil, customerrors.NewNotImplementedError("not implemented")
+//}
 
-func (mf MapFormats) KML() (image.Image, error) {
-	return nil, customerrors.NewNotImplementedError("not implemented")
-}
+//func (mf MapFormats) OpenLayers() (*wms.OpenLayersTemplate, error) {
+//	raw, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.OpenLayers)
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	templ, err := template.New("OpenLayers").Parse(string(raw))
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	return &wms.OpenLayersTemplate{
+//		Template: templ,
+//		RawHTML:  raw,
+//	}, nil
+//}
 
-func (mf MapFormats) KMZ() (image.Image, error) {
-	return nil, customerrors.NewNotImplementedError("not implemented")
-}
-
-func (mf MapFormats) MapML() (image.Image, error) {
-	return nil, customerrors.NewNotImplementedError("not implemented")
-}
-
-func (mf MapFormats) MapMLHTMLViewer() ([]byte, error) {
-	return nil, customerrors.NewNotImplementedError("not implemented")
-}
-
-func (mf MapFormats) OpenLayers() (*wms.OpenLayersTemplate, error) {
-	raw, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.OpenLayers)
-	if err != nil {
-		return nil, err
-	}
-
-	templ, err := template.New("OpenLayers").Parse(string(raw))
-	if err != nil {
-		return nil, err
-	}
-
-	return &wms.OpenLayersTemplate{
-		Template: templ,
-		RawHTML:  raw,
-	}, nil
-}
-
-func (mf MapFormats) UTFGrid() ([]byte, error) {
-	return nil, customerrors.NewNotImplementedError("not implemented")
-}
+//func (mf MapFormats) UTFGrid() ([]byte, error) {
+//	return nil, customerrors.NewNotImplementedError("not implemented")
+//}

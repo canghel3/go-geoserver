@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/options"
 	"github.com/canghel3/go-geoserver/pkg/types"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -13,8 +14,28 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 	addTestWorkspace(t)
 
 	t.Run("200 Ok", func(t *testing.T) {
-		t.Run("GENERIC OPTIONS", func(t *testing.T) {
-			t.Skip()
+		t.Run("Generic Options", func(t *testing.T) {
+			t.Run("Description", func(t *testing.T) {
+				var suffix = "_DESC_OPT"
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create(options.GenericStore.Description("my description")).GeoTIFF(testdata.CoverageStoreGeoTiff+suffix, testdata.FileGeoTiff)
+				assert.NoError(t, err)
+
+				cvg, err := geoclient.Workspace(testdata.Workspace).CoverageStores().Get(testdata.CoverageStoreGeoTiff + suffix)
+				assert.NoError(t, err)
+				assert.Equal(t, testdata.CoverageStoreGeoTiff+suffix, cvg.Name)
+				assert.Equal(t, "my description", cvg.Description)
+			})
+
+			t.Run("AutoDisableOnConnFailure", func(t *testing.T) {
+				var suffix = "_AUTO_DISABLE_OPT"
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create(options.GenericStore.AutoDisableOnConnFailure()).GeoTIFF(testdata.CoverageStoreGeoTiff+suffix, testdata.FileGeoTiff)
+				assert.NoError(t, err)
+
+				cvg, err := geoclient.Workspace(testdata.Workspace).CoverageStores().Get(testdata.CoverageStoreGeoTiff + suffix)
+				assert.NoError(t, err)
+				assert.Equal(t, testdata.CoverageStoreGeoTiff+suffix, cvg.Name)
+				assert.Equal(t, true, cvg.DisableConnectionOnFailure)
+			})
 		})
 
 		t.Run("GeoTiff", func(t *testing.T) {

@@ -23,7 +23,7 @@ func newDataStoresActions(info internal.GeoserverData) *DataStores {
 }
 
 type DataStoreList struct {
-	options   *models.DataStoreOptions
+	options   *models.GenericStoreOptions
 	requester *requester.Requester
 }
 
@@ -42,10 +42,10 @@ func (ds *DataStores) Use(name string) *FeatureTypes {
 }
 
 // Create sets general store options and returns a list of available data stores to create.
-func (ds *DataStores) Create(options ...options.DataStoreOption) DataStoreList {
+func (ds *DataStores) Create(options ...options.GenericStoreOption) DataStoreList {
 	dsl := DataStoreList{
 		requester: ds.requester,
-		options:   &models.DataStoreOptions{},
+		options:   &models.GenericStoreOptions{},
 	}
 
 	for _, option := range options {
@@ -86,7 +86,7 @@ func (dsl DataStoreList) PostGIS(name string, connectionParams postgis.Connectio
 		DataStore: datastores.GenericDataStoreCreationModel{
 			Name:                       name,
 			Description:                dsl.options.Description,
-			DisableOnConnectionFailure: dsl.options.DisableOnConnectionFailure,
+			DisableOnConnectionFailure: dsl.options.AutoDisableOnConnFailure,
 			ConnectionParameters: datastores.ConnectionParameters{
 				Entry: cp.ToDatastoreEntries(),
 			},
@@ -127,7 +127,7 @@ func (dsl DataStoreList) GeoPackage(name string, filepath string, options ...opt
 		DataStore: datastores.GenericDataStoreCreationModel{
 			Name:                       name,
 			Description:                dsl.options.Description,
-			DisableOnConnectionFailure: dsl.options.DisableOnConnectionFailure,
+			DisableOnConnectionFailure: dsl.options.AutoDisableOnConnFailure,
 			ConnectionParameters: datastores.ConnectionParameters{
 				Entry: cp.ToDatastoreEntries(),
 			},
@@ -168,7 +168,7 @@ func (dsl DataStoreList) Shapefile(name string, filepath string, options ...opti
 		DataStore: datastores.GenericDataStoreCreationModel{
 			Name:                       name,
 			Description:                dsl.options.Description,
-			DisableOnConnectionFailure: dsl.options.DisableOnConnectionFailure,
+			DisableOnConnectionFailure: dsl.options.AutoDisableOnConnFailure,
 			ConnectionParameters: datastores.ConnectionParameters{
 				Entry: cp.ToDatastoreEntries(),
 			},
@@ -209,7 +209,7 @@ func (dsl DataStoreList) Shapefiles(name string, dir string, options ...options.
 		DataStore: datastores.GenericDataStoreCreationModel{
 			Name:                       name,
 			Description:                dsl.options.Description,
-			DisableOnConnectionFailure: dsl.options.DisableOnConnectionFailure,
+			DisableOnConnectionFailure: dsl.options.AutoDisableOnConnFailure,
 			ConnectionParameters: datastores.ConnectionParameters{
 				Entry: cp.ToDatastoreEntries(),
 			},
@@ -278,7 +278,7 @@ func (dsl DataStoreList) WebFeatureService(storeName, username, password, wfsCap
 		DataStore: datastores.GenericDataStoreCreationModel{
 			Name:                       storeName,
 			Description:                dsl.options.Description,
-			DisableOnConnectionFailure: dsl.options.DisableOnConnectionFailure,
+			DisableOnConnectionFailure: dsl.options.AutoDisableOnConnFailure,
 			ConnectionParameters: datastores.ConnectionParameters{
 				Entry: cp.ToDatastoreEntries(),
 			},
