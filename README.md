@@ -3,42 +3,72 @@
 
 # GeoServer Go Client
 
-A GoLang library made to simplify interactions with [GeoServer](https://geoserver.org/), providing an idiomatic way to talk to GeoServer’s REST API from your Go applications.
+A GoLang library made to simplify interactions with [GeoServer](https://geoserver.org/), providing an idiomatic way to
+talk to GeoServer’s REST API from your Go applications.
 
 ## Features
 
-- Support for managing:
+- **Core Management:**
     - Workspaces
-    - Vector Data Sources
-    - Raster Data Sources
+    - Vector Data Sources (Data Store)
+    - Raster Data Sources (Coverage Store)
     - Feature Types
     - Coverages
 
-Tested Vector Data Sources:
-- GeoPackage
-- PostGIS
-- Shapefile
-- Directory of Shapefiles
+## Available Data Sources
 
-Tested Raster Data Sources:
-- EHdr
-- ENVIHdr
-- GeoTIFF
-- NITF
-- RST
-- VRT
+### Vector
 
-## Work In Progress - in order of priority
+| Format                  | Status |
+|-------------------------|--------|
+| GeoPackage              | ✅      |
+| PostGIS                 | ✅      |
+| Shapefile               | ✅      |
+| Directory of Shapefiles | ✅      |
+| CSV                     | ❌      |
+| WebFeatureService       | ❌      |
 
-- Layer Groups
+### Raster
+
+| Format              | Status |
+|---------------------|--------|
+| AIG                 | ❌      |
+| ArcGrid             | ❌      |
+| DTED                | ❌      |
+| EHdr                | ✅      |
+| ENVIHdr             | ✅      |
+| ERDASImg            | ✅      |
+| GeoPackage (mosaic) | ❌      |
+| GeoTIFF             | ✅      |
+| ImageMosaic         | ❌      |
+| ImagePyramid        | ❌      |
+| NITF                | ✅      |
+| RPFTOC              | ❌      |
+| RST                 | ✅      |
+| SRP                 | ❌      |
+| VRT                 | ✅      |
+| WorldImage          | ❌      |
+
+---
+
+## Tested GeoServer Versions
+
+| Version | Status |
+|---------|--------|
+| 2.27.1  | ✅      |
+| 2.22.2  | ✅      |
+
+## Work In Progress
+
 - Caching
+- Layer Groups
 - Styles
 - WMS, WFS, WCS, WMTS
 
 ## Installation
 
 ```go
-go get github.com/canghel3/go-geoserver
+go get github.com/canghel3/go -geoserver
 ```
 
 ## Usage Examples

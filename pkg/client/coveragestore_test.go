@@ -1,6 +1,7 @@
 package client
 
 import (
+	"fmt"
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"github.com/canghel3/go-geoserver/pkg/types"
@@ -22,6 +23,14 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 			store, err := geoclient.Workspace(testdata.Workspace).CoverageStores().Get(testdata.CoverageStoreGeoTiff)
 			assert.NoError(t, err)
 			assert.NotNil(t, store)
+
+			t.Run("With file: In Filepath", func(t *testing.T) {
+				err = geoclient.Workspace(testdata.Workspace).CoverageStores().Delete(testdata.CoverageStoreGeoTiff, true)
+				assert.NoError(t, err)
+
+				err = geoclient.Workspace(testdata.Workspace).CoverageStores().Create().GeoTIFF(testdata.CoverageStoreGeoTiff, fmt.Sprintf("file:%s", testdata.FileGeoTiff))
+				assert.NoError(t, err)
+			})
 		})
 
 		t.Run("EHdr", func(t *testing.T) {
@@ -36,6 +45,14 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 			addTestCoverageStore(t, types.ENVIHdr)
 
 			store, err := geoclient.Workspace(testdata.Workspace).CoverageStores().Get(testdata.CoverageStoreENVIHdr)
+			assert.NoError(t, err)
+			assert.NotNil(t, store)
+		})
+
+		t.Run("ERDASImg", func(t *testing.T) {
+			addTestCoverageStore(t, types.ERDASImg)
+
+			store, err := geoclient.Workspace(testdata.Workspace).CoverageStores().Get(testdata.CoverageStoreERDASImg)
 			assert.NoError(t, err)
 			assert.NotNil(t, store)
 		})
@@ -71,6 +88,12 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 			store, err := geoclient.Workspace(testdata.Workspace).CoverageStores().Get(testdata.CoverageStoreVRT)
 			assert.NoError(t, err)
 			assert.NotNil(t, store)
+		})
+	})
+
+	t.Run("Validation Error", func(t *testing.T) {
+		t.Run("GeoTIFF", func(t *testing.T) {
+
 		})
 	})
 }

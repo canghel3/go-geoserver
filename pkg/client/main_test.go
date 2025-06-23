@@ -32,6 +32,7 @@ func TestMain(m *testing.M) {
 	copyDirToGeoserver(testdata.DirGeoTiff, false)
 	copyDirToGeoserver(testdata.DirEHdr, false)
 	copyDirToGeoserver(testdata.DirENVIHdr, false)
+	copyDirToGeoserver(testdata.DirERDASImg, false)
 	copyDirToGeoserver(testdata.DirGeoPackageRaster, false)
 	copyDirToGeoserver(testdata.DirNITF, false)
 	copyDirToGeoserver(testdata.DirRST, false)
@@ -153,6 +154,11 @@ func addTestCoverageStore(t *testing.T, type_ types.CoverageStoreType) {
 			t.Fatal(err)
 		}
 		return
+	case types.ERDASImg:
+		if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().ERDASImg(testdata.CoverageStoreERDASImg, testdata.FileERDASImg); err != nil {
+			t.Fatal(err)
+		}
+		return
 	//case types.GeoPackageMosaic:
 	//	if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().GeoPackage(testdata.CoverageStoreGeoPackage, testdata.FileGeoPackageRaster); err != nil {
 	//		t.Fatal(err)
@@ -173,6 +179,7 @@ func addTestCoverageStore(t *testing.T, type_ types.CoverageStoreType) {
 			t.Fatal(err)
 		}
 		return
+
 	}
 
 	t.Fatal(customerrors.NewUnsupportedError("unsupported coverage store type"))

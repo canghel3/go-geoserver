@@ -142,6 +142,48 @@ func TestCoverageStoreValidator_ENVIHdr(t *testing.T) {
 	}
 }
 
+func TestCoverageStoreValidator_ERDASImg(t *testing.T) {
+	tests := []struct {
+		name         string
+		dir          string
+		wantErr      bool
+		errorMessage string
+	}{
+		{
+			name:    "Valid ERDASImg filepath",
+			dir:     "/path/to/directory/file.img",
+			wantErr: false,
+		},
+		{
+			name:         "Empty ERDASImg filepath",
+			dir:          "",
+			wantErr:      true,
+			errorMessage: "empty url",
+		},
+		{
+			name:         "Invalid ERDASImg extension",
+			dir:          "/path/to/directory/file.csv",
+			wantErr:      true,
+			errorMessage: "ERDASImg file extension must be .img",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			csv := CoverageStoreValidator{}
+			err := csv.ERDASImg(tt.dir)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.EqualError(t, err, tt.errorMessage)
+				assert.IsType(t, err, &customerrors.InputError{})
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
 func TestCoverageStoreValidator_GeoPackage(t *testing.T) {
 	tests := []struct {
 		name         string
@@ -516,12 +558,6 @@ func TestCoverageStoreValidator_NotImplementedMethods(t *testing.T) {
 
 	t.Run("DTED", func(t *testing.T) {
 		err := csv.DTED("test")
-		assert.Error(t, err)
-		assert.EqualError(t, err, "not implemented")
-	})
-
-	t.Run("ERDASImg", func(t *testing.T) {
-		err := csv.ERDASImg("test")
 		assert.Error(t, err)
 		assert.EqualError(t, err, "not implemented")
 	})

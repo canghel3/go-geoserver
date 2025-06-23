@@ -58,7 +58,16 @@ func (csv CoverageStoreValidator) ENVIHdr(url string) error {
 }
 
 func (csv CoverageStoreValidator) ERDASImg(url string) error {
-	return customerrors.NewNotImplementedError("not implemented")
+	if len(url) == 0 {
+		return customerrors.WrapInputError(errors.New("empty url"))
+	}
+
+	ext := filepath.Ext(url)
+	if ext != ".img" {
+		return customerrors.WrapInputError(errors.New("ERDASImg file extension must be .img"))
+	}
+
+	return nil
 }
 
 func (csv CoverageStoreValidator) NITF(url string) error {
