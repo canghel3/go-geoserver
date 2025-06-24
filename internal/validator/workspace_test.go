@@ -27,7 +27,7 @@ func TestWorkspaceValidator_Name(t *testing.T) {
 		},
 		{
 			name:          "Invalid workspace name with special characters",
-			workspaceName: testdata.InvalidWorkspaceName,
+			workspaceName: testdata.InvalidName,
 			wantErr:       true,
 			errorMessage:  "name can only contain alphanumerical characters",
 		},

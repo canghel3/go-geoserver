@@ -6,8 +6,8 @@ const (
 	GeoserverPassword = "geoserver"
 	GeoserverDataDir  = "/tmp/data"
 
-	Workspace            = "PLAYGROUND"
-	InvalidWorkspaceName = "SO_!@#MEINVALIDNAME"
+	Workspace   = "PLAYGROUND"
+	InvalidName = "SO_!@#MEINVALIDNAME"
 
 	DatastorePostgis           = "POSTGIS"
 	DatastoreShapefile         = "SHAPEFILE"

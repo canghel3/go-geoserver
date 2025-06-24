@@ -14,34 +14,40 @@ func TestLayerValidator_Name(t *testing.T) {
 		errorMessage string
 	}{
 		{
-			name:      "Valid layer name",
+			name:      "Valid name",
 			layerName: "validLayer",
 			wantErr:   false,
 		},
 		{
-			name:         "Empty layer name",
+			name:         "Empty name",
 			layerName:    "",
 			wantErr:      true,
-			errorMessage: "layer store name",
+			errorMessage: "empty name",
 		},
 		{
-			name:         "Invalid layer name with special characters",
+			name:         "Blank name",
+			layerName:    "   ",
+			wantErr:      true,
+			errorMessage: "empty name",
+		},
+		{
+			name:         "Invalid name with special characters",
 			layerName:    "invalid!@#$%^&*()",
 			wantErr:      true,
 			errorMessage: "name can only contain alphanumerical characters",
 		},
 		{
-			name:      "Valid layer name with underscore",
+			name:      "Valid name with underscore",
 			layerName: "valid_layer",
 			wantErr:   false,
 		},
 		{
-			name:      "Valid layer name with hyphen",
+			name:      "Valid name with hyphen",
 			layerName: "valid-layer",
 			wantErr:   false,
 		},
 		{
-			name:      "Valid layer name with numbers",
+			name:      "Valid name with numbers",
 			layerName: "layer123",
 			wantErr:   false,
 		},
@@ -49,8 +55,7 @@ func TestLayerValidator_Name(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			lv := LayerValidator{}
-			err := lv.Name(tt.layerName)
+			err := Name(tt.layerName)
 
 			if tt.wantErr {
 				assert.Error(t, err)

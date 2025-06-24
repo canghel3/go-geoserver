@@ -60,6 +60,14 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 			store, err := geoclient.Workspace(testdata.Workspace).CoverageStores().Get(testdata.CoverageStoreEHdr)
 			assert.NoError(t, err)
 			assert.NotNil(t, store)
+
+			t.Run("With file: In Filepath", func(t *testing.T) {
+				err = geoclient.Workspace(testdata.Workspace).CoverageStores().Delete(testdata.CoverageStoreEHdr, true)
+				assert.NoError(t, err)
+
+				err = geoclient.Workspace(testdata.Workspace).CoverageStores().Create().EHdr(testdata.CoverageStoreEHdr, fmt.Sprintf("file:%s", testdata.FileEHdr))
+				assert.NoError(t, err)
+			})
 		})
 
 		t.Run("ENVIHdr", func(t *testing.T) {
@@ -68,6 +76,14 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 			store, err := geoclient.Workspace(testdata.Workspace).CoverageStores().Get(testdata.CoverageStoreENVIHdr)
 			assert.NoError(t, err)
 			assert.NotNil(t, store)
+
+			t.Run("With file: In Filepath", func(t *testing.T) {
+				err = geoclient.Workspace(testdata.Workspace).CoverageStores().Delete(testdata.CoverageStoreENVIHdr, true)
+				assert.NoError(t, err)
+
+				err = geoclient.Workspace(testdata.Workspace).CoverageStores().Create().ENVIHdr(testdata.CoverageStoreENVIHdr, fmt.Sprintf("file:%s", testdata.FileENVIHdr))
+				assert.NoError(t, err)
+			})
 		})
 
 		t.Run("ERDASImg", func(t *testing.T) {
@@ -76,6 +92,14 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 			store, err := geoclient.Workspace(testdata.Workspace).CoverageStores().Get(testdata.CoverageStoreERDASImg)
 			assert.NoError(t, err)
 			assert.NotNil(t, store)
+
+			t.Run("With file: In Filepath", func(t *testing.T) {
+				err = geoclient.Workspace(testdata.Workspace).CoverageStores().Delete(testdata.CoverageStoreERDASImg, true)
+				assert.NoError(t, err)
+
+				err = geoclient.Workspace(testdata.Workspace).CoverageStores().Create().ERDASImg(testdata.CoverageStoreERDASImg, fmt.Sprintf("file:%s", testdata.FileERDASImg))
+				assert.NoError(t, err)
+			})
 		})
 
 		t.Run("GeoPackage", func(t *testing.T) {
@@ -93,6 +117,14 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 			store, err := geoclient.Workspace(testdata.Workspace).CoverageStores().Get(testdata.CoverageStoreNITF)
 			assert.NoError(t, err)
 			assert.NotNil(t, store)
+
+			t.Run("With file: In Filepath", func(t *testing.T) {
+				err = geoclient.Workspace(testdata.Workspace).CoverageStores().Delete(testdata.CoverageStoreNITF, true)
+				assert.NoError(t, err)
+
+				err = geoclient.Workspace(testdata.Workspace).CoverageStores().Create().NITF(testdata.CoverageStoreNITF, fmt.Sprintf("file:%s", testdata.FileNITF))
+				assert.NoError(t, err)
+			})
 		})
 
 		t.Run("RST", func(t *testing.T) {
@@ -101,6 +133,14 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 			store, err := geoclient.Workspace(testdata.Workspace).CoverageStores().Get(testdata.CoverageStoreRST)
 			assert.NoError(t, err)
 			assert.NotNil(t, store)
+
+			t.Run("With file: In Filepath", func(t *testing.T) {
+				err = geoclient.Workspace(testdata.Workspace).CoverageStores().Delete(testdata.CoverageStoreRST, true)
+				assert.NoError(t, err)
+
+				err = geoclient.Workspace(testdata.Workspace).CoverageStores().Create().RST(testdata.CoverageStoreRST, fmt.Sprintf("file:%s", testdata.FileRST))
+				assert.NoError(t, err)
+			})
 		})
 
 		t.Run("VRT", func(t *testing.T) {
@@ -109,12 +149,114 @@ func TestCoverageStoreIntegration_Create(t *testing.T) {
 			store, err := geoclient.Workspace(testdata.Workspace).CoverageStores().Get(testdata.CoverageStoreVRT)
 			assert.NoError(t, err)
 			assert.NotNil(t, store)
+
+			t.Run("With file: In Filepath", func(t *testing.T) {
+				err = geoclient.Workspace(testdata.Workspace).CoverageStores().Delete(testdata.CoverageStoreVRT, true)
+				assert.NoError(t, err)
+
+				err = geoclient.Workspace(testdata.Workspace).CoverageStores().Create().VRT(testdata.CoverageStoreVRT, fmt.Sprintf("file:%s", testdata.FileVRT))
+				assert.NoError(t, err)
+			})
 		})
 	})
 
 	t.Run("Validation Error", func(t *testing.T) {
-		t.Run("GeoTIFF", func(t *testing.T) {
+		t.Run("EHdr", func(t *testing.T) {
+			t.Run("Store name", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().EHdr(testdata.InvalidName, testdata.FileEHdr)
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "name can only contain alphanumerical characters")
+			})
 
+			t.Run("File extension", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().EHdr(testdata.CoverageStoreEHdr, "/path/to/file.csv")
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "EHdr file extension must be .bil")
+			})
+		})
+
+		t.Run("ENVIHdr", func(t *testing.T) {
+			t.Run("Store name", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().ENVIHdr(testdata.InvalidName, testdata.FileENVIHdr)
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "name can only contain alphanumerical characters")
+			})
+
+			t.Run("File extension", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().ENVIHdr(testdata.CoverageStoreENVIHdr, "/path/to/file.csv")
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "ENVIHdr file extension must be .dat")
+			})
+		})
+
+		t.Run("ERDASImg", func(t *testing.T) {
+			t.Run("Store name", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().ERDASImg(testdata.InvalidName, testdata.FileERDASImg)
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "name can only contain alphanumerical characters")
+			})
+
+			t.Run("File extension", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().ERDASImg(testdata.CoverageStoreERDASImg, "/path/to/file.csv")
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "ERDASImg file extension must be .img")
+			})
+		})
+
+		t.Run("GeoTIFF", func(t *testing.T) {
+			t.Run("Store name", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().GeoTIFF(testdata.InvalidName, testdata.FileGeoTiff)
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "name can only contain alphanumerical characters")
+			})
+
+			t.Run("File extension", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().GeoTIFF(testdata.CoverageStoreGeoTiff, "/path/to/file.csv")
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "geotiff file extension must be .tif or .tiff")
+			})
+		})
+
+		t.Run("NITF", func(t *testing.T) {
+			t.Run("Store name", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().NITF(testdata.InvalidName, testdata.FileNITF)
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "name can only contain alphanumerical characters")
+			})
+
+			t.Run("File extension", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().NITF(testdata.CoverageStoreNITF, "/path/to/file.csv")
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "NITF file extension must be .ntf")
+			})
+		})
+
+		t.Run("RST", func(t *testing.T) {
+			t.Run("Store name", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().RST(testdata.InvalidName, testdata.FileRST)
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "name can only contain alphanumerical characters")
+			})
+
+			t.Run("File extension", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().RST(testdata.CoverageStoreRST, "/path/to/file.csv")
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "RST file extension must be .rst")
+			})
+		})
+
+		t.Run("VRT", func(t *testing.T) {
+			t.Run("Store name", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().VRT(testdata.InvalidName, testdata.FileVRT)
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "name can only contain alphanumerical characters")
+			})
+
+			t.Run("File extension", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().VRT(testdata.CoverageStoreVRT, "/path/to/file.csv")
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "VRT file extension must be .vrt")
+			})
 		})
 	})
 }

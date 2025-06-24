@@ -182,7 +182,12 @@ func (cs *CoverageStores) Delete(name string, recurse bool) error {
 //}
 
 func (csl CoverageStoreList) EHdr(name string, dir string) error {
-	err := validator.CoverageStore.EHdr(dir)
+	err := validator.Name(name)
+	if err != nil {
+		return err
+	}
+
+	err = validator.CoverageStore.EHdr(dir)
 	if err != nil {
 		return err
 	}
@@ -221,7 +226,12 @@ func (csl CoverageStoreList) EHdr(name string, dir string) error {
 }
 
 func (csl CoverageStoreList) ENVIHdr(name string, filepath string) error {
-	err := validator.CoverageStore.ENVIHdr(filepath)
+	err := validator.Name(name)
+	if err != nil {
+		return err
+	}
+
+	err = validator.CoverageStore.ENVIHdr(filepath)
 	if err != nil {
 		return err
 	}
@@ -260,7 +270,12 @@ func (csl CoverageStoreList) ENVIHdr(name string, filepath string) error {
 }
 
 func (csl CoverageStoreList) ERDASImg(name string, filepath string) error {
-	err := validator.CoverageStore.ERDASImg(filepath)
+	err := validator.Name(name)
+	if err != nil {
+		return err
+	}
+
+	err = validator.CoverageStore.ERDASImg(filepath)
 	if err != nil {
 		return err
 	}
@@ -338,7 +353,12 @@ func (csl CoverageStoreList) ERDASImg(name string, filepath string) error {
 //}
 
 func (csl CoverageStoreList) GeoTIFF(name string, filepath string) error {
-	err := validator.CoverageStore.GeoTIFF(filepath)
+	err := validator.Name(name)
+	if err != nil {
+		return err
+	}
+
+	err = validator.CoverageStore.GeoTIFF(filepath)
 	if err != nil {
 		return err
 	}
@@ -441,7 +461,12 @@ func (csl CoverageStoreList) GeoTIFF(name string, filepath string) error {
 //}
 
 func (csl CoverageStoreList) NITF(name string, filepath string) error {
-	err := validator.CoverageStore.NITF(filepath)
+	err := validator.Name(name)
+	if err != nil {
+		return err
+	}
+
+	err = validator.CoverageStore.NITF(filepath)
 	if err != nil {
 		return err
 	}
@@ -519,7 +544,12 @@ func (csl CoverageStoreList) NITF(name string, filepath string) error {
 //}
 
 func (csl CoverageStoreList) RST(name string, filepath string) error {
-	err := validator.CoverageStore.RST(filepath)
+	err := validator.Name(name)
+	if err != nil {
+		return err
+	}
+
+	err = validator.CoverageStore.RST(filepath)
 	if err != nil {
 		return err
 	}
@@ -597,7 +627,12 @@ func (csl CoverageStoreList) RST(name string, filepath string) error {
 //}
 
 func (csl CoverageStoreList) VRT(name string, filepath string) error {
-	err := validator.CoverageStore.VRT(filepath)
+	err := validator.Name(name)
+	if err != nil {
+		return err
+	}
+
+	err = validator.CoverageStore.VRT(filepath)
 	if err != nil {
 		return err
 	}
