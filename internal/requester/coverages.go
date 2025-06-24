@@ -169,6 +169,8 @@ func (cr *CoverageRequester) Update(store, coverage string, content []byte) erro
 	switch response.StatusCode {
 	case http.StatusOK, http.StatusCreated:
 		return nil
+	case http.StatusNotFound:
+		return customerrors.WrapNotFoundError(fmt.Errorf("coverage %s not found", coverage))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {

@@ -32,10 +32,10 @@ type CoverageStores struct {
 	requester *requester.Requester
 }
 
-// Reset the caches related to the specified coveragestore.
-func (cs *CoverageStores) Reset(name string) error {
-	return cs.requester.CoverageStores().Reset(name)
-}
+//// Reset the caches related to the specified coveragestore.
+//func (cs *CoverageStores) Reset(name string) error {
+//	return cs.requester.CoverageStores().Reset(name)
+//}
 
 // Use a specific coverage store
 func (cs *CoverageStores) Use(name string) *Coverages {

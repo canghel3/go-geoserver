@@ -118,6 +118,6 @@ func (cr *CoverageStoreRequester) Delete(name string, recurse bool) error {
 	}
 }
 
-func (cr *CoverageStoreRequester) Reset(name string) error {
-	return customerrors.NewNotImplementedError("not implemented")
-}
+//func (cr *CoverageStoreRequester) Reset(name string) error {
+//	return customerrors.NewNotImplementedError("not implemented")
+//}

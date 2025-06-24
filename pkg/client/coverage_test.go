@@ -3,6 +3,7 @@ package client
 import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal/testdata"
+	"github.com/canghel3/go-geoserver/pkg/coverages"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"github.com/canghel3/go-geoserver/pkg/types"
 	"github.com/stretchr/testify/assert"
@@ -18,6 +19,29 @@ func TestCoverageIntegration_Create(t *testing.T) {
 
 			addTestCoverage(t, types.GeoTIFF)
 		})
+	})
+}
+
+func TestCoverageIntegration_Update(t *testing.T) {
+	addTestWorkspace(t)
+	addTestCoverageStore(t, types.GeoTIFF)
+	addTestCoverage(t, types.GeoTIFF)
+
+	t.Run("200 Ok", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Update(testdata.CoverageGeoTiffName, coverages.New(testdata.CoverageGeoTiffName+"_2", testdata.CoverageGeoTiffNativeName))
+		assert.NoError(t, err)
+
+		cvg, err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Get(testdata.CoverageGeoTiffName + "_2")
+		assert.NoError(t, err)
+		assert.NotNil(t, cvg)
+		assert.Equal(t, testdata.CoverageGeoTiffName+"_2", cvg.Name)
+	})
+
+	t.Run("404 Not Found", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Update(testdata.CoverageGeoTiffName, coverages.New(testdata.CoverageGeoTiffName, testdata.CoverageGeoTiffNativeName))
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.NotFoundError{}, err)
+		assert.EqualError(t, err, fmt.Sprintf("coverage %s not found", testdata.CoverageGeoTiffName))
 	})
 }
 

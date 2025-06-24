@@ -449,6 +449,26 @@ func TestCoverageRequester_Update(t *testing.T) {
 		assert.NoError(t, err)
 	})
 
+	t.Run("404 Not Found", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		mockClient := mocks.NewMockHTTPClient(ctrl)
+		mockResponse := &http.Response{
+			StatusCode: http.StatusNotFound,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader("not found")),
+		}
+
+		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
+
+		coverageRequester := &CoverageRequester{data: testdata.GeoserverInfo(mockClient)}
+
+		err := coverageRequester.Update(testdata.CoverageStoreGeoTiff, testdata.CoverageGeoTiffName, nil)
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.NotFoundError{}, err)
+		assert.EqualError(t, err, fmt.Sprintf("coverage %s not found", testdata.CoverageGeoTiffName))
+	})
+
 	t.Run("500 Internal Server Error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
