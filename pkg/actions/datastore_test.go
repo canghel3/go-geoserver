@@ -17,10 +17,10 @@ func ExampleDataStores_Create() {
 	dataStoreList := workspace.DataStores().Create()
 
 	//with description option
-	dataStoreList = workspace.DataStores().Create(options.DataStore.Description("example description"))
+	dataStoreList = workspace.DataStores().Create(options.GenericStore.Description("example description"))
 
 	//with disable conn option
-	dataStoreList = workspace.DataStores().Create(options.DataStore.DisableConnectionOnFailure(true))
+	dataStoreList = workspace.DataStores().Create(options.GenericStore.AutoDisableOnConnFailure())
 
 	_ = dataStoreList
 }
