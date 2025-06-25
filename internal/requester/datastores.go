@@ -15,6 +15,12 @@ type DataStoreRequester struct {
 	data internal.GeoserverData
 }
 
+func NewDataStoreRequester(data internal.GeoserverData) DataStoreRequester {
+	return DataStoreRequester{
+		data: data,
+	}
+}
+
 func (dr *DataStoreRequester) Create(content []byte) error {
 	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores", dr.data.Connection.URL, dr.data.Workspace), bytes.NewBuffer(content))
 	if err != nil {

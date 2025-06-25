@@ -84,9 +84,34 @@ func (cr *CoverageStoreRequester) Get(name string) (*coveragestores.CoverageStor
 	}
 }
 
-// TODO: implement
-func (cr *CoverageStoreRequester) Update() error {
-	return customerrors.NewNotImplementedError("not implemented")
+func (cr *CoverageStoreRequester) Update(name string, content []byte) error {
+	request, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s", cr.data.Connection.URL, cr.data.Workspace, name), bytes.NewReader(content))
+	if err != nil {
+		return err
+	}
+
+	request.SetBasicAuth(cr.data.Connection.Credentials.Username, cr.data.Connection.Credentials.Password)
+	request.Header.Add("Content-Type", "application/json")
+
+	response, err := cr.data.Client.Do(request)
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
+
+	switch response.StatusCode {
+	case http.StatusOK, http.StatusCreated:
+		return nil
+	case http.StatusNotFound:
+		return customerrors.WrapNotFoundError(fmt.Errorf("coveragestore %s not found", name))
+	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return err
+		}
+
+		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+	}
 }
 
 func (cr *CoverageStoreRequester) Delete(name string, recurse bool) error {
@@ -118,6 +143,6 @@ func (cr *CoverageStoreRequester) Delete(name string, recurse bool) error {
 	}
 }
 
-//func (cr *CoverageStoreRequester) Reset(name string) error {
-//	return customerrors.NewNotImplementedError("not implemented")
-//}
+func (cr *CoverageStoreRequester) Reset(name string) error {
+	return customerrors.NewNotImplementedError("not implemented")
+}

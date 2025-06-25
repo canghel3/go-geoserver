@@ -15,6 +15,12 @@ type CoverageRequester struct {
 	data internal.GeoserverData
 }
 
+func NewCoverageRequester(data internal.GeoserverData) CoverageRequester {
+	return CoverageRequester{
+		data: data,
+	}
+}
+
 func (cr *CoverageRequester) Create(store string, content []byte) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", cr.data.Connection.URL, cr.data.Workspace, store)
 
@@ -160,6 +166,36 @@ func (cr *CoverageRequester) Update(store, coverage string, content []byte) erro
 
 	request.SetBasicAuth(cr.data.Connection.Credentials.Username, cr.data.Connection.Credentials.Password)
 	request.Header.Add("Content-Type", "application/json")
+
+	response, err := cr.data.Client.Do(request)
+	if err != nil {
+		return err
+	}
+
+	switch response.StatusCode {
+	case http.StatusOK, http.StatusCreated:
+		return nil
+	case http.StatusNotFound:
+		return customerrors.WrapNotFoundError(fmt.Errorf("coverage %s not found", coverage))
+	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return err
+		}
+
+		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+	}
+}
+
+func (cr *CoverageRequester) Reset(store, coverage string) error {
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages/%s/reset", cr.data.Connection.URL, cr.data.Workspace, store, coverage)
+
+	request, err := http.NewRequest(http.MethodPut, target, nil)
+	if err != nil {
+		return err
+	}
+
+	request.SetBasicAuth(cr.data.Connection.Credentials.Username, cr.data.Connection.Credentials.Password)
 
 	response, err := cr.data.Client.Do(request)
 	if err != nil {

@@ -12,14 +12,14 @@ import (
 type Coverages struct {
 	store     string
 	data      internal.GeoserverData
-	requester *requester.Requester
+	requester requester.CoverageRequester
 }
 
 func newCoverages(store string, data internal.GeoserverData) *Coverages {
 	return &Coverages{
 		store:     store,
 		data:      data,
-		requester: requester.NewRequester(data),
+		requester: requester.NewCoverageRequester(data),
 	}
 }
 
@@ -40,15 +40,15 @@ func (c *Coverages) Publish(coverage models.Coverage) error {
 		return err
 	}
 
-	return c.requester.Coverages().Create(c.store, content)
+	return c.requester.Create(c.store, content)
 }
 
 func (c *Coverages) Get(name string) (*coverages.Coverage, error) {
-	return c.requester.Coverages().Get(c.store, name)
+	return c.requester.Get(c.store, name)
 }
 
 func (c *Coverages) GetAll() (*coverages.Coverages, error) {
-	return c.requester.Coverages().GetAll(c.store)
+	return c.requester.GetAll(c.store)
 }
 
 func (c *Coverages) Update(name string, coverage models.Coverage) error {
@@ -68,9 +68,13 @@ func (c *Coverages) Update(name string, coverage models.Coverage) error {
 		return err
 	}
 
-	return c.requester.Coverages().Update(c.store, name, content)
+	return c.requester.Update(c.store, name, content)
 }
 
 func (c *Coverages) Delete(name string, recurse bool) error {
-	return c.requester.Coverages().Delete(c.store, name, recurse)
+	return c.requester.Delete(c.store, name, recurse)
+}
+
+func (c *Coverages) Reset(name string) error {
+	return c.requester.Reset(c.store, name)
 }

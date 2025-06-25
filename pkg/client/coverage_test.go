@@ -101,3 +101,21 @@ func TestCoverageIntegration_Delete(t *testing.T) {
 		assert.EqualError(t, err, fmt.Sprintf("coverage %s not found", testdata.CoverageGeoTiffName))
 	})
 }
+
+func TestCoverageIntegration_Reset(t *testing.T) {
+	addTestWorkspace(t)
+	addTestCoverageStore(t, types.GeoTIFF)
+	addTestCoverage(t, types.GeoTIFF)
+
+	t.Run("200 Ok", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Reset(testdata.CoverageGeoTiffName)
+		assert.NoError(t, err)
+	})
+
+	t.Run("404 Not Found", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Reset("does-not-exist")
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.NotFoundError{}, err)
+		assert.EqualError(t, err, fmt.Sprintf("coverage %s not found", "does-not-exist"))
+	})
+}

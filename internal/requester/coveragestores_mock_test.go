@@ -246,6 +246,10 @@ func TestCoverageStoreRequester_Get(t *testing.T) {
 	})
 }
 
+func TestCoverageStoreRequester_Update(t *testing.T) {
+
+}
+
 func TestCoverageStoreRequester_Delete(t *testing.T) {
 	t.Run("200 Ok", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
