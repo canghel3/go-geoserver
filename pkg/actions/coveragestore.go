@@ -32,10 +32,10 @@ type CoverageStores struct {
 	requester *requester.Requester
 }
 
-//// Reset the caches related to the specified coveragestore.
-//func (cs *CoverageStores) Reset(name string) error {
-//	return cs.requester.CoverageStores().Reset(name)
-//}
+// Reset the caches related to the specified coveragestore.
+func (cs *CoverageStores) Reset(name string) error {
+	return cs.requester.CoverageStores().Reset(name)
+}
 
 // Use a specific coverage store
 func (cs *CoverageStores) Use(name string) *Coverages {
@@ -60,8 +60,21 @@ func (cs *CoverageStores) Get(name string) (*coveragestores.CoverageStore, error
 	return cs.requester.CoverageStores().Get(name)
 }
 
+func (cs *CoverageStores) GetAll() (*coveragestores.CoverageStores, error) {
+	return cs.requester.CoverageStores().GetAll()
+}
+
 func (cs *CoverageStores) Delete(name string, recurse bool) error {
 	return cs.requester.CoverageStores().Delete(name, recurse)
+}
+
+func (cs *CoverageStores) Update(name string, store coveragestores.CoverageStore) error {
+	content, err := json.Marshal(coveragestores.CoverageStoreWrapper{CoverageStore: store})
+	if err != nil {
+		return err
+	}
+
+	return cs.requester.CoverageStores().Update(name, content)
 }
 
 //func (csl CoverageStoreList) AIG(name string, filepath string) error {

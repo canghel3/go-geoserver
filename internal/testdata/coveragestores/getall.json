@@ -1,0 +1,18 @@
+{
+  "coverageStores": {
+    "coverageStore": [
+      {
+        "name": "erdasimg",
+        "href": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND/coveragestores/erdasimg.json"
+      },
+      {
+        "name": "rst",
+        "href": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND/coveragestores/rst.json"
+      },
+      {
+        "name": "vrt",
+        "href": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND/coveragestores/vrt.json"
+      }
+    ]
+  }
+}

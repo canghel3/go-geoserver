@@ -109,7 +109,10 @@ func (wr *WorkspaceRequester) GetAll() ([]workspace.MultiWorkspace, error) {
 		var wksp workspace.MultiWorkspaceRetrievalWrapper
 		err = json.Unmarshal(body, &wksp)
 		if err != nil {
-			var noWorkspacesExistResponse workspace.NoWorkspacesExist
+			type noWorkspaceExists struct {
+				Workspaces string `json:"workspaces" xml:"workspaces"`
+			}
+			var noWorkspacesExistResponse noWorkspaceExists
 			noWorkspacesExistError := json.Unmarshal(body, &noWorkspacesExistResponse)
 			if noWorkspacesExistError == nil {
 				return []workspace.MultiWorkspace{}, nil
