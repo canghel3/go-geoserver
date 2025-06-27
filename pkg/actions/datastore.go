@@ -15,26 +15,25 @@ import (
 )
 
 func newDataStoresActions(info internal.GeoserverData) *DataStores {
-	r := requester.NewRequester(info)
 	return &DataStores{
 		info:      info,
-		requester: r,
+		requester: requester.NewDataStoreRequester(info),
 	}
 }
 
 type DataStoreList struct {
 	options   *models.GenericStoreOptions
-	requester *requester.Requester
+	requester requester.DataStoreRequester
 }
 
 type DataStores struct {
 	info      internal.GeoserverData
-	requester *requester.Requester
+	requester requester.DataStoreRequester
 }
 
 // Reset the caches related to the specified datastore.
 func (ds *DataStores) Reset(name string) error {
-	return ds.requester.DataStores().Reset(name)
+	return ds.requester.Reset(name)
 }
 
 func (ds *DataStores) Use(name string) *FeatureTypes {
@@ -56,11 +55,11 @@ func (ds *DataStores) Create(options ...options.GenericStoreOption) DataStoreLis
 }
 
 func (ds *DataStores) Get(name string) (*datastores.DataStore, error) {
-	return ds.requester.DataStores().Get(name)
+	return ds.requester.Get(name)
 }
 
 func (ds *DataStores) GetAll() (*datastores.DataStores, error) {
-	return ds.requester.DataStores().GetAll()
+	return ds.requester.GetAll()
 }
 
 func (ds *DataStores) Update(name string, store datastores.DataStore) error {
@@ -69,11 +68,11 @@ func (ds *DataStores) Update(name string, store datastores.DataStore) error {
 		return err
 	}
 
-	return ds.requester.DataStores().Update(name, content)
+	return ds.requester.Update(name, content)
 }
 
 func (ds *DataStores) Delete(name string, recurse bool) error {
-	return ds.requester.DataStores().Delete(name, recurse)
+	return ds.requester.Delete(name, recurse)
 }
 
 func (dsl DataStoreList) PostGIS(name string, connectionParams postgis.ConnectionParams, options ...options.PostGISOption) error {
@@ -111,7 +110,7 @@ func (dsl DataStoreList) PostGIS(name string, connectionParams postgis.Connectio
 		return err
 	}
 
-	return dsl.requester.DataStores().Create(content)
+	return dsl.requester.Create(content)
 }
 
 func (dsl DataStoreList) GeoPackage(name string, filepath string, options ...options.GeoPackageOptions) error {
@@ -152,7 +151,7 @@ func (dsl DataStoreList) GeoPackage(name string, filepath string, options ...opt
 		return err
 	}
 
-	return dsl.requester.DataStores().Create(content)
+	return dsl.requester.Create(content)
 }
 
 func (dsl DataStoreList) Shapefile(name string, filepath string, options ...options.ShapefileOption) error {
@@ -193,7 +192,7 @@ func (dsl DataStoreList) Shapefile(name string, filepath string, options ...opti
 		return err
 	}
 
-	return dsl.requester.DataStores().Create(content)
+	return dsl.requester.Create(content)
 }
 
 func (dsl DataStoreList) Shapefiles(name string, dir string, options ...options.ShapefileOption) error {
@@ -234,7 +233,7 @@ func (dsl DataStoreList) Shapefiles(name string, dir string, options ...options.
 		return err
 	}
 
-	return dsl.requester.DataStores().Create(content)
+	return dsl.requester.Create(content)
 }
 
 //func (dsl DataStoreList) CSV(name string, filepath string, options ...options.CSVOptions) error {
@@ -303,5 +302,5 @@ func (dsl DataStoreList) WebFeatureService(storeName, username, password, wfsCap
 		return err
 	}
 
-	return dsl.requester.DataStores().Create(content)
+	return dsl.requester.Create(content)
 }
