@@ -59,6 +59,19 @@ func (ds *DataStores) Get(name string) (*datastores.DataStore, error) {
 	return ds.requester.DataStores().Get(name)
 }
 
+func (ds *DataStores) GetAll() (*datastores.DataStores, error) {
+	return ds.requester.DataStores().GetAll()
+}
+
+func (ds *DataStores) Update(name string, store datastores.DataStore) error {
+	content, err := json.Marshal(datastores.DataStoreWrapper{DataStore: store})
+	if err != nil {
+		return err
+	}
+
+	return ds.requester.DataStores().Update(name, content)
+}
+
 func (ds *DataStores) Delete(name string, recurse bool) error {
 	return ds.requester.DataStores().Delete(name, recurse)
 }

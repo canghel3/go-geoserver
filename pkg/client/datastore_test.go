@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/datastores"
 	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
 	"github.com/canghel3/go-geoserver/pkg/options"
 	"github.com/canghel3/go-geoserver/pkg/types"
@@ -113,11 +114,11 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 
 		t.Run("Csv", func(t *testing.T) {
 			t.Run("Lat Lon", func(t *testing.T) {
-
+				t.Skip()
 			})
 
 			t.Run("Wkt", func(t *testing.T) {
-
+				t.Skip()
 			})
 		})
 
@@ -181,7 +182,24 @@ func TestDataStoreIntegration_Get(t *testing.T) {
 }
 
 func TestDataStoreIntegration_GetAll(t *testing.T) {
-	//TODO: implement and test functionality
+	addTestWorkspace(t)
+	addTestDataStore(t, types.PostGIS)
+
+	t.Run("200 Ok", func(t *testing.T) {
+		t.Run("Single DataStore", func(t *testing.T) {
+			stores, err := geoclient.Workspace(testdata.Workspace).DataStores().GetAll()
+			assert.NoError(t, err)
+			assert.Len(t, stores.Entries, 1)
+		})
+
+		t.Run("No CoverageStore", func(t *testing.T) {
+			addTestWorkspace(t)
+
+			stores, err := geoclient.Workspace(testdata.Workspace).DataStores().GetAll()
+			assert.NoError(t, err)
+			assert.Nil(t, stores.Entries)
+		})
+	})
 }
 
 func TestDataStoreIntegration_Delete(t *testing.T) {
@@ -215,9 +233,46 @@ func TestDataStoreIntegration_Delete(t *testing.T) {
 }
 
 func TestDataStoreIntegration_Update(t *testing.T) {
-	//TODO: implement
+	addTestWorkspace(t)
+	addTestDataStore(t, types.PostGIS)
+
+	t.Run("200 Ok", func(t *testing.T) {
+		store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastorePostgis)
+		assert.NoError(t, err)
+		assert.NotNil(t, store)
+
+		store.Name = "changed"
+
+		err = geoclient.Workspace(testdata.Workspace).DataStores().Update(testdata.DatastorePostgis, *store)
+		assert.NoError(t, err)
+
+		dst, err := geoclient.Workspace(testdata.Workspace).DataStores().Get("changed")
+		assert.NoError(t, err)
+		assert.NotNil(t, dst)
+		assert.Equal(t, "changed", dst.Name)
+	})
+
+	t.Run("404 Not Found", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).DataStores().Update("does-not-exist", datastores.DataStore{})
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.NotFoundError{}, err)
+		assert.EqualError(t, err, fmt.Sprintf("datastore %s not found", "does-not-exist"))
+	})
 }
 
 func TestDataStoreIntegration_Reset(t *testing.T) {
-	//TODO: implement
+	addTestWorkspace(t)
+	addTestDataStore(t, types.PostGIS)
+
+	t.Run("200 Ok", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).DataStores().Reset(testdata.DatastorePostgis)
+		assert.NoError(t, err)
+	})
+
+	t.Run("404 Not Found", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).DataStores().Reset("does-not-exist")
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.NotFoundError{}, err)
+		assert.EqualError(t, err, fmt.Sprintf("datastore %s not found", "does-not-exist"))
+	})
 }

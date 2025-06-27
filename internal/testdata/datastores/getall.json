@@ -1,0 +1,14 @@
+{
+  "dataStores": {
+    "dataStore": [
+      {
+        "name": "shp",
+        "href": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND/datastores/shp.json"
+      },
+      {
+        "name": "shps",
+        "href": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND/datastores/shps.json"
+      }
+    ]
+  }
+}

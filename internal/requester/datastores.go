@@ -49,9 +49,49 @@ func (dr *DataStoreRequester) Create(content []byte) error {
 	}
 }
 
-// TODO: implement
-func (dr *DataStoreRequester) GetAll() ([]datastores.DataStore, error) {
-	return nil, customerrors.NewNotImplementedError("not implemented")
+func (dr *DataStoreRequester) GetAll() (*datastores.DataStores, error) {
+	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores", dr.data.Connection.URL, dr.data.Workspace), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	request.SetBasicAuth(dr.data.Connection.Credentials.Username, dr.data.Connection.Credentials.Password)
+	request.Header.Add("Accept", "application/json")
+
+	response, err := dr.data.Client.Do(request)
+	if err != nil {
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	body, err := io.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+
+	}
+
+	switch response.StatusCode {
+	case http.StatusOK:
+		var dts *datastores.DataStoresWrapper
+		err = json.Unmarshal(body, &dts)
+		if err != nil {
+			//try to unmarshal into empty string because geoserver has a funny way of responding
+			type noDataStoreExists struct {
+				DataStores string `json:"dataStores"`
+			}
+			var noDataStoreExistsResponse noDataStoreExists
+			noDataStoreExistsError := json.Unmarshal(body, &noDataStoreExistsResponse)
+			if noDataStoreExistsError == nil {
+				return &datastores.DataStores{Entries: nil}, nil
+			}
+
+			return nil, err
+		}
+
+		return &dts.DataStores, nil
+	default:
+		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+	}
 }
 
 func (dr *DataStoreRequester) Get(name string) (*datastores.DataStore, error) {
@@ -71,7 +111,7 @@ func (dr *DataStoreRequester) Get(name string) (*datastores.DataStore, error) {
 
 	switch response.StatusCode {
 	case http.StatusOK:
-		var dts *datastores.DataStoreRetrievalWrapper
+		var dts *datastores.DataStoreWrapper
 		err = json.NewDecoder(response.Body).Decode(&dts)
 		if err != nil {
 			return nil, err
@@ -90,9 +130,34 @@ func (dr *DataStoreRequester) Get(name string) (*datastores.DataStore, error) {
 	}
 }
 
-// TODO: implement
-func (dr *DataStoreRequester) Update() error {
-	return customerrors.NewNotImplementedError("not implemented")
+func (dr *DataStoreRequester) Update(name string, content []byte) error {
+	request, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", dr.data.Connection.URL, dr.data.Workspace, name), bytes.NewReader(content))
+	if err != nil {
+		return err
+	}
+
+	request.SetBasicAuth(dr.data.Connection.Credentials.Username, dr.data.Connection.Credentials.Password)
+	request.Header.Add("Content-Type", "application/json")
+
+	response, err := dr.data.Client.Do(request)
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
+
+	switch response.StatusCode {
+	case http.StatusOK, http.StatusCreated:
+		return nil
+	case http.StatusNotFound:
+		return customerrors.WrapNotFoundError(fmt.Errorf("datastore %s not found", name))
+	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return err
+		}
+
+		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+	}
 }
 
 func (dr *DataStoreRequester) Delete(name string, recurse bool) error {
@@ -125,5 +190,31 @@ func (dr *DataStoreRequester) Delete(name string, recurse bool) error {
 }
 
 func (dr *DataStoreRequester) Reset(name string) error {
-	return customerrors.NewNotImplementedError("not implemented")
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/reset", dr.data.Connection.URL, dr.data.Workspace, name)
+
+	request, err := http.NewRequest(http.MethodPut, target, nil)
+	if err != nil {
+		return err
+	}
+
+	request.SetBasicAuth(dr.data.Connection.Credentials.Username, dr.data.Connection.Credentials.Password)
+
+	response, err := dr.data.Client.Do(request)
+	if err != nil {
+		return err
+	}
+
+	switch response.StatusCode {
+	case http.StatusOK, http.StatusCreated:
+		return nil
+	case http.StatusNotFound:
+		return customerrors.WrapNotFoundError(fmt.Errorf("datastore %s not found", name))
+	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return err
+		}
+
+		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+	}
 }

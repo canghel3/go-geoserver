@@ -74,8 +74,8 @@ func (cr *CoverageStoreRequester) GetAll() (*coveragestores.CoverageStores, erro
 				CoverageStores string `json:"coverageStores"`
 			}
 			var noCoverageStoreExistsResponse noCoverageStoreExists
-			noWorkspacesExistError := json.Unmarshal(body, &noCoverageStoreExistsResponse)
-			if noWorkspacesExistError == nil {
+			noCoverageStoreExistsError := json.Unmarshal(body, &noCoverageStoreExistsResponse)
+			if noCoverageStoreExistsError == nil {
 				return &coveragestores.CoverageStores{Entries: nil}, nil
 			}
 

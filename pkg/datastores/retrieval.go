@@ -4,8 +4,19 @@ import (
 	"github.com/canghel3/go-geoserver/pkg/workspace"
 )
 
-type DataStoreRetrievalWrapper struct {
+type DataStoreWrapper struct {
 	DataStore DataStore `json:"dataStore"`
+}
+
+type DataStoresWrapper struct {
+	DataStores DataStores `json:"dataStores"`
+}
+
+type DataStores struct {
+	Entries []struct {
+		Name string `json:"name"`
+		Href string `json:"href"`
+	} `json:"dataStore"`
 }
 
 type DataStore struct {
@@ -20,7 +31,4 @@ type DataStore struct {
 	DateModified               string                   `json:"dateModified,omitempty"`
 	Type                       string                   `json:"type,omitempty"`
 	FeatureTypes               string                   `json:"featureTypes,omitempty"`
-}
-
-type AllDataStoreRetrievalWrapper struct {
 }
