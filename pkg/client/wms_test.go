@@ -15,7 +15,7 @@ func TestWMS_GetMap(t *testing.T) {
 
 	addTestDataStore(t, types.GeoPackage)
 
-	addTestVectorLayer(t, types.GeoPackage)
+	addTestFeatureType(t, types.GeoPackage)
 
 	t.Run("Version", func(t *testing.T) {
 		t.Run("1.1.1", func(t *testing.T) {

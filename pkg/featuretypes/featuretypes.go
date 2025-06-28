@@ -19,36 +19,50 @@ func New(name, nativeName string, options ...options.FeatureTypeOption) models.F
 	return *cft
 }
 
-type GetFeatureTypeWrapper struct {
+type FeatureTypesWrapper struct {
+	FeatureTypes FeatureTypes `json:"featureTypes"`
+}
+
+type FeatureTypes struct {
+	Entries []struct {
+		Name string `json:"name"`
+		Href string `json:"href"`
+	} `json:"featureType"`
+}
+
+type FeatureTypeWrapper struct {
 	FeatureType FeatureType `json:"featureType"`
 }
 
 type FeatureType struct {
-	Name                   string             `json:"name"`
-	NativeName             string             `json:"nativeName"`
-	Namespace              Namespace          `json:"namespace"`
-	Title                  string             `json:"title"`
-	Abstract               string             `json:"abstract"`
-	Keywords               shared.Keywords    `json:"keywords"`
-	MetadataLinks          Links              `json:"metadataLinks"`
-	DataLinks              Links              `json:"dataLinks"`
-	NativeCRS              any                `json:"nativeCRS"`
-	Srs                    string             `json:"srs"`
-	NativeBoundingBox      shared.BoundingBox `json:"nativeBoundingBox"`
-	LatLonBoundingBox      shared.BoundingBox `json:"latLonBoundingBox"`
-	ProjectionPolicy       string             `json:"projectionPolicy"`
-	Enabled                bool               `json:"enabled"`
-	Metadata               Metadata           `json:"metadata"`
-	Store                  Store              `json:"store"`
-	CqlFilter              string             `json:"cqlFilter"`
-	MaxFeatures            int                `json:"maxFeatures"`
-	NumDecimals            int                `json:"numDecimals"`
-	ResponseSRS            SRS                `json:"responseSRS"`
-	OverridingServiceSRS   bool               `json:"overridingServiceSRS"`
-	SkipNumberMatched      bool               `json:"skipNumberMatched"`
-	CircularArcPresent     bool               `json:"circularArcPresent"`
-	LinearizationTolerance int                `json:"linearizationTolerance"`
-	Attributes             Attributes         `json:"attributes"`
+	Name       string          `json:"name"`
+	NativeName string          `json:"nativeName"`
+	Namespace  Namespace       `json:"namespace"`
+	Title      string          `json:"title"`
+	Abstract   string          `json:"abstract"`
+	Keywords   shared.Keywords `json:"keywords"`
+	//TODO: because GeoServer responds with either a Links structure or just an empty fucking string,
+	//we avoid using this until its either fixed or im in the mood to implement it.
+	//MetadataLinks          *Links             `json:"metadataLinks,omitempty"`
+	//DataLinks              *Links             `json:"dataLinks,omitempty"`
+	NativeCRS         any                `json:"nativeCRS"`
+	Srs               string             `json:"srs"`
+	NativeBoundingBox shared.BoundingBox `json:"nativeBoundingBox"`
+	LatLonBoundingBox shared.BoundingBox `json:"latLonBoundingBox"`
+	ProjectionPolicy  string             `json:"projectionPolicy"`
+	Enabled           bool               `json:"enabled"`
+	Metadata          *Metadata          `json:"metadata,omitempty"`
+	Store             Store              `json:"store"`
+	CqlFilter         string             `json:"cqlFilter"`
+	MaxFeatures       int                `json:"maxFeatures"`
+	NumDecimals       int                `json:"numDecimals"`
+	//TODO: GeoServer responds wit either a struct or a slice of ints (:
+	//ResponseSRS            SRS                `json:"responseSRS"`
+	OverridingServiceSRS   bool       `json:"overridingServiceSRS"`
+	SkipNumberMatched      bool       `json:"skipNumberMatched"`
+	CircularArcPresent     bool       `json:"circularArcPresent"`
+	LinearizationTolerance any        `json:"linearizationTolerance"`
+	Attributes             Attributes `json:"attributes"`
 }
 
 type Links struct {

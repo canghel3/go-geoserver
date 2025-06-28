@@ -15,6 +15,10 @@ type FeatureTypeRequester struct {
 	data internal.GeoserverData
 }
 
+func NewFeatureTypeRequester(data internal.GeoserverData) FeatureTypeRequester {
+	return FeatureTypeRequester{data: data}
+}
+
 func (ftr *FeatureTypeRequester) Create(store string, content []byte) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes", ftr.data.Connection.URL, ftr.data.Workspace, store)
 
@@ -84,7 +88,7 @@ func (ftr *FeatureTypeRequester) Get(store, feature string) (*featuretypes.Featu
 	}
 
 	request.SetBasicAuth(ftr.data.Connection.Credentials.Username, ftr.data.Connection.Credentials.Password)
-	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("Accept", "application/json")
 
 	response, err := ftr.data.Client.Do(request)
 	if err != nil {
@@ -93,9 +97,16 @@ func (ftr *FeatureTypeRequester) Get(store, feature string) (*featuretypes.Featu
 
 	switch response.StatusCode {
 	case http.StatusOK:
-		var featureType featuretypes.GetFeatureTypeWrapper
+		var featureType featuretypes.FeatureTypeWrapper
 
-		err = json.NewDecoder(response.Body).Decode(&featureType)
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return nil, err
+		}
+
+		fmt.Println(string(body))
+
+		err = json.Unmarshal(body, &featureType)
 		if err != nil {
 			return nil, err
 		}
@@ -109,6 +120,51 @@ func (ftr *FeatureTypeRequester) Get(store, feature string) (*featuretypes.Featu
 			return nil, err
 		}
 
+		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+	}
+}
+
+func (ftr *FeatureTypeRequester) GetAll(store string) (*featuretypes.FeatureTypes, error) {
+	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes", ftr.data.Connection.URL, ftr.data.Workspace, store), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	request.SetBasicAuth(ftr.data.Connection.Credentials.Username, ftr.data.Connection.Credentials.Password)
+	request.Header.Add("Accept", "application/json")
+
+	response, err := ftr.data.Client.Do(request)
+	if err != nil {
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	body, err := io.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+
+	}
+
+	switch response.StatusCode {
+	case http.StatusOK:
+		var fts *featuretypes.FeatureTypesWrapper
+		err = json.Unmarshal(body, &fts)
+		if err != nil {
+			//try to unmarshal into empty string because geoserver has a funny way of responding
+			type noFeatureTypesExists struct {
+				FeatureTypes string `json:"featureTypes"`
+			}
+			var noFeatureTypeExistsResponse noFeatureTypesExists
+			noFeatureTypeExistsError := json.Unmarshal(body, &noFeatureTypeExistsResponse)
+			if noFeatureTypeExistsError == nil {
+				return &featuretypes.FeatureTypes{Entries: nil}, nil
+			}
+
+			return nil, err
+		}
+
+		return &fts.FeatureTypes, nil
+	default:
 		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
@@ -132,6 +188,8 @@ func (ftr *FeatureTypeRequester) Update(store, feature string, content []byte) e
 	switch response.StatusCode {
 	case http.StatusOK, http.StatusCreated:
 		return nil
+	case http.StatusNotFound:
+		return customerrors.WrapNotFoundError(fmt.Errorf("featuretype %s not found", feature))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {
@@ -142,6 +200,32 @@ func (ftr *FeatureTypeRequester) Update(store, feature string, content []byte) e
 	}
 }
 
-func (ftr *FeatureTypeRequester) Reset(name string) error {
-	return customerrors.NewNotImplementedError("not implemented")
+func (ftr *FeatureTypeRequester) Reset(store, name string) error {
+	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes/%s/reset", ftr.data.Connection.URL, ftr.data.Workspace, store, name)
+
+	request, err := http.NewRequest(http.MethodPut, target, nil)
+	if err != nil {
+		return err
+	}
+
+	request.SetBasicAuth(ftr.data.Connection.Credentials.Username, ftr.data.Connection.Credentials.Password)
+
+	response, err := ftr.data.Client.Do(request)
+	if err != nil {
+		return err
+	}
+
+	switch response.StatusCode {
+	case http.StatusOK, http.StatusCreated:
+		return nil
+	case http.StatusNotFound:
+		return customerrors.WrapNotFoundError(fmt.Errorf("featuretype %s not found", name))
+	default:
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return err
+		}
+
+		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+	}
 }

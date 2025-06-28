@@ -60,29 +60,39 @@ func (cr *CoverageRequester) GetAll(store string) (*coverages.Coverages, error) 
 	}
 
 	request.SetBasicAuth(cr.data.Connection.Credentials.Username, cr.data.Connection.Credentials.Password)
-	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("Accept", "application/json")
 
 	response, err := cr.data.Client.Do(request)
 	if err != nil {
 		return nil, err
 	}
 
+	body, err := io.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+
+	}
+
 	switch response.StatusCode {
 	case http.StatusOK:
-		var coveragesWrapper coverages.CoveragesWrapper
-
-		err = json.NewDecoder(response.Body).Decode(&coveragesWrapper)
+		var cvgs *coverages.CoveragesWrapper
+		err = json.Unmarshal(body, &cvgs)
 		if err != nil {
+			//try to unmarshal into empty string because geoserver has a funny way of responding
+			type noCoveragesExists struct {
+				Coverages string `json:"coverages"`
+			}
+			var noCoveragesExistsResponse noCoveragesExists
+			noCoveragesExistsError := json.Unmarshal(body, &noCoveragesExistsResponse)
+			if noCoveragesExistsError == nil {
+				return &coverages.Coverages{Entries: nil}, nil
+			}
+
 			return nil, err
 		}
 
-		return &coveragesWrapper.Coverages, nil
+		return &cvgs.Coverages, nil
 	default:
-		body, err := io.ReadAll(response.Body)
-		if err != nil {
-			return nil, err
-		}
-
 		return nil, customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
@@ -96,7 +106,7 @@ func (cr *CoverageRequester) Get(store, coverage string) (*coverages.Coverage, e
 	}
 
 	request.SetBasicAuth(cr.data.Connection.Credentials.Username, cr.data.Connection.Credentials.Password)
-	request.Header.Add("Content-Type", "application/json")
+	request.Header.Add("Accept", "application/json")
 
 	response, err := cr.data.Client.Do(request)
 	if err != nil {

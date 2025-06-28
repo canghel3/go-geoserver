@@ -305,7 +305,7 @@ func TestCoverageRequester_GetAll(t *testing.T) {
 
 		_, err := coverageRequester.GetAll(testdata.CoverageStoreGeoTiff)
 		assert.Error(t, err)
-		assert.EqualError(t, err, "unexpected EOF")
+		assert.EqualError(t, err, "unexpected end of JSON input")
 	})
 
 	t.Run("Client Error", func(t *testing.T) {

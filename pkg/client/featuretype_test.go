@@ -1,43 +1,27 @@
 package client
 
 import (
+	"fmt"
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
-	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
 	"github.com/canghel3/go-geoserver/pkg/featuretypes"
 	"github.com/canghel3/go-geoserver/pkg/options"
+	"github.com/canghel3/go-geoserver/pkg/types"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestFeatureTypeIntegration_Create(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
-
-	geoserverClient.Workspaces().Delete(testdata.Workspace, true)
-
-	//create workspace
-	geoserverClient.Workspaces().Create(testdata.Workspace, true)
+	addTestWorkspace(t)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("POSTGIS", func(t *testing.T) {
-			//create datastore
-			err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create().PostGIS(testdata.DatastorePostgis, postgis.ConnectionParams{
-				Host:     testdata.PostgisHost,
-				Database: testdata.PostgisDb,
-				User:     testdata.PostgisUsername,
-				Password: testdata.PostgisPassword,
-				Port:     testdata.PostgisPort,
-				SSL:      testdata.PostgisSsl,
-			})
-			assert.NoError(t, err)
+			addTestDataStore(t, types.PostGIS)
 
 			t.Run("WITHOUT ANY OPTIONS", func(t *testing.T) {
-				feature := featuretypes.New(testdata.FeatureTypePostgis, testdata.FeatureTypePostgisNativeName)
+				addTestFeatureType(t, types.PostGIS)
 
-				err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
-				assert.NoError(t, err)
-
-				get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
+				get, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
 				assert.NoError(t, err)
 				assert.Equal(t, get.Name, testdata.FeatureTypePostgis)
 				assert.Equal(t, get.NativeName, testdata.FeatureTypePostgisNativeName)
@@ -52,10 +36,10 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 
 				feature := featuretypes.New(featureName, testdata.FeatureTypePostgisNativeName, options.FeatureType.BBOX(bbox, bboxSrs))
 
-				err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
+				err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
 				assert.NoError(t, err)
 
-				get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(featureName)
+				get, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(featureName)
 				assert.NoError(t, err)
 				assert.Equal(t, get.Name, featureName)
 				assert.Equal(t, get.NativeName, testdata.FeatureTypePostgisNativeName)
@@ -68,35 +52,15 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 			})
 		})
 	})
-
-	err := geoserverClient.Workspaces().Delete(testdata.Workspace, true)
-	assert.NoError(t, err)
 }
 
 func TestFeatureTypeIntegration_Get(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
-
-	//create workspace
-	geoserverClient.Workspaces().Create(testdata.Workspace, true)
-
-	//create datastore
-	err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create().PostGIS(testdata.DatastorePostgis, postgis.ConnectionParams{
-		Host:     testdata.PostgisHost,
-		Database: testdata.PostgisDb,
-		User:     testdata.PostgisUsername,
-		Password: testdata.PostgisPassword,
-		Port:     testdata.PostgisPort,
-		SSL:      testdata.PostgisSsl,
-	})
-	assert.NoError(t, err)
-
-	//create feature type
-	feature := featuretypes.New(testdata.FeatureTypePostgis, testdata.FeatureTypePostgisNativeName)
-	err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
-	assert.NoError(t, err)
+	addTestWorkspace(t)
+	addTestDataStore(t, types.PostGIS)
+	addTestFeatureType(t, types.PostGIS)
 
 	t.Run("200 Ok", func(t *testing.T) {
-		get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
+		get, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
 		assert.NoError(t, err)
 		assert.NotNil(t, get)
 		assert.Equal(t, get.Name, testdata.FeatureTypePostgis)
@@ -105,55 +69,107 @@ func TestFeatureTypeIntegration_Get(t *testing.T) {
 	})
 
 	t.Run("404 Not Found", func(t *testing.T) {
-		get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis + "_DOES_NOT_EXIST")
+		get, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis + "_DOES_NOT_EXIST")
 		assert.Error(t, err)
 		assert.Nil(t, get)
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 	})
+}
 
-	err = geoserverClient.Workspaces().Delete(testdata.Workspace, true)
-	assert.NoError(t, err)
+func TestFeatureTypeIntegration_GetAll(t *testing.T) {
+	addTestWorkspace(t)
+	addTestDataStore(t, types.PostGIS)
+	addTestFeatureType(t, types.PostGIS)
+
+	t.Run("200 Ok", func(t *testing.T) {
+		t.Run("Single FeatureType", func(t *testing.T) {
+			ft, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).GetAll()
+			assert.NoError(t, err)
+			assert.NotNil(t, ft)
+			assert.Len(t, ft.Entries, 1)
+		})
+
+		t.Run("No FeatureType", func(t *testing.T) {
+			addTestWorkspace(t)
+			addTestDataStore(t, types.PostGIS)
+
+			ft, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).GetAll()
+			assert.NoError(t, err)
+			assert.Nil(t, ft.Entries)
+		})
+	})
+}
+
+func TestFeatureTypeIntegration_Update(t *testing.T) {
+	addTestWorkspace(t)
+	addTestDataStore(t, types.PostGIS)
+	addTestFeatureType(t, types.PostGIS)
+
+	t.Run("200 Ok", func(t *testing.T) {
+		ft, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
+		assert.NoError(t, err)
+		assert.NotNil(t, ft)
+
+		ft.Name = "changed"
+
+		err = geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Update(testdata.FeatureTypePostgis, *ft)
+		assert.NoError(t, err)
+
+		fts, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get("changed")
+		assert.NoError(t, err)
+		assert.NotNil(t, fts)
+		assert.Equal(t, "changed", fts.Name)
+	})
+
+	t.Run("404 Not Found", func(t *testing.T) {
+		ft, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get("changed")
+		assert.NoError(t, err)
+		assert.NotNil(t, ft)
+
+		err = geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Update("does-not-exist", *ft)
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.NotFoundError{}, err)
+		assert.EqualError(t, err, fmt.Sprintf("featuretype %s not found", "does-not-exist"))
+	})
 }
 
 func TestFeatureTypeIntegration_Delete(t *testing.T) {
-	geoserverClient := NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
-
-	//create workspace
-	geoserverClient.Workspaces().Create(testdata.Workspace, true)
-
-	//create datastore
-	err := geoserverClient.Workspace(testdata.Workspace).DataStores().Create().PostGIS(testdata.DatastorePostgis, postgis.ConnectionParams{
-		Host:     testdata.PostgisHost,
-		Database: testdata.PostgisDb,
-		User:     testdata.PostgisUsername,
-		Password: testdata.PostgisPassword,
-		Port:     testdata.PostgisPort,
-		SSL:      testdata.PostgisSsl,
-	})
-	assert.NoError(t, err)
-
-	//create feature type
-	feature := featuretypes.New(testdata.FeatureTypePostgis, testdata.FeatureTypePostgisNativeName)
-	err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature)
-	assert.NoError(t, err)
+	addTestWorkspace(t)
+	addTestDataStore(t, types.PostGIS)
+	addTestFeatureType(t, types.PostGIS)
 
 	t.Run("200 Ok", func(t *testing.T) {
-		err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Delete(testdata.FeatureTypePostgis, true)
+		err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Delete(testdata.FeatureTypePostgis, true)
 		assert.NoError(t, err)
 
 		//try to retrieve the feature type
-		get, err := geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
+		get, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
 		assert.Nil(t, get)
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 	})
 
 	t.Run("404 Not Found", func(t *testing.T) {
-		err = geoserverClient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Delete(testdata.FeatureTypePostgis, true)
+		err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Delete(testdata.FeatureTypePostgis, true)
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 	})
+}
 
-	err = geoserverClient.Workspaces().Delete(testdata.Workspace, true)
-	assert.NoError(t, err)
+func TestFeatureTypeIntegration_Reset(t *testing.T) {
+	addTestWorkspace(t)
+	addTestDataStore(t, types.PostGIS)
+	addTestFeatureType(t, types.PostGIS)
+
+	t.Run("200 Ok", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Reset(testdata.FeatureTypePostgis)
+		assert.NoError(t, err)
+	})
+
+	t.Run("404 Not Found", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Reset("does-not-exist")
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.NotFoundError{}, err)
+		assert.EqualError(t, err, fmt.Sprintf("featuretype %s not found", "does-not-exist"))
+	})
 }

@@ -94,22 +94,46 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreShapefile)
 			assert.NoError(t, err)
 			assert.NotNil(t, store)
+
+			t.Run("With file: In Filepath", func(t *testing.T) {
+				err = geoclient.Workspace(testdata.Workspace).DataStores().Delete(testdata.DatastoreShapefile, true)
+				assert.NoError(t, err)
+
+				err = geoclient.Workspace(testdata.Workspace).DataStores().Create().Shapefile(testdata.DatastoreShapefile, fmt.Sprintf("file:%s", testdata.FileShapefile))
+				assert.NoError(t, err)
+			})
 		})
 
 		t.Run("Directory Of Shapefiles", func(t *testing.T) {
 			addTestDataStore(t, types.DirOfShapefiles)
 
-			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreShapefile)
+			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreDirOfShapefiles)
 			assert.NoError(t, err)
 			assert.NotNil(t, store)
+
+			t.Run("With file: In Filepath", func(t *testing.T) {
+				err = geoclient.Workspace(testdata.Workspace).DataStores().Delete(testdata.DatastoreDirOfShapefiles, true)
+				assert.NoError(t, err)
+
+				err = geoclient.Workspace(testdata.Workspace).DataStores().Create().Shapefiles(testdata.DatastoreDirOfShapefiles, fmt.Sprintf("file:%s", testdata.DirShapefiles))
+				assert.NoError(t, err)
+			})
 		})
 
 		t.Run("GeoPackage", func(t *testing.T) {
 			addTestDataStore(t, types.GeoPackage)
 
-			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreShapefile)
+			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreGeoPackage)
 			assert.NoError(t, err)
 			assert.NotNil(t, store)
+
+			t.Run("With file: In Filepath", func(t *testing.T) {
+				err = geoclient.Workspace(testdata.Workspace).DataStores().Delete(testdata.DatastoreGeoPackage, true)
+				assert.NoError(t, err)
+
+				err = geoclient.Workspace(testdata.Workspace).DataStores().Create().GeoPackage(testdata.DatastoreGeoPackage, fmt.Sprintf("file:%s", testdata.FileGeoPackage))
+				assert.NoError(t, err)
+			})
 		})
 
 		t.Run("Csv", func(t *testing.T) {
@@ -154,6 +178,73 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 		assert.IsType(t, err, &customerrors.GeoserverError{})
 		//yes, geoserver actually responds with 500 for a conflict error
 		assert.ErrorContains(t, err, fmt.Sprintf(`Store '%s' already exists in workspace '%s'`, testdata.DatastorePostgis, testdata.Workspace))
+	})
+
+	t.Run("Validation errors", func(t *testing.T) {
+		t.Run("PostGIS", func(t *testing.T) {
+			t.Run("Store name", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).DataStores().Create().PostGIS(testdata.InvalidName, postgis.ConnectionParams{})
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "name can only contain alphanumerical characters")
+			})
+		})
+
+		t.Run("GeoPackage", func(t *testing.T) {
+			t.Run("Store name", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).DataStores().Create().GeoPackage(testdata.InvalidName, testdata.FileGeoPackage)
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "name can only contain alphanumerical characters")
+			})
+
+			t.Run("File extension", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).DataStores().Create().GeoPackage(testdata.DatastoreGeoPackage, "/path/to/file.csv")
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "geopackage extension must be .gpkg")
+			})
+		})
+
+		t.Run("Shapefile", func(t *testing.T) {
+			t.Run("Store name", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).DataStores().Create().Shapefile(testdata.InvalidName, testdata.FileShapefile)
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "name can only contain alphanumerical characters")
+			})
+
+			t.Run("File extension", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).DataStores().Create().Shapefile(testdata.DatastoreShapefile, "/path/to/file.csv")
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "shapefile extension must be .shp")
+			})
+		})
+
+		t.Run("Dir of Shapefiles", func(t *testing.T) {
+			t.Run("Store name", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).DataStores().Create().Shapefiles(testdata.InvalidName, testdata.DirShapefiles)
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "name can only contain alphanumerical characters")
+			})
+
+			t.Run("File extension", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).DataStores().Create().Shapefiles(testdata.DatastoreDirOfShapefiles, "")
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "empty directory path")
+			})
+		})
+
+		t.Run("WebFeatureService", func(t *testing.T) {
+			t.Run("Store name", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).DataStores().Create().WebFeatureService(testdata.InvalidName, "", "", testdata.DatastoreWFSUrl)
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "name can only contain alphanumerical characters")
+			})
+
+			t.Run("File extension", func(t *testing.T) {
+				err := geoclient.Workspace(testdata.Workspace).DataStores().Create().WebFeatureService(testdata.DatastoreGeoPackage, "", "", "")
+				assert.IsType(t, err, &customerrors.InputError{})
+				assert.EqualError(t, err, "empty wfs url")
+			})
+
+		})
 	})
 }
 

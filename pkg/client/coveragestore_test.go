@@ -281,7 +281,6 @@ func TestCoverageStoreIntegration_Delete(t *testing.T) {
 
 func TestCoverageStoreIntegration_Get(t *testing.T) {
 	addTestWorkspace(t)
-
 	addTestCoverageStore(t, types.GeoTIFF)
 
 	t.Run("200 Ok", func(t *testing.T) {

@@ -76,7 +76,12 @@ func (ds *DataStores) Delete(name string, recurse bool) error {
 }
 
 func (dsl DataStoreList) PostGIS(name string, connectionParams postgis.ConnectionParams, options ...options.PostGISOption) error {
-	err := validator.DataStore.PostGIS(name)
+	err := validator.Name(name)
+	if err != nil {
+		return err
+	}
+
+	err = validator.DataStore.PostGIS(name)
 	if err != nil {
 		return err
 	}
@@ -114,7 +119,12 @@ func (dsl DataStoreList) PostGIS(name string, connectionParams postgis.Connectio
 }
 
 func (dsl DataStoreList) GeoPackage(name string, filepath string, options ...options.GeoPackageOptions) error {
-	err := validator.DataStore.GeoPackage(filepath)
+	err := validator.Name(name)
+	if err != nil {
+		return err
+	}
+
+	err = validator.DataStore.GeoPackage(filepath)
 	if err != nil {
 		return err
 	}
@@ -155,7 +165,12 @@ func (dsl DataStoreList) GeoPackage(name string, filepath string, options ...opt
 }
 
 func (dsl DataStoreList) Shapefile(name string, filepath string, options ...options.ShapefileOption) error {
-	err := validator.DataStore.Shapefile(filepath)
+	err := validator.Name(name)
+	if err != nil {
+		return err
+	}
+
+	err = validator.DataStore.Shapefile(filepath)
 	if err != nil {
 		return err
 	}
@@ -196,7 +211,12 @@ func (dsl DataStoreList) Shapefile(name string, filepath string, options ...opti
 }
 
 func (dsl DataStoreList) Shapefiles(name string, dir string, options ...options.ShapefileOption) error {
-	err := validator.DataStore.ShapefileDirectory(dir)
+	err := validator.Name(name)
+	if err != nil {
+		return err
+	}
+
+	err = validator.DataStore.ShapefileDirectory(dir)
 	if err != nil {
 		return err
 	}
@@ -271,7 +291,12 @@ func (dsl DataStoreList) Shapefiles(name string, dir string, options ...options.
 //}
 
 func (dsl DataStoreList) WebFeatureService(storeName, username, password, wfsCapabilitiesUrl string, options ...options.WFSOptions) error {
-	err := validator.DataStore.WebFeatureService(wfsCapabilitiesUrl)
+	err := validator.Name(storeName)
+	if err != nil {
+		return err
+	}
+
+	err = validator.DataStore.WebFeatureService(wfsCapabilitiesUrl)
 	if err != nil {
 		return err
 	}

@@ -1,0 +1,14 @@
+{
+  "featureTypes": {
+    "featureType": [
+      {
+        "name": "ne_110m_coastline",
+        "href": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND/datastores/shp/featuretypes/ne_110m_coastline.json"
+      },
+      {
+        "name": "ne_110m_coastline2",
+        "href": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND/datastores/shp/featuretypes/ne_110m_coastline2.json"
+      }
+    ]
+  }
+}

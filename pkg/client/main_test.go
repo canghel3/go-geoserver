@@ -123,7 +123,7 @@ func addTestDataStore(t *testing.T, type_ types.DataStoreType) {
 	t.Fatal(customerrors.NewUnsupportedError("unsupported data store type"))
 }
 
-func addTestVectorLayer(t *testing.T, type_ types.DataStoreType) {
+func addTestFeatureType(t *testing.T, type_ types.DataStoreType) {
 	switch type_ {
 	case types.PostGIS:
 		feature := featuretypes.New(testdata.FeatureTypePostgis, testdata.FeatureTypePostgisNativeName)

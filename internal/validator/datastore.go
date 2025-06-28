@@ -50,6 +50,10 @@ func (dsv DataStoreValidator) ShapefileDirectory(dir string) error {
 }
 
 func (dsv DataStoreValidator) CSV(url string) error {
+	if len(url) == 0 {
+		return customerrors.WrapInputError(errors.New("empty csv url"))
+	}
+
 	if filepath.Ext(url) != ".csv" {
 		return customerrors.WrapInputError(errors.New("csv file extension must be .csv"))
 	}

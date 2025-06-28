@@ -251,7 +251,7 @@ func TestDataStoreRequester_GetAll(t *testing.T) {
 			assert.Len(t, ds.Entries, 2)
 		})
 
-		t.Run("No CoverageStores", func(t *testing.T) {
+		t.Run("No DataStores", func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			mockClient := mocks.NewMockHTTPClient(ctrl)
