@@ -7,6 +7,7 @@ import (
 	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
 	"github.com/canghel3/go-geoserver/pkg/featuretypes"
 	"github.com/canghel3/go-geoserver/pkg/types"
+	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"
 	"testing"
@@ -15,8 +16,9 @@ import (
 // GDAL raster drivers: https://gdal.org/en/stable/drivers/raster/index.html
 
 var (
-	vectorsTestDataDir = vectorsTestDataPath()
-	rastersTestDataDir = rastersTestDataPath()
+	vectorsTestDataDir = findTestDataPath("internal/testdata/featuretypes")
+	rastersTestDataDir = findTestDataPath("internal/testdata/coverages")
+	imagesTestDataDir  = findTestDataPath("internal/testdata/images")
 	geoclient          = NewGeoserverClient(testdata.GeoserverUrl, testdata.GeoserverUsername, testdata.GeoserverPassword)
 )
 
@@ -203,35 +205,31 @@ func addTestCoverage(t *testing.T, type_ types.CoverageStoreType) {
 	t.Fatal(customerrors.NewUnsupportedError("unsupported coverage store type"))
 }
 
-func findGoModRoot() (string, error) {
+func findGoModRoot() string {
 	dir, err := os.Getwd()
 	if err != nil {
-		return "", err
+		panic(err)
 	}
 	for {
 		if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
-			return dir, nil
+			return dir
 		}
 		parent := filepath.Dir(dir)
 		if parent == dir {
-			return "", os.ErrNotExist
+			panic(os.ErrNotExist)
 		}
 		dir = parent
 	}
 }
 
-func vectorsTestDataPath() string {
-	root, err := findGoModRoot()
-	if err != nil {
-		panic(err)
-	}
-	return filepath.Join(root, "internal/testdata/featuretypes")
+func findTestDataPath(path string) string {
+	root := findGoModRoot()
+	return filepath.Join(root, path)
 }
 
-func rastersTestDataPath() string {
-	root, err := findGoModRoot()
-	if err != nil {
-		panic(err)
-	}
-	return filepath.Join(root, "internal/testdata/coverages")
+func writeFile(t *testing.T, path string, content []byte) {
+	f, err := os.Create(path)
+	assert.NoError(t, err)
+	_, err = f.Write(content)
+	assert.NoError(t, err)
 }

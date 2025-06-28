@@ -64,4 +64,16 @@ const (
 	FileVRT              = "vrt/output.vrt"
 	FileCSVLatLon        = "csv/latlon.csv"
 	FileCSVWkt           = "csv/wkt.csv"
+
+	ImagePng      = "outputpng.png"
+	ImagePng8     = "outputpng8.png"
+	ImageJpeg     = "outputjpeg.jpeg"
+	ImageJpeg8    = "outputjpeg8.jpeg"
+	ImageJpegPng  = "outputjpegpng.jpeg"
+	ImageJpegPng8 = "outputjpegpng8.jpeg"
+	ImageGif      = "outputgif.gif"
+	ImageTiff     = "outputtiff.tiff"
+	ImageTiff8    = "outputtiff8.tiff"
+	ImageGeoTiff  = "outputgeotiff.tiff"
+	ImageGeoTiff8 = "outputgeotiff8.tiff"
 )
