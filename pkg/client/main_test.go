@@ -228,8 +228,12 @@ func findTestDataPath(path string) string {
 }
 
 func writeFile(t *testing.T, path string, content []byte) {
-	f, err := os.Create(path)
+	tmpDir := t.TempDir()
+	fullPath := filepath.Join(tmpDir, path)
+
+	err := os.MkdirAll(filepath.Dir(fullPath), 0755)
 	assert.NoError(t, err)
-	_, err = f.Write(content)
+
+	err = os.WriteFile(fullPath, content, 0644)
 	assert.NoError(t, err)
 }
