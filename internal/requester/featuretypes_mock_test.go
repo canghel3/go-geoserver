@@ -210,7 +210,7 @@ func TestFeatureTypeRequester_Get(t *testing.T) {
 
 		_, err := featureTypeRequester.Get(testdata.DatastorePostgis, testdata.FeatureTypePostgis)
 		assert.Error(t, err)
-		assert.EqualError(t, err, "unexpected end of JSON input")
+		assert.EqualError(t, err, "unexpected EOF")
 	})
 
 	t.Run("Client Error", func(t *testing.T) {

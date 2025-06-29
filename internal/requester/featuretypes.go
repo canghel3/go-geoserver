@@ -99,14 +99,7 @@ func (ftr *FeatureTypeRequester) Get(store, feature string) (*featuretypes.Featu
 	case http.StatusOK:
 		var featureType featuretypes.FeatureTypeWrapper
 
-		body, err := io.ReadAll(response.Body)
-		if err != nil {
-			return nil, err
-		}
-
-		fmt.Println(string(body))
-
-		err = json.Unmarshal(body, &featureType)
+		err = json.NewDecoder(response.Body).Decode(&featureType)
 		if err != nil {
 			return nil, err
 		}

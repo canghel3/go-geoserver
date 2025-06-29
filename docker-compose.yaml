@@ -9,6 +9,7 @@ services:
       - POSTGRES_DB=vectors
     volumes:
       - ./internal/testdata/migrations/table_for_feature.sql:/docker-entrypoint-initdb.d/table_for_feature.sql
+    restart: always
   geoserver-for-tests:
     image: kartoza/geoserver:2.27.1
     ports:
