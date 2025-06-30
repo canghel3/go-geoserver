@@ -3,7 +3,6 @@ package client
 import (
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/coverages"
-	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
 	"github.com/canghel3/go-geoserver/pkg/featuretypes"
 	"github.com/canghel3/go-geoserver/pkg/types"
@@ -122,7 +121,7 @@ func addTestDataStore(t *testing.T, type_ types.DataStoreType) {
 		return
 	}
 
-	t.Fatal(customerrors.NewUnsupportedError("unsupported data store type"))
+	t.Fatal("unsupported data store type")
 }
 
 func addTestFeatureType(t *testing.T, type_ types.DataStoreType) {
@@ -141,7 +140,7 @@ func addTestFeatureType(t *testing.T, type_ types.DataStoreType) {
 		return
 	}
 
-	t.Fatal(customerrors.NewUnsupportedError("unsupported vector layer type"))
+	t.Fatal("unsupported vector layer type")
 }
 
 func addTestCoverageStore(t *testing.T, type_ types.CoverageStoreType) {
@@ -189,7 +188,7 @@ func addTestCoverageStore(t *testing.T, type_ types.CoverageStoreType) {
 
 	}
 
-	t.Fatal(customerrors.NewUnsupportedError("unsupported coverage store type"))
+	t.Fatal("unsupported coverage store type")
 }
 
 func addTestCoverage(t *testing.T, type_ types.CoverageStoreType) {
@@ -202,7 +201,7 @@ func addTestCoverage(t *testing.T, type_ types.CoverageStoreType) {
 		return
 	}
 
-	t.Fatal(customerrors.NewUnsupportedError("unsupported coverage store type"))
+	t.Fatal("unsupported coverage store type")
 }
 
 func findGoModRoot() string {
