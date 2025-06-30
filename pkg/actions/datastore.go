@@ -14,8 +14,8 @@ import (
 	"strings"
 )
 
-func newDataStoresActions(info internal.GeoserverData) *DataStores {
-	return &DataStores{
+func newDataStoresActions(info internal.GeoserverData) DataStores {
+	return DataStores{
 		info:      info,
 		requester: requester.NewDataStoreRequester(info),
 	}
@@ -32,16 +32,16 @@ type DataStores struct {
 }
 
 // Reset the caches related to the specified datastore.
-func (ds *DataStores) Reset(name string) error {
+func (ds DataStores) Reset(name string) error {
 	return ds.requester.Reset(name)
 }
 
-func (ds *DataStores) Use(name string) *FeatureTypes {
+func (ds DataStores) Use(name string) FeatureTypes {
 	return newFeatureTypes(name, ds.info.Clone())
 }
 
 // Create sets general store options and returns a list of available data stores to create.
-func (ds *DataStores) Create(options ...options.GenericStoreOption) DataStoreList {
+func (ds DataStores) Create(options ...options.GenericStoreOption) DataStoreList {
 	dsl := DataStoreList{
 		requester: ds.requester,
 		options:   &models.GenericStoreOptions{},
@@ -54,15 +54,15 @@ func (ds *DataStores) Create(options ...options.GenericStoreOption) DataStoreLis
 	return dsl
 }
 
-func (ds *DataStores) Get(name string) (*datastores.DataStore, error) {
+func (ds DataStores) Get(name string) (*datastores.DataStore, error) {
 	return ds.requester.Get(name)
 }
 
-func (ds *DataStores) GetAll() (*datastores.DataStores, error) {
+func (ds DataStores) GetAll() (*datastores.DataStores, error) {
 	return ds.requester.GetAll()
 }
 
-func (ds *DataStores) Update(name string, store datastores.DataStore) error {
+func (ds DataStores) Update(name string, store datastores.DataStore) error {
 	content, err := json.Marshal(datastores.DataStoreWrapper{DataStore: store})
 	if err != nil {
 		return err
@@ -71,7 +71,7 @@ func (ds *DataStores) Update(name string, store datastores.DataStore) error {
 	return ds.requester.Update(name, content)
 }
 
-func (ds *DataStores) Delete(name string, recurse bool) error {
+func (ds DataStores) Delete(name string, recurse bool) error {
 	return ds.requester.Delete(name, recurse)
 }
 

@@ -23,13 +23,13 @@ func (csv CoverageStoreValidator) ArcGrid(url string) error {
 	return nil
 }
 
-func (csv CoverageStoreValidator) AIG(url string) error {
-	return customerrors.NewNotImplementedError("not implemented")
-}
-
-func (csv CoverageStoreValidator) DTED(url string) error {
-	return customerrors.NewNotImplementedError("not implemented")
-}
+//func (csv CoverageStoreValidator) AIG(url string) error {
+//	return customerrors.NewNotImplementedError("not implemented")
+//}
+//
+//func (csv CoverageStoreValidator) DTED(url string) error {
+//	return customerrors.NewNotImplementedError("not implemented")
+//}
 
 func (csv CoverageStoreValidator) EHdr(url string) error {
 	if len(url) == 0 {
@@ -83,9 +83,9 @@ func (csv CoverageStoreValidator) NITF(url string) error {
 	return nil
 }
 
-func (csv CoverageStoreValidator) RPFTOC(url string) error {
-	return customerrors.NewNotImplementedError("not implemented")
-}
+//func (csv CoverageStoreValidator) RPFTOC(url string) error {
+//	return customerrors.NewNotImplementedError("not implemented")
+//}
 
 func (csv CoverageStoreValidator) RST(url string) error {
 	if len(url) == 0 {
@@ -100,9 +100,9 @@ func (csv CoverageStoreValidator) RST(url string) error {
 	return nil
 }
 
-func (csv CoverageStoreValidator) SRP(url string) error {
-	return customerrors.NewNotImplementedError("not implemented")
-}
+//func (csv CoverageStoreValidator) SRP(url string) error {
+//	return customerrors.NewNotImplementedError("not implemented")
+//}
 
 func (csv CoverageStoreValidator) VRT(url string) error {
 	if len(url) == 0 {

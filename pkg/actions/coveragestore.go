@@ -13,36 +13,35 @@ import (
 	"strings"
 )
 
-func newCoverageStoreActions(info internal.GeoserverData) *CoverageStores {
-	r := requester.NewRequester(info)
-	return &CoverageStores{
+func newCoverageStoreActions(info internal.GeoserverData) CoverageStores {
+	return CoverageStores{
 		info:      info,
-		requester: r,
+		requester: requester.NewCoverageStoreRequester(info),
 	}
 }
 
 type CoverageStoreList struct {
 	options   *models.GenericStoreOptions
-	requester *requester.Requester
+	requester requester.CoverageStoreRequester
 	data      internal.GeoserverData
 }
 
 type CoverageStores struct {
 	info      internal.GeoserverData
-	requester *requester.Requester
+	requester requester.CoverageStoreRequester
 }
 
 // Reset the caches related to the specified coveragestore.
-func (cs *CoverageStores) Reset(name string) error {
-	return cs.requester.CoverageStores().Reset(name)
+func (cs CoverageStores) Reset(name string) error {
+	return cs.requester.Reset(name)
 }
 
 // Use a specific coverage store
-func (cs *CoverageStores) Use(name string) *Coverages {
+func (cs CoverageStores) Use(name string) Coverages {
 	return newCoverages(name, cs.info.Clone())
 }
 
-func (cs *CoverageStores) Create(options ...options.GenericStoreOption) CoverageStoreList {
+func (cs CoverageStores) Create(options ...options.GenericStoreOption) CoverageStoreList {
 	csl := CoverageStoreList{
 		requester: cs.requester,
 		options:   &models.GenericStoreOptions{},
@@ -56,25 +55,25 @@ func (cs *CoverageStores) Create(options ...options.GenericStoreOption) Coverage
 	return csl
 }
 
-func (cs *CoverageStores) Get(name string) (*coveragestores.CoverageStore, error) {
-	return cs.requester.CoverageStores().Get(name)
+func (cs CoverageStores) Get(name string) (*coveragestores.CoverageStore, error) {
+	return cs.requester.Get(name)
 }
 
-func (cs *CoverageStores) GetAll() (*coveragestores.CoverageStores, error) {
-	return cs.requester.CoverageStores().GetAll()
+func (cs CoverageStores) GetAll() (*coveragestores.CoverageStores, error) {
+	return cs.requester.GetAll()
 }
 
-func (cs *CoverageStores) Delete(name string, recurse bool) error {
-	return cs.requester.CoverageStores().Delete(name, recurse)
+func (cs CoverageStores) Delete(name string, recurse bool) error {
+	return cs.requester.Delete(name, recurse)
 }
 
-func (cs *CoverageStores) Update(name string, store coveragestores.CoverageStore) error {
+func (cs CoverageStores) Update(name string, store coveragestores.CoverageStore) error {
 	content, err := json.Marshal(coveragestores.CoverageStoreWrapper{CoverageStore: store})
 	if err != nil {
 		return err
 	}
 
-	return cs.requester.CoverageStores().Update(name, content)
+	return cs.requester.Update(name, content)
 }
 
 //func (csl CoverageStoreList) AIG(name string, filepath string) error {
@@ -235,7 +234,7 @@ func (csl CoverageStoreList) EHdr(name string, dir string) error {
 		return err
 	}
 
-	return csl.requester.CoverageStores().Create(content)
+	return csl.requester.Create(content)
 }
 
 func (csl CoverageStoreList) ENVIHdr(name string, filepath string) error {
@@ -279,7 +278,7 @@ func (csl CoverageStoreList) ENVIHdr(name string, filepath string) error {
 		return err
 	}
 
-	return csl.requester.CoverageStores().Create(content)
+	return csl.requester.Create(content)
 }
 
 func (csl CoverageStoreList) ERDASImg(name string, filepath string) error {
@@ -323,7 +322,7 @@ func (csl CoverageStoreList) ERDASImg(name string, filepath string) error {
 		return err
 	}
 
-	return csl.requester.CoverageStores().Create(content)
+	return csl.requester.Create(content)
 }
 
 //func (csl CoverageStoreList) GeoPackage(name string, filepath string) error {
@@ -406,7 +405,7 @@ func (csl CoverageStoreList) GeoTIFF(name string, filepath string) error {
 		return err
 	}
 
-	return csl.requester.CoverageStores().Create(content)
+	return csl.requester.Create(content)
 }
 
 //func (csl CoverageStoreList) ImageMosaic(name string, dirpath string) error {
@@ -514,7 +513,7 @@ func (csl CoverageStoreList) NITF(name string, filepath string) error {
 		return err
 	}
 
-	return csl.requester.CoverageStores().Create(content)
+	return csl.requester.Create(content)
 }
 
 //func (csl CoverageStoreList) RPFTOC(name string, filepath string) error {
@@ -597,7 +596,7 @@ func (csl CoverageStoreList) RST(name string, filepath string) error {
 		return err
 	}
 
-	return csl.requester.CoverageStores().Create(content)
+	return csl.requester.Create(content)
 }
 
 //func (csl CoverageStoreList) SRP(name string, filepath string) error {
@@ -680,7 +679,7 @@ func (csl CoverageStoreList) VRT(name string, filepath string) error {
 		return err
 	}
 
-	return csl.requester.CoverageStores().Create(content)
+	return csl.requester.Create(content)
 }
 
 //func (csl CoverageStoreList) WorldImage(name string, filepath string) error {

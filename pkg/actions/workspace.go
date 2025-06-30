@@ -10,17 +10,17 @@ import (
 
 type Workspaces struct {
 	info      internal.GeoserverData
-	requester *requester.Requester
+	requester requester.WorkspaceRequester
 }
 
-func NewWorkspaceActions(info internal.GeoserverData) *Workspaces {
-	return &Workspaces{
+func NewWorkspaceActions(info internal.GeoserverData) Workspaces {
+	return Workspaces{
 		info:      info,
-		requester: requester.NewRequester(info),
+		requester: requester.NewWorkspaceRequester(info),
 	}
 }
 
-func (ws *Workspaces) Create(name string, _default bool) error {
+func (ws Workspaces) Create(name string, _default bool) error {
 	err := validator.Workspace.Name(name)
 	if err != nil {
 		return err
@@ -37,23 +37,23 @@ func (ws *Workspaces) Create(name string, _default bool) error {
 		return err
 	}
 
-	return ws.requester.Workspaces().Create(content, _default)
+	return ws.requester.Create(content, _default)
 }
 
-func (ws *Workspaces) Get(name string) (*workspace.WorkspaceRetrieval, error) {
+func (ws Workspaces) Get(name string) (*workspace.WorkspaceRetrieval, error) {
 	err := validator.Workspace.Name(name)
 	if err != nil {
 		return nil, err
 	}
 
-	return ws.requester.Workspaces().Get(name)
+	return ws.requester.Get(name)
 }
 
-func (ws *Workspaces) GetAll() ([]workspace.MultiWorkspace, error) {
-	return ws.requester.Workspaces().GetAll()
+func (ws Workspaces) GetAll() ([]workspace.MultiWorkspace, error) {
+	return ws.requester.GetAll()
 }
 
-func (ws *Workspaces) Update(oldName, newName string) error {
+func (ws Workspaces) Update(oldName, newName string) error {
 	err := validator.Workspace.Name(oldName)
 	if err != nil {
 		return err
@@ -75,43 +75,43 @@ func (ws *Workspaces) Update(oldName, newName string) error {
 		return err
 	}
 
-	return ws.requester.Workspaces().Update(content, oldName)
+	return ws.requester.Update(content, oldName)
 }
 
-func (ws *Workspaces) Delete(name string, recurse bool) error {
+func (ws Workspaces) Delete(name string, recurse bool) error {
 	err := validator.Workspace.Name(name)
 	if err != nil {
 		return err
 	}
 
-	return ws.requester.Workspaces().Delete(name, recurse)
+	return ws.requester.Delete(name, recurse)
 }
 
 type Workspace struct {
-	info internal.GeoserverData
+	data internal.GeoserverData
 }
 
-func (ws *Workspaces) Use(workspace string) *Workspace {
+func (ws Workspaces) Use(workspace string) Workspace {
 	ws.info.Workspace = workspace
-	return &Workspace{
-		info: ws.info,
+	return Workspace{
+		data: ws.info,
 	}
 }
 
-func (w *Workspace) DataStores() *DataStores {
-	return newDataStoresActions(w.info.Clone())
+func (w Workspace) DataStores() DataStores {
+	return newDataStoresActions(w.data.Clone())
 }
 
-func (w *Workspace) DataStore(name string) *FeatureTypes {
-	return newDataStoresActions(w.info.Clone()).Use(name)
+func (w Workspace) DataStore(name string) FeatureTypes {
+	return newDataStoresActions(w.data.Clone()).Use(name)
 }
 
-func (w *Workspace) CoverageStores() *CoverageStores {
-	return newCoverageStoreActions(w.info.Clone())
+func (w Workspace) CoverageStores() CoverageStores {
+	return newCoverageStoreActions(w.data.Clone())
 }
 
-func (w *Workspace) CoverageStore(name string) *Coverages {
-	return newCoverageStoreActions(w.info.Clone()).Use(name)
+func (w Workspace) CoverageStore(name string) Coverages {
+	return newCoverageStoreActions(w.data.Clone()).Use(name)
 }
 
 //TODO: add raster service and layers service for handling layers without specifying store

@@ -7,15 +7,15 @@ import (
 )
 
 type Fonts struct {
-	requester *requester.Requester
+	requester requester.FontsRequester
 }
 
-func NewFonts(data internal.GeoserverData) *Fonts {
-	return &Fonts{
-		requester: requester.NewRequester(data),
+func NewFonts(data internal.GeoserverData) Fonts {
+	return Fonts{
+		requester: requester.NewFontsRequester(data),
 	}
 }
 
-func (f *Fonts) Get() (*fonts.Fonts, error) {
-	return f.requester.Fonts().Get()
+func (f Fonts) Get() (*fonts.Fonts, error) {
+	return f.requester.Get()
 }

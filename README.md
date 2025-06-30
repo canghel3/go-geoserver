@@ -68,8 +68,8 @@ talk to GeoServer’s REST API from your Go applications.
 
 ## Installation
 
-```go
-go get github.com/canghel3/go -geoserver
+```bash
+go get github.com/canghel3/go-geoserver
 ```
 
 ## Usage Examples

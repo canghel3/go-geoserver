@@ -18,7 +18,13 @@ type WMSRequester struct {
 	data internal.GeoserverData
 }
 
-func (wmsR *WMSRequester) GetCapabilities(version wms.WMSVersion) ([]byte, error) {
+func NewWMSRequester(data internal.GeoserverData) WMSRequester {
+	return WMSRequester{
+		data: data,
+	}
+}
+
+func (wmsR WMSRequester) GetCapabilities(version wms.WMSVersion) ([]byte, error) {
 	var target = fmt.Sprintf("%s/geoserver/wms?service=wms&version=%s&request=GetCapabilities", wmsR.data.Connection.URL, version)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -47,7 +53,7 @@ func (wmsR *WMSRequester) GetCapabilities(version wms.WMSVersion) ([]byte, error
 	}
 }
 
-func (wmsR *WMSRequester) GetMap(width, height uint16, layers []string, bbox shared.BBOX, version wms.WMSVersion, format wms.WMSFormat, options ...options.GetMapOption) ([]byte, error) {
+func (wmsR WMSRequester) GetMap(width, height uint16, layers []string, bbox shared.BBOX, version wms.WMSVersion, format wms.WMSFormat, options ...options.GetMapOption) ([]byte, error) {
 	u, err := url.Parse(fmt.Sprintf("%s/geoserver/wms", wmsR.data.Connection.URL))
 	if err != nil {
 		return nil, err

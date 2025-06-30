@@ -14,7 +14,13 @@ type AboutRequester struct {
 	data internal.GeoserverData
 }
 
-func (ar *AboutRequester) Manifest() (*about.Manifest, error) {
+func NewAboutRequester(data internal.GeoserverData) AboutRequester {
+	return AboutRequester{
+		data: data,
+	}
+}
+
+func (ar AboutRequester) Manifest() (*about.Manifest, error) {
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/about/manifest", ar.data.Connection.URL), nil)
 	if err != nil {
 		return nil, err
@@ -48,7 +54,7 @@ func (ar *AboutRequester) Manifest() (*about.Manifest, error) {
 	}
 }
 
-func (ar *AboutRequester) Version() (*about.Version, error) {
+func (ar AboutRequester) Version() (*about.Version, error) {
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/about/version", ar.data.Connection.URL), nil)
 	if err != nil {
 		return nil, err
@@ -82,7 +88,7 @@ func (ar *AboutRequester) Version() (*about.Version, error) {
 	}
 }
 
-func (ar *AboutRequester) Status() (*about.Status, error) {
+func (ar AboutRequester) Status() (*about.Status, error) {
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/about/status", ar.data.Connection.URL), nil)
 	if err != nil {
 		return nil, err
@@ -116,7 +122,7 @@ func (ar *AboutRequester) Status() (*about.Status, error) {
 	}
 }
 
-func (ar *AboutRequester) SystemStatus() (*about.Metrics, error) {
+func (ar AboutRequester) SystemStatus() (*about.Metrics, error) {
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/about/status", ar.data.Connection.URL), nil)
 	if err != nil {
 		return nil, err

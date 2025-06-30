@@ -34,28 +34,28 @@ func NewGeoserverClient(url, username, password string, options ...options.Geose
 
 type GeoserverClientOption func(*GeoserverClient)
 
-func (s *GeoserverClient) About() *actions.About {
+func (s *GeoserverClient) About() actions.About {
 	return actions.NewAboutAction(s.info.Clone())
 }
 
-func (s *GeoserverClient) Fonts() *actions.Fonts {
+func (s *GeoserverClient) Fonts() actions.Fonts {
 	return actions.NewFonts(s.info.Clone())
 }
 
 // Workspaces displays available actions inside a workspace.
-func (s *GeoserverClient) Workspaces() *actions.Workspaces {
+func (s *GeoserverClient) Workspaces() actions.Workspaces {
 	return actions.NewWorkspaceActions(s.info.Clone())
 }
 
 // Workspace is shorthand for Workspaces().Use(name)
-func (s *GeoserverClient) Workspace(name string) *actions.Workspace {
+func (s *GeoserverClient) Workspace(name string) actions.Workspace {
 	return actions.NewWorkspaceActions(s.info.Clone()).Use(name)
 }
 
-func (s *GeoserverClient) WMS(version wms.WMSVersion) *actions.WMS {
+func (s *GeoserverClient) WMS(version wms.WMSVersion) actions.WMS {
 	return actions.NewWMSActions(s.info.Clone(), version)
 }
 
-func (s *GeoserverClient) Logging() *actions.Logging {
+func (s *GeoserverClient) Logging() actions.Logging {
 	return actions.NewLoggingActions(s.info.Clone())
 }

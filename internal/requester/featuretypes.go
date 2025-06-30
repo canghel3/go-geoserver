@@ -19,7 +19,7 @@ func NewFeatureTypeRequester(data internal.GeoserverData) FeatureTypeRequester {
 	return FeatureTypeRequester{data: data}
 }
 
-func (ftr *FeatureTypeRequester) Create(store string, content []byte) error {
+func (ftr FeatureTypeRequester) Create(store string, content []byte) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes", ftr.data.Connection.URL, ftr.data.Workspace, store)
 
 	request, err := http.NewRequest(http.MethodPost, target, bytes.NewReader(content))
@@ -48,7 +48,7 @@ func (ftr *FeatureTypeRequester) Create(store string, content []byte) error {
 	}
 }
 
-func (ftr *FeatureTypeRequester) Delete(store, feature string, recurse bool) error {
+func (ftr FeatureTypeRequester) Delete(store, feature string, recurse bool) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes/%s?recurse=%v", ftr.data.Connection.URL, ftr.data.Workspace, store, feature, recurse)
 
 	request, err := http.NewRequest(http.MethodDelete, target, nil)
@@ -79,7 +79,7 @@ func (ftr *FeatureTypeRequester) Delete(store, feature string, recurse bool) err
 	}
 }
 
-func (ftr *FeatureTypeRequester) Get(store, feature string) (*featuretypes.FeatureType, error) {
+func (ftr FeatureTypeRequester) Get(store, feature string) (*featuretypes.FeatureType, error) {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes/%s.json", ftr.data.Connection.URL, ftr.data.Workspace, store, feature)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -117,7 +117,7 @@ func (ftr *FeatureTypeRequester) Get(store, feature string) (*featuretypes.Featu
 	}
 }
 
-func (ftr *FeatureTypeRequester) GetAll(store string) (*featuretypes.FeatureTypes, error) {
+func (ftr FeatureTypeRequester) GetAll(store string) (*featuretypes.FeatureTypes, error) {
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes", ftr.data.Connection.URL, ftr.data.Workspace, store), nil)
 	if err != nil {
 		return nil, err
@@ -162,7 +162,7 @@ func (ftr *FeatureTypeRequester) GetAll(store string) (*featuretypes.FeatureType
 	}
 }
 
-func (ftr *FeatureTypeRequester) Update(store, feature string, content []byte) error {
+func (ftr FeatureTypeRequester) Update(store, feature string, content []byte) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes/%s", ftr.data.Connection.URL, ftr.data.Workspace, store, feature)
 
 	request, err := http.NewRequest(http.MethodPut, target, bytes.NewReader(content))
@@ -193,7 +193,7 @@ func (ftr *FeatureTypeRequester) Update(store, feature string, content []byte) e
 	}
 }
 
-func (ftr *FeatureTypeRequester) Reset(store, name string) error {
+func (ftr FeatureTypeRequester) Reset(store, name string) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/featuretypes/%s/reset", ftr.data.Connection.URL, ftr.data.Workspace, store, name)
 
 	request, err := http.NewRequest(http.MethodPut, target, nil)

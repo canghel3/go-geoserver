@@ -21,7 +21,7 @@ func NewDataStoreRequester(data internal.GeoserverData) DataStoreRequester {
 	}
 }
 
-func (dr *DataStoreRequester) Create(content []byte) error {
+func (dr DataStoreRequester) Create(content []byte) error {
 	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores", dr.data.Connection.URL, dr.data.Workspace), bytes.NewBuffer(content))
 	if err != nil {
 		return err
@@ -49,7 +49,7 @@ func (dr *DataStoreRequester) Create(content []byte) error {
 	}
 }
 
-func (dr *DataStoreRequester) GetAll() (*datastores.DataStores, error) {
+func (dr DataStoreRequester) GetAll() (*datastores.DataStores, error) {
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores", dr.data.Connection.URL, dr.data.Workspace), nil)
 	if err != nil {
 		return nil, err
@@ -94,7 +94,7 @@ func (dr *DataStoreRequester) GetAll() (*datastores.DataStores, error) {
 	}
 }
 
-func (dr *DataStoreRequester) Get(name string) (*datastores.DataStore, error) {
+func (dr DataStoreRequester) Get(name string) (*datastores.DataStore, error) {
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", dr.data.Connection.URL, dr.data.Workspace, name), nil)
 	if err != nil {
 		return nil, err
@@ -130,7 +130,7 @@ func (dr *DataStoreRequester) Get(name string) (*datastores.DataStore, error) {
 	}
 }
 
-func (dr *DataStoreRequester) Update(name string, content []byte) error {
+func (dr DataStoreRequester) Update(name string, content []byte) error {
 	request, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s", dr.data.Connection.URL, dr.data.Workspace, name), bytes.NewReader(content))
 	if err != nil {
 		return err
@@ -160,7 +160,7 @@ func (dr *DataStoreRequester) Update(name string, content []byte) error {
 	}
 }
 
-func (dr *DataStoreRequester) Delete(name string, recurse bool) error {
+func (dr DataStoreRequester) Delete(name string, recurse bool) error {
 	request, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s?recurse=%v", dr.data.Connection.URL, dr.data.Workspace, name, recurse), nil)
 	if err != nil {
 		return err
@@ -189,7 +189,7 @@ func (dr *DataStoreRequester) Delete(name string, recurse bool) error {
 	}
 }
 
-func (dr *DataStoreRequester) Reset(name string) error {
+func (dr DataStoreRequester) Reset(name string) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/datastores/%s/reset", dr.data.Connection.URL, dr.data.Workspace, name)
 
 	request, err := http.NewRequest(http.MethodPut, target, nil)

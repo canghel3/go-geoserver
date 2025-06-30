@@ -15,7 +15,13 @@ type CoverageStoreRequester struct {
 	data internal.GeoserverData
 }
 
-func (cr *CoverageStoreRequester) Create(content []byte) error {
+func NewCoverageStoreRequester(data internal.GeoserverData) CoverageStoreRequester {
+	return CoverageStoreRequester{
+		data: data,
+	}
+}
+
+func (cr CoverageStoreRequester) Create(content []byte) error {
 	request, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores", cr.data.Connection.URL, cr.data.Workspace), bytes.NewBuffer(content))
 	if err != nil {
 		return err
@@ -43,7 +49,7 @@ func (cr *CoverageStoreRequester) Create(content []byte) error {
 	}
 }
 
-func (cr *CoverageStoreRequester) GetAll() (*coveragestores.CoverageStores, error) {
+func (cr CoverageStoreRequester) GetAll() (*coveragestores.CoverageStores, error) {
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores", cr.data.Connection.URL, cr.data.Workspace), nil)
 	if err != nil {
 		return nil, err
@@ -88,7 +94,7 @@ func (cr *CoverageStoreRequester) GetAll() (*coveragestores.CoverageStores, erro
 	}
 }
 
-func (cr *CoverageStoreRequester) Get(name string) (*coveragestores.CoverageStore, error) {
+func (cr CoverageStoreRequester) Get(name string) (*coveragestores.CoverageStore, error) {
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s", cr.data.Connection.URL, cr.data.Workspace, name), nil)
 	if err != nil {
 		return nil, err
@@ -124,7 +130,7 @@ func (cr *CoverageStoreRequester) Get(name string) (*coveragestores.CoverageStor
 	}
 }
 
-func (cr *CoverageStoreRequester) Update(name string, content []byte) error {
+func (cr CoverageStoreRequester) Update(name string, content []byte) error {
 	request, err := http.NewRequest(http.MethodPut, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s", cr.data.Connection.URL, cr.data.Workspace, name), bytes.NewReader(content))
 	if err != nil {
 		return err
@@ -154,7 +160,7 @@ func (cr *CoverageStoreRequester) Update(name string, content []byte) error {
 	}
 }
 
-func (cr *CoverageStoreRequester) Delete(name string, recurse bool) error {
+func (cr CoverageStoreRequester) Delete(name string, recurse bool) error {
 	request, err := http.NewRequest(http.MethodDelete, fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s?recurse=%v", cr.data.Connection.URL, cr.data.Workspace, name, recurse), nil)
 	if err != nil {
 		return err
@@ -183,7 +189,7 @@ func (cr *CoverageStoreRequester) Delete(name string, recurse bool) error {
 	}
 }
 
-func (cr *CoverageStoreRequester) Reset(name string) error {
+func (cr CoverageStoreRequester) Reset(name string) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/reset", cr.data.Connection.URL, cr.data.Workspace, name)
 
 	request, err := http.NewRequest(http.MethodPut, target, nil)

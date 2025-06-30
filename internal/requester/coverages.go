@@ -21,7 +21,7 @@ func NewCoverageRequester(data internal.GeoserverData) CoverageRequester {
 	}
 }
 
-func (cr *CoverageRequester) Create(store string, content []byte) error {
+func (cr CoverageRequester) Create(store string, content []byte) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", cr.data.Connection.URL, cr.data.Workspace, store)
 
 	request, err := http.NewRequest(http.MethodPost, target, bytes.NewBuffer(content))
@@ -51,7 +51,7 @@ func (cr *CoverageRequester) Create(store string, content []byte) error {
 	}
 }
 
-func (cr *CoverageRequester) GetAll(store string) (*coverages.Coverages, error) {
+func (cr CoverageRequester) GetAll(store string) (*coverages.Coverages, error) {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages", cr.data.Connection.URL, cr.data.Workspace, store)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -97,7 +97,7 @@ func (cr *CoverageRequester) GetAll(store string) (*coverages.Coverages, error) 
 	}
 }
 
-func (cr *CoverageRequester) Get(store, coverage string) (*coverages.Coverage, error) {
+func (cr CoverageRequester) Get(store, coverage string) (*coverages.Coverage, error) {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages/%s.json", cr.data.Connection.URL, cr.data.Workspace, store, coverage)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -135,7 +135,7 @@ func (cr *CoverageRequester) Get(store, coverage string) (*coverages.Coverage, e
 	}
 }
 
-func (cr *CoverageRequester) Delete(store, coverage string, recurse bool) error {
+func (cr CoverageRequester) Delete(store, coverage string, recurse bool) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages/%s?recurse=%v", cr.data.Connection.URL, cr.data.Workspace, store, coverage, recurse)
 
 	request, err := http.NewRequest(http.MethodDelete, target, nil)
@@ -166,7 +166,7 @@ func (cr *CoverageRequester) Delete(store, coverage string, recurse bool) error 
 	}
 }
 
-func (cr *CoverageRequester) Update(store, coverage string, content []byte) error {
+func (cr CoverageRequester) Update(store, coverage string, content []byte) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages/%s", cr.data.Connection.URL, cr.data.Workspace, store, coverage)
 
 	request, err := http.NewRequest(http.MethodPut, target, bytes.NewReader(content))
@@ -197,7 +197,7 @@ func (cr *CoverageRequester) Update(store, coverage string, content []byte) erro
 	}
 }
 
-func (cr *CoverageRequester) Reset(store, coverage string) error {
+func (cr CoverageRequester) Reset(store, coverage string) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s/coveragestores/%s/coverages/%s/reset", cr.data.Connection.URL, cr.data.Workspace, store, coverage)
 
 	request, err := http.NewRequest(http.MethodPut, target, nil)

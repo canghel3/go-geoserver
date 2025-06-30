@@ -2,11 +2,8 @@ package actions
 
 import (
 	"bytes"
-	"encoding/xml"
-	"errors"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
-	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"github.com/canghel3/go-geoserver/pkg/shared"
 	"github.com/canghel3/go-geoserver/pkg/wms"
 	"golang.org/x/image/tiff"
@@ -17,41 +14,41 @@ import (
 )
 
 type WMS struct {
-	requester *requester.Requester
+	requester requester.WMSRequester
 	version   wms.WMSVersion
 }
 
-func NewWMSActions(info internal.GeoserverData, version wms.WMSVersion) *WMS {
-	return &WMS{
-		requester: requester.NewRequester(info),
+func NewWMSActions(data internal.GeoserverData, version wms.WMSVersion) WMS {
+	return WMS{
+		requester: requester.NewWMSRequester(data),
 		version:   version,
 	}
 }
 
-func (wm *WMS) GetCapabilities() (wms.Capabilities, error) {
-	cap, err := wm.requester.WMS().GetCapabilities(wm.version)
-	if err != nil {
-		return nil, err
-	}
+//func (wm *WMS) GetCapabilities() (wms.Capabilities, error) {
+//	cap, err := wm.requester.WMS().GetCapabilities(wm.version)
+//	if err != nil {
+//		return nil, err
+//	}
+//
+//	switch wm.version {
+//	case wms.Version111:
+//		return nil, customerrors.NewNotImplementedError("not implemented")
+//		//unmarshal into v1.1.1 struct
+//	case wms.Version130:
+//		cap130 := wms.Capabilities1_3_0{}
+//		err = xml.Unmarshal(cap, &cap130)
+//		if err != nil {
+//			return nil, err
+//		}
+//
+//		return &cap130, nil
+//	default:
+//		return nil, errors.New("unsupported version")
+//	}
+//}
 
-	switch wm.version {
-	case wms.Version111:
-		return nil, customerrors.NewNotImplementedError("not implemented")
-		//unmarshal into v1.1.1 struct
-	case wms.Version130:
-		cap130 := wms.Capabilities1_3_0{}
-		err = xml.Unmarshal(cap, &cap130)
-		if err != nil {
-			return nil, err
-		}
-
-		return &cap130, nil
-	default:
-		return nil, errors.New("unsupported version")
-	}
-}
-
-func (wm *WMS) GetMap(width, height uint16, layers []string, bbox shared.BBOX) MapFormats {
+func (wm WMS) GetMap(width, height uint16, layers []string, bbox shared.BBOX) MapFormats {
 	return MapFormats{
 		width:     width,
 		height:    height,
@@ -68,11 +65,11 @@ type MapFormats struct {
 	layers    []string
 	bbox      shared.BBOX
 	version   wms.WMSVersion
-	requester *requester.Requester
+	requester requester.WMSRequester
 }
 
 func (mf MapFormats) Png() (image.Image, error) {
-	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.PNG)
+	content, err := mf.requester.GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.PNG)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +78,7 @@ func (mf MapFormats) Png() (image.Image, error) {
 }
 
 func (mf MapFormats) Png8() (image.Image, error) {
-	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.PNG8)
+	content, err := mf.requester.GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.PNG8)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +87,7 @@ func (mf MapFormats) Png8() (image.Image, error) {
 }
 
 func (mf MapFormats) Jpeg() (image.Image, error) {
-	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.JPEG)
+	content, err := mf.requester.GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.JPEG)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +96,7 @@ func (mf MapFormats) Jpeg() (image.Image, error) {
 }
 
 func (mf MapFormats) JpegPng() (image.Image, error) {
-	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.JPEG_PNG)
+	content, err := mf.requester.GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.JPEG_PNG)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +105,7 @@ func (mf MapFormats) JpegPng() (image.Image, error) {
 }
 
 func (mf MapFormats) JpegPng8() (image.Image, error) {
-	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.JPEG_PNG8)
+	content, err := mf.requester.GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.JPEG_PNG8)
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +114,7 @@ func (mf MapFormats) JpegPng8() (image.Image, error) {
 }
 
 func (mf MapFormats) Gif() (image.Image, error) {
-	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.GIF)
+	content, err := mf.requester.GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.GIF)
 	if err != nil {
 		return nil, err
 	}
@@ -126,7 +123,7 @@ func (mf MapFormats) Gif() (image.Image, error) {
 }
 
 func (mf MapFormats) Tiff() (image.Image, error) {
-	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.TIFF)
+	content, err := mf.requester.GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.TIFF)
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +132,7 @@ func (mf MapFormats) Tiff() (image.Image, error) {
 }
 
 func (mf MapFormats) Tiff8() (image.Image, error) {
-	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.TIFF8)
+	content, err := mf.requester.GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.TIFF8)
 	if err != nil {
 		return nil, err
 	}
@@ -144,7 +141,7 @@ func (mf MapFormats) Tiff8() (image.Image, error) {
 }
 
 func (mf MapFormats) GeoTiff() (image.Image, error) {
-	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.GeoTIFF)
+	content, err := mf.requester.GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.GeoTIFF)
 	if err != nil {
 		return nil, err
 	}
@@ -153,7 +150,7 @@ func (mf MapFormats) GeoTiff() (image.Image, error) {
 }
 
 func (mf MapFormats) GeoTiff8() (image.Image, error) {
-	content, err := mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.GeoTIFF8)
+	content, err := mf.requester.GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.GeoTIFF8)
 	if err != nil {
 		return nil, err
 	}
@@ -162,11 +159,11 @@ func (mf MapFormats) GeoTiff8() (image.Image, error) {
 }
 
 func (mf MapFormats) Svg() ([]byte, error) {
-	return mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.SVG)
+	return mf.requester.GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.SVG)
 }
 
 func (mf MapFormats) Pdf() ([]byte, error) {
-	return mf.requester.WMS().GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.PDF)
+	return mf.requester.GetMap(mf.width, mf.height, mf.layers, mf.bbox, mf.version, wms.PDF)
 }
 
 //func (mf MapFormats) GeoRSS() (image.Image, error) {

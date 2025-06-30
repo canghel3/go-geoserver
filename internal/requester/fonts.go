@@ -14,7 +14,11 @@ type FontsRequester struct {
 	data internal.GeoserverData
 }
 
-func (fr *FontsRequester) Get() (*fonts.Fonts, error) {
+func NewFontsRequester(data internal.GeoserverData) FontsRequester {
+	return FontsRequester{data: data}
+}
+
+func (fr FontsRequester) Get() (*fonts.Fonts, error) {
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/geoserver/rest/fonts", fr.data.Connection.URL), nil)
 	if err != nil {
 		return nil, err

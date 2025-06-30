@@ -15,7 +15,11 @@ type WorkspaceRequester struct {
 	data internal.GeoserverData
 }
 
-func (wr *WorkspaceRequester) Create(content []byte, _default bool) error {
+func NewWorkspaceRequester(data internal.GeoserverData) WorkspaceRequester {
+	return WorkspaceRequester{data: data}
+}
+
+func (wr WorkspaceRequester) Create(content []byte, _default bool) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces?default=%v", wr.data.Connection.URL, _default)
 	request, err := http.NewRequest(http.MethodPost, target, bytes.NewBuffer(content))
 	if err != nil {
@@ -46,7 +50,7 @@ func (wr *WorkspaceRequester) Create(content []byte, _default bool) error {
 	}
 }
 
-func (wr *WorkspaceRequester) Get(name string) (*workspace.WorkspaceRetrieval, error) {
+func (wr WorkspaceRequester) Get(name string) (*workspace.WorkspaceRetrieval, error) {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", wr.data.Connection.URL, name)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -83,7 +87,7 @@ func (wr *WorkspaceRequester) Get(name string) (*workspace.WorkspaceRetrieval, e
 	}
 }
 
-func (wr *WorkspaceRequester) GetAll() ([]workspace.MultiWorkspace, error) {
+func (wr WorkspaceRequester) GetAll() ([]workspace.MultiWorkspace, error) {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces", wr.data.Connection.URL)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -127,7 +131,7 @@ func (wr *WorkspaceRequester) GetAll() ([]workspace.MultiWorkspace, error) {
 	}
 }
 
-func (wr *WorkspaceRequester) Update(content []byte, oldName string) error {
+func (wr WorkspaceRequester) Update(content []byte, oldName string) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", wr.data.Connection.URL, oldName)
 	request, err := http.NewRequest(http.MethodPut, target, bytes.NewReader(content))
 	if err != nil {
@@ -158,7 +162,7 @@ func (wr *WorkspaceRequester) Update(content []byte, oldName string) error {
 	}
 }
 
-func (wr *WorkspaceRequester) Delete(name string, recurse bool) error {
+func (wr WorkspaceRequester) Delete(name string, recurse bool) error {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s?recurse=%v", wr.data.Connection.URL, name, recurse)
 	request, err := http.NewRequest(http.MethodDelete, target, nil)
 	if err != nil {
