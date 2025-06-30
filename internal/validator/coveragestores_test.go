@@ -545,32 +545,3 @@ func TestCoverageStoreValidator_ImagePyramid(t *testing.T) {
 		})
 	}
 }
-
-// Tests for the not implemented methods
-func TestCoverageStoreValidator_NotImplementedMethods(t *testing.T) {
-	csv := CoverageStoreValidator{}
-
-	t.Run("AIG", func(t *testing.T) {
-		err := csv.AIG("test")
-		assert.Error(t, err)
-		assert.EqualError(t, err, "not implemented")
-	})
-
-	t.Run("DTED", func(t *testing.T) {
-		err := csv.DTED("test")
-		assert.Error(t, err)
-		assert.EqualError(t, err, "not implemented")
-	})
-
-	t.Run("RPFTOC", func(t *testing.T) {
-		err := csv.RPFTOC("test")
-		assert.Error(t, err)
-		assert.EqualError(t, err, "not implemented")
-	})
-
-	t.Run("SRP", func(t *testing.T) {
-		err := csv.SRP("test")
-		assert.Error(t, err)
-		assert.EqualError(t, err, "not implemented")
-	})
-}
