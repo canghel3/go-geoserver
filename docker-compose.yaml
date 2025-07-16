@@ -17,11 +17,11 @@ services:
     environment:
       - GEOSERVER_ADMIN_USER=admin
       - GEOSERVER_ADMIN_PASSWORD=geoserver
-      - GEOSERVER_DATA_DIR=/opt/geoserver/data
+      - GEOSERVER_DATA_DIR=/opt/geoserver-for-tests/data
       - STABLE_EXTENSIONS=css-plugin
     command: run
     volumes:
-      - /tmp/data:/opt/geoserver/data:rw
+      - /tmp/data:/opt/geoserver-for-tests/data:rw
     restart: always
   geoserver:
     image: kartoza/geoserver:2.27.1

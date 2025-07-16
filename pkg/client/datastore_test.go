@@ -6,8 +6,8 @@ import (
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"github.com/canghel3/go-geoserver/pkg/datastores"
 	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
+	"github.com/canghel3/go-geoserver/pkg/formats"
 	"github.com/canghel3/go-geoserver/pkg/options"
-	"github.com/canghel3/go-geoserver/pkg/types"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -58,7 +58,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 		})
 
 		t.Run("PostGIS", func(t *testing.T) {
-			addTestDataStore(t, types.PostGIS)
+			addTestDataStore(t, formats.PostGIS)
 
 			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastorePostgis)
 			assert.NoError(t, err)
@@ -89,7 +89,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 		})
 
 		t.Run("Shapefile", func(t *testing.T) {
-			addTestDataStore(t, types.Shapefile)
+			addTestDataStore(t, formats.Shapefile)
 
 			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreShapefile)
 			assert.NoError(t, err)
@@ -105,7 +105,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 		})
 
 		t.Run("Directory Of Shapefiles", func(t *testing.T) {
-			addTestDataStore(t, types.DirOfShapefiles)
+			addTestDataStore(t, formats.DirOfShapefiles)
 
 			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreDirOfShapefiles)
 			assert.NoError(t, err)
@@ -121,7 +121,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 		})
 
 		t.Run("GeoPackage", func(t *testing.T) {
-			addTestDataStore(t, types.GeoPackage)
+			addTestDataStore(t, formats.GeoPackage)
 
 			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreGeoPackage)
 			assert.NoError(t, err)
@@ -147,7 +147,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 		})
 
 		t.Run("WebFeatureService", func(t *testing.T) {
-			addTestDataStore(t, types.WebFeatureService)
+			addTestDataStore(t, formats.WebFeatureService)
 
 			store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastoreWebFeatureService)
 			assert.NoError(t, err)
@@ -251,7 +251,7 @@ func TestDataStoreIntegration_Create(t *testing.T) {
 func TestDataStoreIntegration_Get(t *testing.T) {
 	addTestWorkspace(t)
 
-	addTestDataStore(t, types.PostGIS)
+	addTestDataStore(t, formats.PostGIS)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("POSTGIS", func(t *testing.T) {
@@ -274,7 +274,7 @@ func TestDataStoreIntegration_Get(t *testing.T) {
 
 func TestDataStoreIntegration_GetAll(t *testing.T) {
 	addTestWorkspace(t)
-	addTestDataStore(t, types.PostGIS)
+	addTestDataStore(t, formats.PostGIS)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("Single DataStore", func(t *testing.T) {
@@ -296,7 +296,7 @@ func TestDataStoreIntegration_GetAll(t *testing.T) {
 func TestDataStoreIntegration_Delete(t *testing.T) {
 	addTestWorkspace(t)
 
-	addTestDataStore(t, types.PostGIS)
+	addTestDataStore(t, formats.PostGIS)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("POSTGIS", func(t *testing.T) {
@@ -325,7 +325,7 @@ func TestDataStoreIntegration_Delete(t *testing.T) {
 
 func TestDataStoreIntegration_Update(t *testing.T) {
 	addTestWorkspace(t)
-	addTestDataStore(t, types.PostGIS)
+	addTestDataStore(t, formats.PostGIS)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		store, err := geoclient.Workspace(testdata.Workspace).DataStores().Get(testdata.DatastorePostgis)
@@ -353,7 +353,7 @@ func TestDataStoreIntegration_Update(t *testing.T) {
 
 func TestDataStoreIntegration_Reset(t *testing.T) {
 	addTestWorkspace(t)
-	addTestDataStore(t, types.PostGIS)
+	addTestDataStore(t, formats.PostGIS)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		err := geoclient.Workspace(testdata.Workspace).DataStores().Reset(testdata.DatastorePostgis)

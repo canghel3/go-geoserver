@@ -5,7 +5,7 @@ import (
 	"github.com/canghel3/go-geoserver/pkg/coverages"
 	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
 	"github.com/canghel3/go-geoserver/pkg/featuretypes"
-	"github.com/canghel3/go-geoserver/pkg/types"
+	"github.com/canghel3/go-geoserver/pkg/formats"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"
@@ -80,9 +80,9 @@ func addTestWorkspace(t *testing.T) {
 	}
 }
 
-func addTestDataStore(t *testing.T, type_ types.DataStoreType) {
+func addTestDataStore(t *testing.T, type_ formats.DataStoreFormat) {
 	switch type_ {
-	case types.PostGIS:
+	case formats.PostGIS:
 		if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().PostGIS(testdata.DatastorePostgis, postgis.ConnectionParams{
 			Host:     testdata.PostgisHost,
 			Database: testdata.PostgisDb,
@@ -94,17 +94,17 @@ func addTestDataStore(t *testing.T, type_ types.DataStoreType) {
 			t.Fatal(err)
 		}
 		return
-	case types.GeoPackage:
+	case formats.GeoPackage:
 		if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().GeoPackage(testdata.DatastoreGeoPackage, testdata.FileGeoPackage); err != nil {
 			t.Fatal(err)
 		}
 		return
-	case types.Shapefile:
+	case formats.Shapefile:
 		if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().Shapefile(testdata.DatastoreShapefile, testdata.FileShapefile); err != nil {
 			t.Fatal(err)
 		}
 		return
-	case types.DirOfShapefiles:
+	case formats.DirOfShapefiles:
 		if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().Shapefiles(testdata.DatastoreDirOfShapefiles, testdata.DirShapefiles); err != nil {
 			t.Fatal(err)
 		}
@@ -114,7 +114,7 @@ func addTestDataStore(t *testing.T, type_ types.DataStoreType) {
 	//		t.Fatal(err)
 	//	}
 	//	return
-	case types.WebFeatureService:
+	case formats.WebFeatureService:
 		if err := geoclient.Workspace(testdata.Workspace).DataStores().Create().WebFeatureService(testdata.DatastoreWebFeatureService, testdata.GeoserverUsername, testdata.GeoserverPassword, testdata.DatastoreWFSUrl); err != nil {
 			t.Fatal(err)
 		}
@@ -124,15 +124,15 @@ func addTestDataStore(t *testing.T, type_ types.DataStoreType) {
 	t.Fatal("unsupported data store type")
 }
 
-func addTestFeatureType(t *testing.T, type_ types.DataStoreType) {
+func addTestFeatureType(t *testing.T, type_ formats.DataStoreFormat) {
 	switch type_ {
-	case types.PostGIS:
+	case formats.PostGIS:
 		feature := featuretypes.New(testdata.FeatureTypePostgis, testdata.FeatureTypePostgisNativeName)
 		if err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Publish(feature); err != nil {
 			t.Fatal(err)
 		}
 		return
-	case types.GeoPackage:
+	case formats.GeoPackage:
 		feature := featuretypes.New(testdata.FeatureTypeGeoPackage, testdata.FeatureTypeGeoPackageNativeName)
 		if err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastoreGeoPackage).Publish(feature); err != nil {
 			t.Fatal(err)
@@ -143,24 +143,24 @@ func addTestFeatureType(t *testing.T, type_ types.DataStoreType) {
 	t.Fatal("unsupported vector layer type")
 }
 
-func addTestCoverageStore(t *testing.T, type_ types.CoverageStoreType) {
+func addTestCoverageStore(t *testing.T, type_ formats.CoverageStoreFormat) {
 	switch type_ {
-	case types.GeoTIFF:
+	case formats.GeoTIFF:
 		if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().GeoTIFF(testdata.CoverageStoreGeoTiff, testdata.FileGeoTiff); err != nil {
 			t.Fatal(err)
 		}
 		return
-	case types.EHdr:
+	case formats.EHdr:
 		if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().EHdr(testdata.CoverageStoreEHdr, testdata.FileEHdr); err != nil {
 			t.Fatal(err)
 		}
 		return
-	case types.ENVIHdr:
+	case formats.ENVIHdr:
 		if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().ENVIHdr(testdata.CoverageStoreENVIHdr, testdata.FileENVIHdr); err != nil {
 			t.Fatal(err)
 		}
 		return
-	case types.ERDASImg:
+	case formats.ERDASImg:
 		if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().ERDASImg(testdata.CoverageStoreERDASImg, testdata.FileERDASImg); err != nil {
 			t.Fatal(err)
 		}
@@ -170,17 +170,17 @@ func addTestCoverageStore(t *testing.T, type_ types.CoverageStoreType) {
 	//		t.Fatal(err)
 	//	}
 	//	return
-	case types.NITF:
+	case formats.NITF:
 		if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().NITF(testdata.CoverageStoreNITF, testdata.FileNITF); err != nil {
 			t.Fatal(err)
 		}
 		return
-	case types.RST:
+	case formats.RST:
 		if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().RST(testdata.CoverageStoreRST, testdata.FileRST); err != nil {
 			t.Fatal(err)
 		}
 		return
-	case types.VRT:
+	case formats.VRT:
 		if err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().VRT(testdata.CoverageStoreVRT, testdata.FileVRT); err != nil {
 			t.Fatal(err)
 		}
@@ -191,9 +191,9 @@ func addTestCoverageStore(t *testing.T, type_ types.CoverageStoreType) {
 	t.Fatal("unsupported coverage store type")
 }
 
-func addTestCoverage(t *testing.T, type_ types.CoverageStoreType) {
+func addTestCoverage(t *testing.T, type_ formats.CoverageStoreFormat) {
 	switch type_ {
-	case types.GeoTIFF:
+	case formats.GeoTIFF:
 		coverage := coverages.New(testdata.CoverageGeoTiffName, testdata.CoverageGeoTiffNativeName)
 		if err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Publish(coverage); err != nil {
 			t.Fatal(err)

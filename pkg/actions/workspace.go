@@ -5,23 +5,24 @@ import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/requester"
 	"github.com/canghel3/go-geoserver/internal/validator"
+	"github.com/canghel3/go-geoserver/pkg/wms"
 	"github.com/canghel3/go-geoserver/pkg/workspace"
 )
 
 type Workspaces struct {
-	info      internal.GeoserverData
+	data      internal.GeoserverData
 	requester requester.WorkspaceRequester
 }
 
 func NewWorkspaceActions(info internal.GeoserverData) Workspaces {
 	return Workspaces{
-		info:      info,
+		data:      info,
 		requester: requester.NewWorkspaceRequester(info),
 	}
 }
 
 func (ws Workspaces) Create(name string, _default bool) error {
-	err := validator.Workspace.Name(name)
+	err := validator.Name(name)
 	if err != nil {
 		return err
 	}
@@ -41,7 +42,7 @@ func (ws Workspaces) Create(name string, _default bool) error {
 }
 
 func (ws Workspaces) Get(name string) (*workspace.WorkspaceRetrieval, error) {
-	err := validator.Workspace.Name(name)
+	err := validator.Name(name)
 	if err != nil {
 		return nil, err
 	}
@@ -54,12 +55,12 @@ func (ws Workspaces) GetAll() ([]workspace.MultiWorkspace, error) {
 }
 
 func (ws Workspaces) Update(oldName, newName string) error {
-	err := validator.Workspace.Name(oldName)
+	err := validator.Name(oldName)
 	if err != nil {
 		return err
 	}
 
-	err = validator.Workspace.Name(newName)
+	err = validator.Name(newName)
 	if err != nil {
 		return err
 	}
@@ -79,7 +80,7 @@ func (ws Workspaces) Update(oldName, newName string) error {
 }
 
 func (ws Workspaces) Delete(name string, recurse bool) error {
-	err := validator.Workspace.Name(name)
+	err := validator.Name(name)
 	if err != nil {
 		return err
 	}
@@ -92,9 +93,9 @@ type Workspace struct {
 }
 
 func (ws Workspaces) Use(workspace string) Workspace {
-	ws.info.Workspace = workspace
+	ws.data.Workspace = workspace
 	return Workspace{
-		data: ws.info,
+		data: ws.data,
 	}
 }
 
@@ -114,4 +115,10 @@ func (w Workspace) CoverageStore(name string) Coverages {
 	return newCoverageStoreActions(w.data.Clone()).Use(name)
 }
 
-//TODO: add raster service and layers service for handling layers without specifying store
+func (w Workspace) GeoWebCache() GeoWebCache {
+	return NewGeoWebCache(w.data.Clone())
+}
+
+func (w Workspace) WMS(version wms.WMSVersion) WMS {
+	return NewWMSActions(w.data.Clone(), version)
+}

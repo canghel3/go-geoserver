@@ -2,7 +2,9 @@ package validator
 
 import (
 	"errors"
+	"fmt"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
+	"regexp"
 	"strings"
 )
 
@@ -12,4 +14,25 @@ func Name(name string) error {
 	}
 
 	return validateAlphaNumerical(name)
+}
+
+func WorkspaceLayerFormat(workspace, layer string) error {
+	split := strings.Split(layer, ":")
+	if len(workspace) == 0 && (len(split) != 2 || len(split[0]) == 0) {
+		return customerrors.NewInputError(fmt.Sprintf("unspecified workspace in layer name %[1]s. format the layer name as <workspace>:%[1]s", strings.Trim(layer, ":")))
+	}
+
+	return nil
+}
+
+func validateAlphaNumerical(name string) error {
+	regex, err := regexp.Compile(`[^a-zA-Z0-9_-]+`)
+	if err != nil {
+		return err
+	}
+
+	if regex.MatchString(name) {
+		return customerrors.WrapInputError(errors.New("name can only contain alphanumerical characters"))
+	}
+	return nil
 }

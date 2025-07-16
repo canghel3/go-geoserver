@@ -9,8 +9,8 @@ import (
 	"github.com/canghel3/go-geoserver/internal/validator"
 	"github.com/canghel3/go-geoserver/pkg/datastores"
 	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
+	"github.com/canghel3/go-geoserver/pkg/formats"
 	"github.com/canghel3/go-geoserver/pkg/options"
-	"github.com/canghel3/go-geoserver/pkg/types"
 	"strings"
 )
 
@@ -92,7 +92,7 @@ func (dsl DataStoreList) PostGIS(name string, connectionParams postgis.Connectio
 		"user":     connectionParams.User,
 		"passwd":   connectionParams.Password,
 		"port":     connectionParams.Port,
-		"dbtype":   string(types.PostGIS),
+		"dbtype":   string(formats.PostGIS),
 	}
 
 	for _, option := range options {
@@ -138,7 +138,7 @@ func (dsl DataStoreList) GeoPackage(name string, filepath string, options ...opt
 
 	cp := datastores.ConnectionParams{
 		"database": url,
-		"dbtype":   string(types.GeoPackage),
+		"dbtype":   string(formats.GeoPackage),
 	}
 
 	for _, option := range options {
@@ -184,7 +184,7 @@ func (dsl DataStoreList) Shapefile(name string, filepath string, options ...opti
 
 	cp := datastores.ConnectionParams{
 		"url":      url,
-		"filetype": string(types.Shapefile),
+		"filetype": string(formats.Shapefile),
 	}
 
 	for _, option := range options {
@@ -230,7 +230,7 @@ func (dsl DataStoreList) Shapefiles(name string, dir string, options ...options.
 
 	cp := datastores.ConnectionParams{
 		"url":    url,
-		"fstype": string(types.DirOfShapefiles),
+		"fstype": string(formats.DirOfShapefiles),
 	}
 
 	for _, option := range options {

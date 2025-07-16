@@ -60,6 +60,102 @@ func TestLayerValidator_Name(t *testing.T) {
 			if tt.wantErr {
 				assert.Error(t, err)
 				assert.EqualError(t, err, tt.errorMessage)
+				assert.IsType(t, err, &customerrors.InputError{})
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestWorkspaceLayerFormat(t *testing.T) {
+	tests := []struct {
+		name         string
+		workspace    string
+		layer        string
+		wantErr      bool
+		errorMessage string
+	}{
+		{
+			name:      "No error",
+			workspace: "wksp",
+			layer:     "la",
+			wantErr:   false,
+		},
+		{
+			name:         "No workspace included in layer name",
+			workspace:    "",
+			layer:        "some",
+			wantErr:      true,
+			errorMessage: "unspecified workspace in layer name some. format the layer name as <workspace>:some",
+		},
+		{
+			name:         "No workspace included in layer name, but layer name resembles workspace:layer format",
+			workspace:    "",
+			layer:        ":some",
+			wantErr:      true,
+			errorMessage: "unspecified workspace in layer name some. format the layer name as <workspace>:some",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := WorkspaceLayerFormat(tt.workspace, tt.layer)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.EqualError(t, err, tt.errorMessage)
+				assert.IsType(t, err, &customerrors.InputError{})
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestValidateAlphaNumerical(t *testing.T) {
+	tests := []struct {
+		name         string
+		input        string
+		wantErr      bool
+		errorMessage string
+	}{
+		{
+			name:    "Valid alphanumerical string",
+			input:   "validString123",
+			wantErr: false,
+		},
+		{
+			name:    "Valid string with underscore",
+			input:   "valid_string",
+			wantErr: false,
+		},
+		{
+			name:    "Valid string with hyphen",
+			input:   "valid-string",
+			wantErr: false,
+		},
+		{
+			name:         "Invalid string with special characters",
+			input:        "invalid!@#$%^&*()",
+			wantErr:      true,
+			errorMessage: "name can only contain alphanumerical characters",
+		},
+		{
+			name:         "Invalid string with spaces",
+			input:        "invalid string",
+			wantErr:      true,
+			errorMessage: "name can only contain alphanumerical characters",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateAlphaNumerical(tt.input)
+
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.EqualError(t, err, tt.errorMessage)
 
 				var inputError *customerrors.InputError
 				assert.ErrorAs(t, err, &inputError)

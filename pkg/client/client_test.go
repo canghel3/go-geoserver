@@ -48,7 +48,7 @@ func TestNewGeoserverClient(t *testing.T) {
 			"geoserver")
 
 		assert.NotNil(t, client)
-		assert.Equal(t, client.info.Connection.URL, "http://localhost:8080")
+		assert.Equal(t, client.data.Connection.URL, "http://localhost:8080")
 	})
 
 	t.Run("Options", func(t *testing.T) {
@@ -61,7 +61,7 @@ func TestNewGeoserverClient(t *testing.T) {
 			)
 
 			assert.NotNil(t, client)
-			assert.Equal(t, "/data", client.info.DataDir)
+			assert.Equal(t, "/data", client.data.DataDir)
 		})
 
 		t.Run("HttpClient", func(t *testing.T) {
@@ -82,7 +82,7 @@ func TestNewGeoserverClient(t *testing.T) {
 			)
 
 			assert.NotNil(t, client)
-			assert.Equal(t, httpClient, client.info.Client)
+			assert.Equal(t, httpClient, client.data.Client)
 		})
 	})
 }

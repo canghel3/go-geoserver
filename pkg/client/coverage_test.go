@@ -5,7 +5,7 @@ import (
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/coverages"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
-	"github.com/canghel3/go-geoserver/pkg/types"
+	"github.com/canghel3/go-geoserver/pkg/formats"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -15,17 +15,17 @@ func TestCoverageIntegration_Create(t *testing.T) {
 
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("GeoTIFF", func(t *testing.T) {
-			addTestCoverageStore(t, types.GeoTIFF)
+			addTestCoverageStore(t, formats.GeoTIFF)
 
-			addTestCoverage(t, types.GeoTIFF)
+			addTestCoverage(t, formats.GeoTIFF)
 		})
 	})
 }
 
 func TestCoverageIntegration_Update(t *testing.T) {
 	addTestWorkspace(t)
-	addTestCoverageStore(t, types.GeoTIFF)
-	addTestCoverage(t, types.GeoTIFF)
+	addTestCoverageStore(t, formats.GeoTIFF)
+	addTestCoverage(t, formats.GeoTIFF)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Update(testdata.CoverageGeoTiffName, coverages.New(testdata.CoverageGeoTiffName+"_2", testdata.CoverageGeoTiffNativeName))
@@ -48,9 +48,9 @@ func TestCoverageIntegration_Update(t *testing.T) {
 func TestCoverageIntegration_Get(t *testing.T) {
 	addTestWorkspace(t)
 
-	addTestCoverageStore(t, types.GeoTIFF)
+	addTestCoverageStore(t, formats.GeoTIFF)
 
-	addTestCoverage(t, types.GeoTIFF)
+	addTestCoverage(t, formats.GeoTIFF)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("GeoTIFF", func(t *testing.T) {
@@ -66,8 +66,8 @@ func TestCoverageIntegration_Get(t *testing.T) {
 
 func TestCoverageIntegration_GetAll(t *testing.T) {
 	addTestWorkspace(t)
-	addTestCoverageStore(t, types.GeoTIFF)
-	addTestCoverage(t, types.GeoTIFF)
+	addTestCoverageStore(t, formats.GeoTIFF)
+	addTestCoverage(t, formats.GeoTIFF)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("Single Coverage", func(t *testing.T) {
@@ -79,7 +79,7 @@ func TestCoverageIntegration_GetAll(t *testing.T) {
 
 		t.Run("No Coverages", func(t *testing.T) {
 			addTestWorkspace(t)
-			addTestCoverageStore(t, types.GeoTIFF)
+			addTestCoverageStore(t, formats.GeoTIFF)
 
 			coverages, err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).GetAll()
 			assert.NoError(t, err)
@@ -91,9 +91,9 @@ func TestCoverageIntegration_GetAll(t *testing.T) {
 func TestCoverageIntegration_Delete(t *testing.T) {
 	addTestWorkspace(t)
 
-	addTestCoverageStore(t, types.GeoTIFF)
+	addTestCoverageStore(t, formats.GeoTIFF)
 
-	addTestCoverage(t, types.GeoTIFF)
+	addTestCoverage(t, formats.GeoTIFF)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Delete(testdata.CoverageGeoTiffName, true)
@@ -110,8 +110,8 @@ func TestCoverageIntegration_Delete(t *testing.T) {
 
 func TestCoverageIntegration_Reset(t *testing.T) {
 	addTestWorkspace(t)
-	addTestCoverageStore(t, types.GeoTIFF)
-	addTestCoverage(t, types.GeoTIFF)
+	addTestCoverageStore(t, formats.GeoTIFF)
+	addTestCoverage(t, formats.GeoTIFF)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Reset(testdata.CoverageGeoTiffName)

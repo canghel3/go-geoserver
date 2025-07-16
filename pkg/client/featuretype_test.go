@@ -5,8 +5,8 @@ import (
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"github.com/canghel3/go-geoserver/pkg/featuretypes"
+	"github.com/canghel3/go-geoserver/pkg/formats"
 	"github.com/canghel3/go-geoserver/pkg/options"
-	"github.com/canghel3/go-geoserver/pkg/types"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -16,10 +16,10 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("POSTGIS", func(t *testing.T) {
-			addTestDataStore(t, types.PostGIS)
+			addTestDataStore(t, formats.PostGIS)
 
 			t.Run("WITHOUT ANY OPTIONS", func(t *testing.T) {
-				addTestFeatureType(t, types.PostGIS)
+				addTestFeatureType(t, formats.PostGIS)
 
 				get, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
 				assert.NoError(t, err)
@@ -56,8 +56,8 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 
 func TestFeatureTypeIntegration_Get(t *testing.T) {
 	addTestWorkspace(t)
-	addTestDataStore(t, types.PostGIS)
-	addTestFeatureType(t, types.PostGIS)
+	addTestDataStore(t, formats.PostGIS)
+	addTestFeatureType(t, formats.PostGIS)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		get, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
@@ -78,8 +78,8 @@ func TestFeatureTypeIntegration_Get(t *testing.T) {
 
 func TestFeatureTypeIntegration_GetAll(t *testing.T) {
 	addTestWorkspace(t)
-	addTestDataStore(t, types.PostGIS)
-	addTestFeatureType(t, types.PostGIS)
+	addTestDataStore(t, formats.PostGIS)
+	addTestFeatureType(t, formats.PostGIS)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		t.Run("Single FeatureType", func(t *testing.T) {
@@ -91,7 +91,7 @@ func TestFeatureTypeIntegration_GetAll(t *testing.T) {
 
 		t.Run("No FeatureType", func(t *testing.T) {
 			addTestWorkspace(t)
-			addTestDataStore(t, types.PostGIS)
+			addTestDataStore(t, formats.PostGIS)
 
 			ft, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).GetAll()
 			assert.NoError(t, err)
@@ -102,8 +102,8 @@ func TestFeatureTypeIntegration_GetAll(t *testing.T) {
 
 func TestFeatureTypeIntegration_Update(t *testing.T) {
 	addTestWorkspace(t)
-	addTestDataStore(t, types.PostGIS)
-	addTestFeatureType(t, types.PostGIS)
+	addTestDataStore(t, formats.PostGIS)
+	addTestFeatureType(t, formats.PostGIS)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		ft, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
@@ -135,8 +135,8 @@ func TestFeatureTypeIntegration_Update(t *testing.T) {
 
 func TestFeatureTypeIntegration_Delete(t *testing.T) {
 	addTestWorkspace(t)
-	addTestDataStore(t, types.PostGIS)
-	addTestFeatureType(t, types.PostGIS)
+	addTestDataStore(t, formats.PostGIS)
+	addTestFeatureType(t, formats.PostGIS)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Delete(testdata.FeatureTypePostgis, true)
@@ -158,8 +158,8 @@ func TestFeatureTypeIntegration_Delete(t *testing.T) {
 
 func TestFeatureTypeIntegration_Reset(t *testing.T) {
 	addTestWorkspace(t)
-	addTestDataStore(t, types.PostGIS)
-	addTestFeatureType(t, types.PostGIS)
+	addTestDataStore(t, formats.PostGIS)
+	addTestFeatureType(t, formats.PostGIS)
 
 	t.Run("200 Ok", func(t *testing.T) {
 		err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Reset(testdata.FeatureTypePostgis)
