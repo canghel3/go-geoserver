@@ -9,7 +9,6 @@ import (
 	"github.com/canghel3/go-geoserver/pkg/types"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"time"
 )
 
 func TestGeoWebCacheIntegration_Status(t *testing.T) {
@@ -29,9 +28,6 @@ func TestGeoWebCacheIntegration_Status(t *testing.T) {
 
 		err := geoclient.Workspace(testdata.Workspace).GeoWebCache().Seed().Run(seedData)
 		assert.NoError(t, err)
-
-		//without the wait the status returns 2 entries and i really don't  understand how that is possible
-		time.Sleep(time.Millisecond * 100)
 
 		status, err := geoclient.Workspace(testdata.Workspace).GeoWebCache().Seed().Status(testdata.CoverageGeoTiffName)
 		assert.NoError(t, err)

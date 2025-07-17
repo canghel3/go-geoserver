@@ -8,13 +8,24 @@ talk to GeoServer’s REST API from your Go applications.
 
 ## Features
 
-**Manage:**
+1. GeoServer
 
-- Workspaces
-- Vector Data Sources (Data Store)
-- Raster Data Sources (Coverage Store)
-- Feature Types
-- Coverages
+   **Management of:**
+
+    - Workspaces
+    - Vector Data Sources
+    - Feature Types
+    - Raster Data Sources
+    - Coverages
+    - Fonts
+    - Logging
+
+   **Services**:
+    - WMS (GetMap only)
+
+
+2. GeoWebCache
+    - Seeding
 
 ## Available Data Sources
 
@@ -59,6 +70,12 @@ talk to GeoServer’s REST API from your Go applications.
 | 2.27.1  | ✅      |
 | 2.22.2  | ✅      |
 
+## Installation
+
+```bash
+go get github.com/canghel3/go-geoserver
+```
+
 ## Work In Progress
 
 - Caching
@@ -66,30 +83,22 @@ talk to GeoServer’s REST API from your Go applications.
 - Styles
 - WMS, WFS, WCS, WMTS
 
-## Installation
+## Examples
 
-```bash
-go get github.com/canghel3/go-geoserver
-```
+### GeoServer
 
-## Usage Examples
+| Resource              | Example                                                            |
+|-----------------------|--------------------------------------------------------------------|
+| Client Initialization | [`examples/client.go`](./pkg/client/client_test.go)                |
+| Workspaces            | [`examples/workspaces.go`](./pkg/client/workspace_test.go)         |
+| DataStores            | [`examples/datastores.go`](./pkg/actions/datastore_test.go)        |
+| Feature Types         | [`examples/featuretypes.go`](./pkg/client/featuretype_test.go)     |
+| CoverageStores        | [`examples/coveragestores.go`](./pkg/client/coveragestore_test.go) |
+| Coverages             | [`examples/coverages.go`](./pkg/client/coverage_test.go)           |
 
-### Client Initialization
+### GeoWebCache
 
-[`examples/client.go`](./pkg/client/client_test.go)
+| Resource       | Example                                                            |
+|----------------|--------------------------------------------------------------------|
+| Seeding        | [`examples/client.go`](./pkg/client/client_test.go)                |
 
-### Workspaces
-
-[`examples/workspaces.go`](./pkg/client/workspace_test.go)
-
-### DataStores
-
-[`examples/datastores.go`](./pkg/actions/datastore_test.go)
-
-### CoverageStores and Coverages
-
-[`examples/coverages.go`](./pkg/client/coverage_test.go)
-
-### Feature Types
-
-[`examples/featuretypes.go`](./pkg/client/featuretype_test.go)
