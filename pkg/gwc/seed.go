@@ -14,3 +14,7 @@ type SeedData struct {
 	ThreadCount uint                `json:"threadCount"`
 	GridSetId   *string             `json:"gridSetId,omitempty"`
 }
+
+type SeedStatus struct {
+	Info [][]int `json:"long-array-array"`
+}

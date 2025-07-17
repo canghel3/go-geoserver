@@ -9,7 +9,46 @@ import (
 	"github.com/canghel3/go-geoserver/pkg/types"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
+
+func TestGeoWebCacheIntegration_Status(t *testing.T) {
+	addTestWorkspace(t)
+	addTestCoverageStore(t, formats.GeoTIFF)
+	addTestCoverage(t, formats.GeoTIFF)
+
+	t.Run("200 Ok", func(t *testing.T) {
+		seedData := gwc.SeedData{
+			Layer:       testdata.CoverageGeoTiffName,
+			Format:      formats.Png,
+			Type:        types.Seed,
+			ZoomStart:   0,
+			ZoomStop:    10,
+			ThreadCount: 1,
+		}
+
+		err := geoclient.Workspace(testdata.Workspace).GeoWebCache().Seed().Run(seedData)
+		assert.NoError(t, err)
+
+		//without the wait the status returns 2 entries and i really don't  understand how that is possible
+		time.Sleep(time.Millisecond * 100)
+
+		status, err := geoclient.Workspace(testdata.Workspace).GeoWebCache().Seed().Status(testdata.CoverageGeoTiffName)
+		assert.NoError(t, err)
+		assert.NotNil(t, status)
+		assert.Len(t, status.Info, 1)
+		assert.Len(t, status.Info[0], 5)
+	})
+
+	t.Run("Input Error", func(t *testing.T) {
+		expectedError := fmt.Sprintf("unspecified workspace in layer name %[1]s. format the layer name as <workspace>:%[1]s", testdata.CoverageGeoTiffName)
+		status, err := geoclient.GeoWebCache().Seed().Status(testdata.CoverageGeoTiffName)
+		assert.Error(t, err)
+		assert.Nil(t, status)
+		assert.IsType(t, &customerrors.InputError{}, err)
+		assert.EqualError(t, err, expectedError)
+	})
+}
 
 func TestGeoWebCacheIntegration_Seed(t *testing.T) {
 	addTestWorkspace(t)

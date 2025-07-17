@@ -2,9 +2,11 @@ package requester
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/gwc"
 	"io"
 	"net/http"
 )
@@ -56,6 +58,41 @@ func NewGeoWebCacheRequester(data internal.GeoserverData) GeoWebCacheRequester {
 //func (gwcr GeoWebCacheRequester) Layer(name string) (*gwc.Layer, error) {
 //	return nil, nil
 //}
+
+func (gwcr GeoWebCacheRequester) Status(name string) (*gwc.SeedStatus, error) {
+	var target = fmt.Sprintf("%s/geoserver/gwc/rest/seed/%s.json", gwcr.data.Connection.URL, name)
+
+	request, err := http.NewRequest(http.MethodGet, target, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	request.SetBasicAuth(gwcr.data.Connection.Credentials.Username, gwcr.data.Connection.Credentials.Password)
+
+	response, err := gwcr.data.Client.Do(request)
+	if err != nil {
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	body, err := io.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	switch response.StatusCode {
+	case http.StatusOK:
+		var status gwc.SeedStatus
+		err = json.Unmarshal(body, &status)
+		if err != nil {
+			return nil, err
+		}
+
+		return &status, nil
+	default:
+		return nil, customerrors.NewGeoserverError(fmt.Sprintf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
+	}
+}
 
 func (gwcr GeoWebCacheRequester) Seed(name string, content []byte) error {
 	var target = fmt.Sprintf("%s/geoserver/gwc/rest/seed/%s.json", gwcr.data.Connection.URL, name)

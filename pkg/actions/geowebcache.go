@@ -34,13 +34,18 @@ type Seed struct {
 	requester requester.GeoWebCacheRequester
 }
 
-//func (s Seed) Statuses() ([]string, error) {
-//	return nil, nil
-//}
-//
-//func (s Seed) Status(layer string) error {
-//	return nil
-//}
+func (s Seed) Status(layer string) (*gwc.SeedStatus, error) {
+	err := validator.WorkspaceLayerFormat(s.data.Workspace, layer)
+	if err != nil {
+		return nil, err
+	}
+
+	if !strings.HasPrefix(layer, s.data.Workspace) {
+		layer = fmt.Sprintf("%s:%s", s.data.Workspace, layer)
+	}
+
+	return s.requester.Status(layer)
+}
 
 func (s Seed) Run(seedData gwc.SeedData) error {
 	err := validator.WorkspaceLayerFormat(s.data.Workspace, seedData.Layer)
