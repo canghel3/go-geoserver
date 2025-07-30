@@ -180,11 +180,11 @@ func TestLayerGroupIntegration_Delete(t *testing.T) {
 	layerInputs := []layers.LayerInput{
 		{
 			Type: layers.TypeLayer,
-			Name: fmt.Sprintf("%s:%s", testdata.Workspace, testdata.CoverageGeoTiffName),
+			Name: testdata.CoverageGeoTiffName,
 		},
 		{
 			Type: layers.TypeLayer,
-			Name: fmt.Sprintf("%s:%s", testdata.Workspace, testdata.CoverageEHdrName),
+			Name: testdata.CoverageEHdrName,
 		},
 	}
 	err := geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs))
