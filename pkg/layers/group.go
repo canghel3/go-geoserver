@@ -75,21 +75,21 @@ type Group struct {
 	DateModified string              `json:"dateModified"`
 }
 
-func (g *Group) MarshalJSON() ([]byte, error) {
-	type alias Group
-	var temp alias
-
-	temp.Name = g.Name
-	temp.Mode = g.Mode
-	temp.Title = g.Title
-	temp.Workspace = g.Workspace
-	temp.Publishables = g.Publishables
-	temp.Bounds = g.Bounds
-	temp.Keywords = g.Keywords
-	temp.Styles = g.Styles
-
-	return json.Marshal(temp)
-}
+//func (g *Group) MarshalJSON() ([]byte, error) {
+//	type alias Group
+//	var temp alias
+//
+//	temp.Name = g.Name
+//	temp.Mode = g.Mode
+//	temp.Title = g.Title
+//	temp.Workspace = g.Workspace
+//	temp.Publishables = g.Publishables
+//	temp.Bounds = g.Bounds
+//	temp.Keywords = g.Keywords
+//	temp.Styles = g.Styles
+//
+//	return json.Marshal(temp)
+//}
 
 type GroupStyles struct {
 	Style []shared.Style `json:"style"`

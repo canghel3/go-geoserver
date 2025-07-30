@@ -10,8 +10,8 @@ type CoverageOptionsGenerator struct{}
 
 type CoverageOption func(csl *models.Coverage)
 
-func (cog CoverageOptionsGenerator) Title(title string) CoverageOption {
-	return func(csl *models.Coverage) {
-		csl.Title = &title
-	}
-}
+//func (cog CoverageOptionsGenerator) Title(title string) CoverageOption {
+//	return func(csl *models.Coverage) {
+//		csl.Title = &title
+//	}
+//}

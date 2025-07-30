@@ -2,7 +2,6 @@ package options
 
 import (
 	"github.com/canghel3/go-geoserver/pkg/datastores"
-	"strconv"
 )
 
 var WFS WFSOptionGenerator
@@ -94,9 +93,9 @@ type WFSOptions func(params *datastores.ConnectionParams)
                 }
 */
 
-// Timeout sets the connection timeout in seconds
-func (wog WFSOptionGenerator) Timeout(timeout uint) WFSOptions {
-	return func(params *datastores.ConnectionParams) {
-		(*params)["Time-out"] = strconv.FormatUint(uint64(timeout), 10)
-	}
-}
+//// Timeout sets the connection timeout in seconds
+//func (wog WFSOptionGenerator) Timeout(timeout uint) WFSOptions {
+//	return func(params *datastores.ConnectionParams) {
+//		(*params)["Time-out"] = strconv.FormatUint(uint64(timeout), 10)
+//	}
+//}
