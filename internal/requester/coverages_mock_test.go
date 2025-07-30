@@ -132,7 +132,7 @@ func TestCoverageRequester_Get(t *testing.T) {
 		assert.NotNil(t, cov)
 		assert.NotNil(t, cov.LatLonBoundingBox)
 		assert.Equal(t, 4.472858110631908, cov.LatLonBoundingBox.MaxX)
-		assert.Equal(t, "EPSG:4326", cov.LatLonBoundingBox.CRS)
+		assert.Equal(t, "EPSG:4326", cov.LatLonBoundingBox.CRS.Value)
 	})
 
 	t.Run("404 Not Found", func(t *testing.T) {

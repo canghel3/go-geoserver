@@ -18,7 +18,10 @@ func (ftog FeatureTypeOptionsGenerator) BBOX(bbox [4]float64, bboxSrs string) Fe
 			MaxX: bbox[2],
 			MinY: bbox[1],
 			MaxY: bbox[3],
-			CRS:  bboxSrs,
+			CRS: shared.CRSClass{
+				Class: "",
+				Value: bboxSrs,
+			},
 		}
 	}
 }

@@ -29,7 +29,7 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 				assert.Equal(t, get.Keywords.Keywords, []string{"features", "init"})
 			})
 
-			t.Run("WWith Bbox Option", func(t *testing.T) {
+			t.Run("With Bbox Option", func(t *testing.T) {
 				var featureName = testdata.FeatureTypePostgis + "_WITH_BBOX"
 				var bbox = [4]float64{-180.0, -90.0, 180.0, 90.0}
 				var bboxSrs = "EPSG:4326"
@@ -48,7 +48,7 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 				assert.Equal(t, get.NativeBoundingBox.MinY, bbox[1])
 				assert.Equal(t, get.NativeBoundingBox.MaxX, bbox[2])
 				assert.Equal(t, get.NativeBoundingBox.MaxY, bbox[3])
-				assert.Equal(t, get.NativeBoundingBox.CRS, bboxSrs)
+				assert.Equal(t, get.NativeBoundingBox.CRS.Value, bboxSrs)
 			})
 		})
 	})

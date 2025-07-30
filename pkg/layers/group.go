@@ -57,16 +57,16 @@ type Group struct {
 	//TODO: Although a layer name can be sent as a string formatted number,
 	// geoserver parses it to an actual number and returns it,
 	// which will cause panics when decoding the name here.
-	Name         string                     `json:"name"`
-	Mode         GroupMode                  `json:"mode"`
-	Title        string                     `json:"title"`
-	Workspace    *workspace.Creation        `json:"workspace,omitempty"`
-	Publishables Publishables               `json:"publishables"`
-	Bounds       shared.BoundingBoxCRSClass `json:"bounds"`
-	Keywords     *shared.Keywords           `json:"keywords,omitempty"`
-	Styles       GroupStyles                `json:"styles,omitempty"`
-	DateCreated  string                     `json:"dateCreated"`
-	DateModified string                     `json:"dateModified"`
+	Name         string              `json:"name"`
+	Mode         GroupMode           `json:"mode"`
+	Title        string              `json:"title"`
+	Workspace    *workspace.Creation `json:"workspace,omitempty"`
+	Publishables Publishables        `json:"publishables"`
+	Bounds       shared.BoundingBox  `json:"bounds"`
+	Keywords     *shared.Keywords    `json:"keywords,omitempty"`
+	Styles       GroupStyles         `json:"styles,omitempty"`
+	DateCreated  string              `json:"dateCreated"`
+	DateModified string              `json:"dateModified"`
 }
 
 type GroupStyles struct {

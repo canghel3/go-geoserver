@@ -2,24 +2,41 @@ package shared
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"strings"
 )
 
-type BoundingBoxCRSClass struct {
+type BoundingBox struct {
 	MinX float64  `json:"minx"`
 	MaxX float64  `json:"maxx"`
 	MinY float64  `json:"miny"`
 	MaxY float64  `json:"maxy"`
-	CRS  CRSClass `json:"crs"`
+	CRS  CRSClass `json:"crs,omitempty"`
 }
 
-type BoundingBox struct {
-	MinX float64 `json:"minx"`
-	MaxX float64 `json:"maxx"`
-	MinY float64 `json:"miny"`
-	MaxY float64 `json:"maxy"`
-	CRS  string  `json:"crs"`
+func (b *BoundingBox) MarshalJSON() ([]byte, error) {
+	output := map[string]interface{}{
+		"minx": b.MinX,
+		"maxx": b.MaxX,
+		"miny": b.MinY,
+		"maxy": b.MaxY,
+	}
+
+	class := strings.TrimSpace(b.CRS.Class)
+	value := strings.TrimSpace(b.CRS.Value)
+
+	switch {
+	case class != "" && value != "":
+		output["crs"] = map[string]interface{}{
+			"@class": class,
+			"$":      value,
+		}
+	case value != "":
+		output["crs"] = value
+	}
+
+	return json.Marshal(output)
 }
 
 type BBOX struct {
@@ -39,12 +56,24 @@ func (b BBOX) ToString() string {
 	}, ",")
 }
 
+// CRSClass represents coordinate reference system information
 type CRSClass struct {
+	// Class can be empty
 	Class string `json:"@class"`
+	// Value will never be empty
 	Value string `json:"$"`
 }
 
 func (c *CRSClass) UnmarshalJSON(data []byte) error {
+	// First try to unmarshal as a simple string
+	var str string
+	if err := json.Unmarshal(data, &str); err == nil {
+		c.Value = str
+		c.Class = "" // Clear class when it's a simple string
+		return nil
+	}
+
+	// If that fails, try to unmarshal as an object with @class and $
 	type alias CRSClass
 	var temp alias
 	if err := json.Unmarshal(data, &temp); err == nil {
@@ -52,9 +81,5 @@ func (c *CRSClass) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 
-	if err := json.Unmarshal(data, &c.Value); err == nil {
-		return nil
-	}
-
-	return nil
+	return fmt.Errorf("unable to unmarshal CRS: %s", string(data))
 }
