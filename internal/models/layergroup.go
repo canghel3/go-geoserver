@@ -10,42 +10,26 @@ type GroupWrapper struct {
 }
 
 type Group struct {
-	Name         string                      `json:"name"`
-	Mode         string                      `json:"mode"`
-	Title        string                      `json:"title"`
-	Workspace    workspace.WorkspaceCreation `json:"workspace"`
-	Publishables Publishables                `json:"publishables"`
-	Bounds       shared.BoundingBox          `json:"bounds"`
-	Keywords     *shared.Keywords            `json:"keywords,omitempty"`
-	Styles       GroupStyles                 `json:"styles"`
-}
-
-type Publishables struct {
-	Published []Published `json:"published"`
-}
-
-type Published struct {
-	Type string `json:"@type"`
-	Name string `json:"name"`
-	Link string `json:"href"`
+	//TODO: Although a layer name can be sent as a string formatted number,
+	// geoserver parses it to an actual number and returns it,
+	// which will cause panics when decoding the name here.
+	Name         string              `json:"name"`
+	Mode         string              `json:"mode"`
+	Title        *string             `json:"title,omitempty"`
+	Workspace    *workspace.Creation `json:"workspace,omitempty"`
+	Publishables Publishables        `json:"publishables"`
+	Bounds       *shared.BoundingBox `json:"bounds,omitempty"`
+	Keywords     *shared.Keywords    `json:"keywords,omitempty"`
+	Styles       *GroupStyles        `json:"styles,omitempty"`
 }
 
 type GroupStyles struct {
 	Style []shared.Style `json:"style"`
 }
 
-type GetGroupWrapper struct {
-	Group GetGroup `json:"layerGroup"`
-}
-
-type GetGroup struct {
-	//even though a layer name can be sent as a string number, geoserver parses it to an actual number and returns it because it is stupids
-	Name         string                      `json:"name"`
-	Mode         string                      `json:"mode"`
-	Title        string                      `json:"title"`
-	Workspace    workspace.WorkspaceCreation `json:"workspace"`
-	Publishables Publishables                `json:"publishables"`
-	Bounds       shared.BoundingBox          `json:"bounds"`
-	Keywords     *shared.Keywords            `json:"keywords,omitempty"`
-	Styles       any                         `json:"styles,omitempty"`
+type Publishables struct {
+	Entries []struct {
+		Type string `json:"@type"`
+		Name string `json:"name"`
+	} `json:"published"`
 }

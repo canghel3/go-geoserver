@@ -6,6 +6,10 @@
 A GoLang library made to simplify interactions with [GeoServer](https://geoserver.org/), providing an idiomatic way to
 talk to GeoServer’s REST API from your Go applications.
 
+```bash
+go get github.com/canghel3/go-geoserver
+```
+
 ## Features
 
 1. GeoServer
@@ -17,8 +21,7 @@ talk to GeoServer’s REST API from your Go applications.
     - Feature Types
     - Raster Data Sources
     - Coverages
-    - Fonts
-    - Logging
+    - Layer Groups
 
    **Services**:
     - WMS (GetMap only)
@@ -61,25 +64,9 @@ talk to GeoServer’s REST API from your Go applications.
 | VRT                 | ✅      |
 | WorldImage          | ❌      |
 
----
-
-## Tested GeoServer Versions
-
-| Version | Status |
-|---------|--------|
-| 2.27.1  | ✅      |
-| 2.22.2  | ✅      |
-
-## Installation
-
-```bash
-go get github.com/canghel3/go-geoserver
-```
-
 ## Work In Progress
 
 - Caching
-- Layer Groups
 - Styles
 - WMS, WFS, WCS, WMTS
 
@@ -101,4 +88,11 @@ go get github.com/canghel3/go-geoserver
 | Resource       | Example                                                            |
 |----------------|--------------------------------------------------------------------|
 | Seeding        | [`examples/client.go`](./pkg/client/client_test.go)                |
+
+## Tested GeoServer Versions
+
+| Version | Status |
+|---------|--------|
+| 2.27    | ✅      |
+| 2.22    | ✅      |
 

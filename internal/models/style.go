@@ -19,12 +19,12 @@ type GetStyleWrapper struct {
 }
 
 type GetStyleDetails struct {
-	Name            any                          `json:"name"`
-	Content         string                       `json:"content"`
-	Workspace       *workspace.WorkspaceCreation `json:"workspace,omitempty"`
-	Format          string                       `json:"format,omitempty"`
-	LanguageVersion *shared.LanguageVersion      `json:"languageVersion,omitempty"`
-	Filename        any                          `json:"filename"`
-	DateCreate      string                       `json:"dateCreate,omitempty"`
-	DateModified    string                       `json:"dateModified,omitempty"`
+	Name            any                     `json:"name"`
+	Content         string                  `json:"content"`
+	Workspace       *workspace.Creation     `json:"workspace,omitempty"`
+	Format          string                  `json:"format,omitempty"`
+	LanguageVersion *shared.LanguageVersion `json:"languageVersion,omitempty"`
+	Filename        any                     `json:"filename"`
+	DateCreate      string                  `json:"dateCreate,omitempty"`
+	DateModified    string                  `json:"dateModified,omitempty"`
 }

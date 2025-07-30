@@ -39,8 +39,10 @@ const (
 	CoverageStoreRST        = "RST"
 	CoverageStoreVRT        = "VRT"
 
-	CoverageGeoTiffName       = "sample"
+	CoverageGeoTiffName       = "COVERAGE_GEOTIFF"
 	CoverageGeoTiffNativeName = "sample"
+	CoverageEHdrName          = "COVERAGE_EHDR"
+	CoverageEHdrNativeName    = "output"
 
 	DirGeoTiff          = "geotiff"
 	DirENVIHdr          = "envihdr"
@@ -76,4 +78,6 @@ const (
 	ImageTiff8    = "outputtiff8.tiff"
 	ImageGeoTiff  = "outputgeotiff.tiff"
 	ImageGeoTiff8 = "outputgeotiff8.tiff"
+
+	LayerGroupName = "LAYER_GROUP"
 )

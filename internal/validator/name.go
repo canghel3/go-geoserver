@@ -16,6 +16,13 @@ func Name(name string) error {
 	return validateAlphaNumerical(name)
 }
 
+func Empty(name string) bool {
+	return len(name) == 0 || len(strings.TrimSpace(name)) == 0
+}
+
+// WorkspaceLayerFormat validates that if the `workspace` string is empty,
+// the `layer` must include a workspace prefix formatted as `<workspace>:<layer>`, otherwise it returns an error.
+// If the `workspace` is provided, there is no restriction on the format of the `layer`.
 func WorkspaceLayerFormat(workspace, layer string) error {
 	split := strings.Split(layer, ":")
 	if len(workspace) == 0 && (len(split) != 2 || len(split[0]) == 0) {
@@ -32,7 +39,7 @@ func validateAlphaNumerical(name string) error {
 	}
 
 	if regex.MatchString(name) {
-		return customerrors.WrapInputError(errors.New("name can only contain alphanumerical characters"))
+		return customerrors.NewInputError("name can only contain alphanumerical characters")
 	}
 	return nil
 }

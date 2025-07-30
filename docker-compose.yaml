@@ -10,6 +10,7 @@ services:
     volumes:
       - ./internal/testdata/migrations/table_for_feature.sql:/docker-entrypoint-initdb.d/table_for_feature.sql
     restart: always
+#  in case of permission errors on tests or WMS map fails. do sudo chmod 777 /tmp/data
   geoserver-for-tests:
     image: kartoza/geoserver:2.27.1
     ports:

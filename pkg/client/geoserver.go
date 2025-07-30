@@ -15,7 +15,7 @@ type GeoserverClient struct {
 func NewGeoserverClient(url, username, password string, options ...options.GeoserverClientOption) GeoserverClient {
 	gc := new(GeoserverClient)
 	gc.data = internal.GeoserverData{
-		Client: &http.Client{},
+		Client: http.DefaultClient,
 		Connection: internal.GeoserverConnection{
 			URL: url,
 			Credentials: internal.GeoserverCredentials{
@@ -54,6 +54,10 @@ func (gc GeoserverClient) Workspace(name string) actions.Workspace {
 
 func (gc GeoserverClient) WMS(version wms.WMSVersion) actions.WMS {
 	return actions.NewWMSActions(gc.data.Clone(), version)
+}
+
+func (gc GeoserverClient) LayerGroups() actions.LayerGroups {
+	return actions.NewLayerGroup(gc.data.Clone())
 }
 
 func (gc GeoserverClient) Logging() actions.Logging {

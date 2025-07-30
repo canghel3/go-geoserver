@@ -20,6 +20,13 @@ func TestCoverageIntegration_Create(t *testing.T) {
 			addTestCoverage(t, formats.GeoTIFF)
 		})
 	})
+
+	t.Run("Invalid Name", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).CoverageStores().Create().GeoTIFF(testdata.InvalidName, testdata.FileGeoTiff)
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.InputError{}, err)
+		assert.EqualError(t, err, "name can only contain alphanumerical characters")
+	})
 }
 
 func TestCoverageIntegration_Update(t *testing.T) {
@@ -42,6 +49,20 @@ func TestCoverageIntegration_Update(t *testing.T) {
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("coverage %s not found", testdata.CoverageGeoTiffName))
+	})
+
+	t.Run("Invalid Previous Name", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Update(testdata.InvalidName, coverages.New("", ""))
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.InputError{}, err)
+		assert.EqualError(t, err, "name can only contain alphanumerical characters")
+	})
+
+	t.Run("Invalid New Name", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreGeoTiff).Update("some", coverages.New(testdata.InvalidName, ""))
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.InputError{}, err)
+		assert.EqualError(t, err, "name can only contain alphanumerical characters")
 	})
 }
 

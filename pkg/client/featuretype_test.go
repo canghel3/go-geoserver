@@ -18,7 +18,7 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 		t.Run("POSTGIS", func(t *testing.T) {
 			addTestDataStore(t, formats.PostGIS)
 
-			t.Run("WITHOUT ANY OPTIONS", func(t *testing.T) {
+			t.Run("Without Any Options", func(t *testing.T) {
 				addTestFeatureType(t, formats.PostGIS)
 
 				get, err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Get(testdata.FeatureTypePostgis)
@@ -29,7 +29,7 @@ func TestFeatureTypeIntegration_Create(t *testing.T) {
 				assert.Equal(t, get.Keywords.Keywords, []string{"features", "init"})
 			})
 
-			t.Run("WITH BBOX OPTION", func(t *testing.T) {
+			t.Run("WWith Bbox Option", func(t *testing.T) {
 				var featureName = testdata.FeatureTypePostgis + "_WITH_BBOX"
 				var bbox = [4]float64{-180.0, -90.0, 180.0, 90.0}
 				var bboxSrs = "EPSG:4326"
@@ -130,6 +130,20 @@ func TestFeatureTypeIntegration_Update(t *testing.T) {
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("featuretype %s not found", "does-not-exist"))
+	})
+
+	t.Run("Invalid Previous Name", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Update(testdata.InvalidName, featuretypes.FeatureType{Name: "some"})
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.InputError{}, err)
+		assert.EqualError(t, err, "name can only contain alphanumerical characters")
+	})
+
+	t.Run("Invalid New Name", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).DataStore(testdata.DatastorePostgis).Update("some", featuretypes.FeatureType{Name: testdata.InvalidName})
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.InputError{}, err)
+		assert.EqualError(t, err, "name can only contain alphanumerical characters")
 	})
 }
 

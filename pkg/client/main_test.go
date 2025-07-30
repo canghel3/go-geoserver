@@ -199,6 +199,12 @@ func addTestCoverage(t *testing.T, type_ formats.CoverageStoreFormat) {
 			t.Fatal(err)
 		}
 		return
+	case formats.EHdr:
+		coverage := coverages.New(testdata.CoverageEHdrName, testdata.CoverageEHdrNativeName)
+		if err := geoclient.Workspace(testdata.Workspace).CoverageStore(testdata.CoverageStoreEHdr).Publish(coverage); err != nil {
+			t.Fatal(err)
+		}
+		return
 	}
 
 	t.Fatal("unsupported coverage store type")

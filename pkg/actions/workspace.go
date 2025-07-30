@@ -28,7 +28,7 @@ func (ws Workspaces) Create(name string, _default bool) error {
 	}
 
 	data := workspace.WorkspaceCreationWrapper{
-		Workspace: workspace.WorkspaceCreation{
+		Workspace: workspace.Creation{
 			Name: name,
 		},
 	}
@@ -41,12 +41,7 @@ func (ws Workspaces) Create(name string, _default bool) error {
 	return ws.requester.Create(content, _default)
 }
 
-func (ws Workspaces) Get(name string) (*workspace.WorkspaceRetrieval, error) {
-	err := validator.Name(name)
-	if err != nil {
-		return nil, err
-	}
-
+func (ws Workspaces) Get(name string) (*workspace.Workspace, error) {
 	return ws.requester.Get(name)
 }
 
@@ -80,11 +75,6 @@ func (ws Workspaces) Update(oldName, newName string) error {
 }
 
 func (ws Workspaces) Delete(name string, recurse bool) error {
-	err := validator.Name(name)
-	if err != nil {
-		return err
-	}
-
 	return ws.requester.Delete(name, recurse)
 }
 
@@ -121,4 +111,8 @@ func (w Workspace) GeoWebCache() GeoWebCache {
 
 func (w Workspace) WMS(version wms.WMSVersion) WMS {
 	return NewWMSActions(w.data.Clone(), version)
+}
+
+func (w Workspace) LayerGroups() LayerGroups {
+	return NewLayerGroup(w.data.Clone())
 }

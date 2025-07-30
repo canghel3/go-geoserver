@@ -50,7 +50,7 @@ func (wr WorkspaceRequester) Create(content []byte, _default bool) error {
 	}
 }
 
-func (wr WorkspaceRequester) Get(name string) (*workspace.WorkspaceRetrieval, error) {
+func (wr WorkspaceRequester) Get(name string) (*workspace.Workspace, error) {
 	var target = fmt.Sprintf("%s/geoserver/rest/workspaces/%s", wr.data.Connection.URL, name)
 
 	request, err := http.NewRequest(http.MethodGet, target, nil)
@@ -108,6 +108,7 @@ func (wr WorkspaceRequester) GetAll() ([]workspace.MultiWorkspace, error) {
 		return nil, err
 
 	}
+
 	switch response.StatusCode {
 	case http.StatusOK:
 		var wksp workspace.MultiWorkspaceRetrievalWrapper

@@ -344,10 +344,30 @@ func TestDataStoreIntegration_Update(t *testing.T) {
 	})
 
 	t.Run("404 Not Found", func(t *testing.T) {
-		err := geoclient.Workspace(testdata.Workspace).DataStores().Update("does-not-exist", datastores.DataStore{})
+		err := geoclient.Workspace(testdata.Workspace).DataStores().Update("does-not-exist", datastores.DataStore{
+			Name: "some",
+		})
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("datastore %s not found", "does-not-exist"))
+	})
+
+	t.Run("Invalid Previous Name", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).DataStores().Update(testdata.InvalidName, datastores.DataStore{
+			Name: "some",
+		})
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.InputError{}, err)
+		assert.EqualError(t, err, "name can only contain alphanumerical characters")
+	})
+
+	t.Run("Invalid New Name", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).DataStores().Update("some", datastores.DataStore{
+			Name: testdata.InvalidName,
+		})
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.InputError{}, err)
+		assert.EqualError(t, err, "name can only contain alphanumerical characters")
 	})
 }
 

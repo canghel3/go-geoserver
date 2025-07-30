@@ -15,23 +15,23 @@ type MultiWorkspace struct {
 
 // GetSingleWorkspaceWrapper defines the model for retrieving a single workspace.
 type GetSingleWorkspaceWrapper struct {
-	Workspace WorkspaceRetrieval `json:"workspace" xml:"workspace"`
+	Workspace Workspace `json:"workspace" xml:"workspace"`
 }
 
-type WorkspaceRetrieval struct {
+type Workspace struct {
 	Name           string `json:"name,omitempty" xml:"name"`
 	DataStores     string `json:"dataStores,omitempty" xml:"dataStores"`
 	CoverageStores string `json:"coverageStores,omitempty" xml:"coverageStores"`
 	WMSStores      string `json:"wmsStores,omitempty" xml:"wmsStores"`
 }
 
-type WorkspaceCreation struct {
+type Creation struct {
 	Name string `json:"name" xml:"name"`
 }
 
 // WorkspaceCreationWrapper defines the model for creating a workspace in GeoServer.
 type WorkspaceCreationWrapper struct {
-	Workspace WorkspaceCreation `json:"workspace" xml:"workspace"`
+	Workspace Creation `json:"workspace" xml:"workspace"`
 }
 
 type WorkspaceUpdateWrapper struct {

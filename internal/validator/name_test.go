@@ -113,6 +113,57 @@ func TestWorkspaceLayerFormat(t *testing.T) {
 	}
 }
 
+func TestEmpty(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected bool
+	}{
+		{
+			name:     "Empty string",
+			input:    "",
+			expected: true,
+		},
+		{
+			name:     "String with only spaces",
+			input:    "   ",
+			expected: true,
+		},
+		{
+			name:     "String with only tabs",
+			input:    "\t\t\t",
+			expected: true,
+		},
+		{
+			name:     "String with only newlines",
+			input:    "\n\n\n",
+			expected: true,
+		},
+		{
+			name:     "String with mixed whitespace",
+			input:    " \t \n ",
+			expected: true,
+		},
+		{
+			name:     "Non-empty string",
+			input:    "test",
+			expected: false,
+		},
+		{
+			name:     "String with whitespace and non-whitespace",
+			input:    "  test  ",
+			expected: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := Empty(tt.input)
+			assert.Equal(t, tt.expected, result, "Empty() returned unexpected result for input: %q", tt.input)
+		})
+	}
+}
+
 func TestValidateAlphaNumerical(t *testing.T) {
 	tests := []struct {
 		name         string

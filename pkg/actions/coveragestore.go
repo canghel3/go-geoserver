@@ -68,6 +68,14 @@ func (cs CoverageStores) Delete(name string, recurse bool) error {
 }
 
 func (cs CoverageStores) Update(name string, store coveragestores.CoverageStore) error {
+	if err := validator.Name(name); err != nil {
+		return err
+	}
+
+	if err := validator.Name(store.Name); err != nil {
+		return err
+	}
+
 	content, err := json.Marshal(coveragestores.CoverageStoreWrapper{CoverageStore: store})
 	if err != nil {
 		return err

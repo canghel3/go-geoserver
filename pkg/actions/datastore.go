@@ -63,6 +63,14 @@ func (ds DataStores) GetAll() (*datastores.DataStores, error) {
 }
 
 func (ds DataStores) Update(name string, store datastores.DataStore) error {
+	if err := validator.Name(name); err != nil {
+		return err
+	}
+
+	if err := validator.Name(store.Name); err != nil {
+		return err
+	}
+
 	content, err := json.Marshal(datastores.DataStoreWrapper{DataStore: store})
 	if err != nil {
 		return err

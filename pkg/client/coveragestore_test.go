@@ -357,9 +357,25 @@ func TestCoverageStoreIntegration_Update(t *testing.T) {
 	})
 
 	t.Run("404 Not Found", func(t *testing.T) {
-		err := geoclient.Workspace(testdata.Workspace).CoverageStores().Update("does-not-exist", coveragestores.CoverageStore{})
+		err := geoclient.Workspace(testdata.Workspace).CoverageStores().Update("does-not-exist", coveragestores.CoverageStore{
+			Name: "some",
+		})
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
 		assert.EqualError(t, err, fmt.Sprintf("coveragestore %s not found", "does-not-exist"))
+	})
+
+	t.Run("Invalid New Name", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).CoverageStores().Update("some", coveragestores.CoverageStore{Name: testdata.InvalidName})
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.InputError{}, err)
+		assert.EqualError(t, err, "name can only contain alphanumerical characters")
+	})
+
+	t.Run("Invalid New Name", func(t *testing.T) {
+		err := geoclient.Workspace(testdata.Workspace).CoverageStores().Update("some", coveragestores.CoverageStore{Name: testdata.InvalidName})
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.InputError{}, err)
+		assert.EqualError(t, err, "name can only contain alphanumerical characters")
 	})
 }

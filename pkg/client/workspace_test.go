@@ -130,15 +130,22 @@ func TestWorkspaceIntegration_Create(t *testing.T) {
 	err := geoclient.Workspaces().Delete(testdata.Workspace, true)
 	assert.NoError(t, err)
 
-	t.Run("201 CREATED", func(t *testing.T) {
+	t.Run("201 Created", func(t *testing.T) {
 		err := geoclient.Workspaces().Create(testdata.Workspace, false)
 		assert.NoError(t, err)
 	})
 
-	t.Run("409 CONFLICT", func(t *testing.T) {
+	t.Run("409 Conflict", func(t *testing.T) {
 		err := geoclient.Workspaces().Create(testdata.Workspace, false)
 		assert.IsType(t, &customerrors.ConflictError{}, err)
 		assert.EqualError(t, err, "workspace already exists")
+	})
+
+	t.Run("Invalid Name", func(t *testing.T) {
+		err = geoclient.Workspaces().Create(testdata.InvalidName, false)
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.InputError{}, err)
+		assert.EqualError(t, err, "name can only contain alphanumerical characters")
 	})
 }
 
@@ -176,6 +183,20 @@ func TestWorkspaceIntegration_Update(t *testing.T) {
 		err := geoclient.Workspaces().Update(testdata.Workspace, testdata.Workspace+suffix)
 		assert.EqualError(t, err, fmt.Sprintf("workspace %s not found", testdata.Workspace))
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
+	})
+
+	t.Run("Invalid Previous Name", func(t *testing.T) {
+		err := geoclient.Workspaces().Update(testdata.InvalidName, "")
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.InputError{}, err)
+		assert.EqualError(t, err, "name can only contain alphanumerical characters")
+	})
+
+	t.Run("Invalid New Name", func(t *testing.T) {
+		err := geoclient.Workspaces().Update(testdata.Workspace, testdata.InvalidName)
+		assert.Error(t, err)
+		assert.IsType(t, &customerrors.InputError{}, err)
+		assert.EqualError(t, err, "name can only contain alphanumerical characters")
 	})
 
 	//revert changes made in the test

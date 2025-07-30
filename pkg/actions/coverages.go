@@ -6,6 +6,7 @@ import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/models"
 	"github.com/canghel3/go-geoserver/internal/requester"
+	"github.com/canghel3/go-geoserver/internal/validator"
 	"github.com/canghel3/go-geoserver/pkg/coverages"
 )
 
@@ -24,6 +25,10 @@ func newCoverages(store string, data internal.GeoserverData) Coverages {
 }
 
 func (c Coverages) Publish(coverage models.Coverage) error {
+	if err := validator.Name(coverage.Name); err != nil {
+		return err
+	}
+
 	coverage.Namespace = models.NamespaceDetails{
 		Href: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", c.data.Connection.URL, c.data.Workspace),
 		Name: c.data.Workspace,
@@ -52,6 +57,14 @@ func (c Coverages) GetAll() (*coverages.Coverages, error) {
 }
 
 func (c Coverages) Update(name string, coverage models.Coverage) error {
+	if err := validator.Name(name); err != nil {
+		return err
+	}
+
+	if err := validator.Name(coverage.Name); err != nil {
+		return err
+	}
+
 	coverage.Namespace = models.NamespaceDetails{
 		Href: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", c.data.Connection.URL, c.data.Workspace),
 		Name: c.data.Workspace,

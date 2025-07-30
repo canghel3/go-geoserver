@@ -1,16 +1,25 @@
 package shared
 
 import (
+	"encoding/json"
 	"strconv"
 	"strings"
 )
+
+type BoundingBoxCRSClass struct {
+	MinX float64  `json:"minx"`
+	MaxX float64  `json:"maxx"`
+	MinY float64  `json:"miny"`
+	MaxY float64  `json:"maxy"`
+	CRS  CRSClass `json:"crs"`
+}
 
 type BoundingBox struct {
 	MinX float64 `json:"minx"`
 	MaxX float64 `json:"maxx"`
 	MinY float64 `json:"miny"`
 	MaxY float64 `json:"maxy"`
-	CRS  any     `json:"crs"`
+	CRS  string  `json:"crs"`
 }
 
 type BBOX struct {
@@ -33,4 +42,19 @@ func (b BBOX) ToString() string {
 type CRSClass struct {
 	Class string `json:"@class"`
 	Value string `json:"$"`
+}
+
+func (c *CRSClass) UnmarshalJSON(data []byte) error {
+	type alias CRSClass
+	var temp alias
+	if err := json.Unmarshal(data, &temp); err == nil {
+		*c = CRSClass(temp)
+		return nil
+	}
+
+	if err := json.Unmarshal(data, &c.Value); err == nil {
+		return nil
+	}
+
+	return nil
 }

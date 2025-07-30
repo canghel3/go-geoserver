@@ -6,6 +6,7 @@ import (
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/internal/models"
 	"github.com/canghel3/go-geoserver/internal/requester"
+	"github.com/canghel3/go-geoserver/internal/validator"
 	"github.com/canghel3/go-geoserver/pkg/featuretypes"
 )
 
@@ -24,6 +25,10 @@ func newFeatureTypes(store string, info internal.GeoserverData) FeatureTypes {
 }
 
 func (ft FeatureTypes) Publish(featureType models.FeatureType) error {
+	if err := validator.Name(featureType.Name); err != nil {
+		return err
+	}
+
 	featureType.Namespace = models.Namespace{
 		Name: ft.data.Workspace,
 		Href: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", ft.data.Connection.URL, ft.data.Workspace),
@@ -52,6 +57,14 @@ func (ft FeatureTypes) GetAll() (*featuretypes.FeatureTypes, error) {
 }
 
 func (ft FeatureTypes) Update(name string, featureType featuretypes.FeatureType) error {
+	if err := validator.Name(name); err != nil {
+		return err
+	}
+
+	if err := validator.Name(featureType.Name); err != nil {
+		return err
+	}
+
 	featureType.Namespace = featuretypes.Namespace{
 		Name: ft.data.Workspace,
 		Href: fmt.Sprintf("%s/geoserver/rest/workspaces/%s.json", ft.data.Connection.URL, ft.data.Workspace),

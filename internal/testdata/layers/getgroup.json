@@ -1,0 +1,53 @@
+{
+  "layerGroup": {
+    "name": "jj",
+    "mode": "SINGLE",
+    "publishables": {
+      "published": [
+        {
+          "@type": "layer",
+          "name": "PLAYGROUND:erdasimg",
+          "href": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND/layers/erdasimg.json"
+        },
+        {
+          "@type": "layer",
+          "name": "PLAYGROUND:ne_110m_coastline",
+          "href": "http://localhost:1111/geoserver/rest/workspaces/PLAYGROUND/layers/ne_110m_coastline.json"
+        }
+      ]
+    },
+    "styles": {
+      "style": [
+        {
+          "name": "raster",
+          "href": "http://localhost:1111/geoserver/rest/styles/raster.json"
+        },
+        {
+          "name": "line",
+          "href": "http://localhost:1111/geoserver/rest/styles/line.json"
+        }
+      ]
+    },
+    "bounds": {
+      "minx": -1.0469537619440609E8,
+      "maxx": 3.342252338996891E8,
+      "miny": -2.5243510840300795E8,
+      "maxy": 3.023237097761117E8,
+      "crs": {
+        "@class": "projected",
+        "$": "EPSG:32631"
+      }
+    },
+    "metadata": {
+      "entry": {
+        "@key": "cachingEnabled",
+        "$": "false"
+      }
+    },
+    "attribution": {
+      "logoWidth": 0,
+      "logoHeight": 0
+    },
+    "dateCreated": "2025-07-28 12:29:28.67 UTC"
+  }
+}
