@@ -135,10 +135,10 @@ func TestWorkspaceIntegration_Create(t *testing.T) {
 		assert.NoError(t, err)
 	})
 
-	t.Run("409 Conflict", func(t *testing.T) {
+	t.Run("Already Exists", func(t *testing.T) {
 		err := geoclient.Workspaces().Create(testdata.Workspace, false)
-		assert.IsType(t, &customerrors.ConflictError{}, err)
-		assert.EqualError(t, err, "workspace already exists")
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
+		assert.ErrorContains(t, err, "received status code 409 from geoserver")
 	})
 
 	t.Run("Invalid Name", func(t *testing.T) {

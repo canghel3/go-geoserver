@@ -38,8 +38,6 @@ func (wr WorkspaceRequester) Create(content []byte, _default bool) error {
 	switch response.StatusCode {
 	case http.StatusCreated:
 		return nil
-	case http.StatusConflict:
-		return customerrors.WrapConflictError(fmt.Errorf("workspace already exists"))
 	default:
 		body, err := io.ReadAll(response.Body)
 		if err != nil {

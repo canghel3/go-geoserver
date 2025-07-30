@@ -49,7 +49,7 @@ func TestWorkspaceRequester_Create(t *testing.T) {
 		mockResponse := &http.Response{
 			StatusCode: http.StatusConflict,
 			Header:     make(http.Header),
-			Body:       io.NopCloser(bytes.NewBufferString("")),
+			Body:       io.NopCloser(bytes.NewBufferString("already exists")),
 		}
 
 		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
@@ -58,8 +58,8 @@ func TestWorkspaceRequester_Create(t *testing.T) {
 
 		err := workspaceRequester.Create(nil, false)
 		assert.Error(t, err)
-		assert.IsType(t, &customerrors.ConflictError{}, err)
-		assert.EqualError(t, err, "workspace already exists")
+		assert.IsType(t, &customerrors.GeoserverError{}, err)
+		assert.EqualError(t, err, "received status code 409 from geoserver: already exists")
 	})
 
 	t.Run("500 Internal Server Error", func(t *testing.T) {
