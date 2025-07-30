@@ -1,6 +1,9 @@
 package shared
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"strings"
+)
 
 type Style struct {
 	Name string `json:"name"`
@@ -22,6 +25,21 @@ func (s *Style) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+func (s *Style) MarshalJSON() ([]byte, error) {
+	name := strings.TrimSpace(s.Name)
+	link := strings.TrimSpace(s.Link)
+
+	type alias Style
+	var temp alias
+	if name != "" && link != "" {
+		temp.Name = name
+		temp.Link = link
+		return json.Marshal(temp)
+	}
+
+	return json.Marshal("")
 }
 
 type LanguageVersion struct {

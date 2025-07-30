@@ -131,6 +131,7 @@ func (lgr LayerGroupRequester) Update(name string, content []byte) error {
 	}
 
 	request.SetBasicAuth(lgr.data.Connection.Credentials.Username, lgr.data.Connection.Credentials.Password)
+	request.Header.Add("Content-Type", "application/json")
 
 	response, err := lgr.data.Client.Do(request)
 	if err != nil {

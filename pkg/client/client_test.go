@@ -15,14 +15,6 @@ func ExampleNewGeoserverClient() {
 		"admin",
 		"geoserver")
 
-	// Initialize with DataDir option
-	client = NewGeoserverClient(
-		"http://localhost:8080",
-		"admin",
-		"geoserver",
-		options.Client.DataDir("/data"),
-	)
-
 	// Initialize with HttpClient option
 	client = NewGeoserverClient(
 		"http://localhost:8080",
@@ -52,18 +44,6 @@ func TestNewGeoserverClient(t *testing.T) {
 	})
 
 	t.Run("Options", func(t *testing.T) {
-		t.Run("DataDir", func(t *testing.T) {
-			client := NewGeoserverClient(
-				"http://localhost:8080",
-				"admin",
-				"geoserver",
-				options.Client.DataDir("/data"),
-			)
-
-			assert.NotNil(t, client)
-			assert.Equal(t, "/data", client.data.DataDir)
-		})
-
 		t.Run("HttpClient", func(t *testing.T) {
 			httpClient := &http.Client{
 				Transport: &http.Transport{

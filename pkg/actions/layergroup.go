@@ -7,8 +7,11 @@ import (
 	"github.com/canghel3/go-geoserver/internal/models"
 	"github.com/canghel3/go-geoserver/internal/requester"
 	"github.com/canghel3/go-geoserver/internal/validator"
+	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"github.com/canghel3/go-geoserver/pkg/layers"
+	"github.com/canghel3/go-geoserver/pkg/workspace"
 	"strings"
+	"time"
 )
 
 type LayerGroups struct {
@@ -32,14 +35,23 @@ func (lg LayerGroups) Publish(group models.Group) error {
 		return err
 	}
 
-	for i := range group.Publishables.Entries {
-		if !strings.HasPrefix(group.Publishables.Entries[i].Name, lg.data.Workspace) {
-			group.Publishables.Entries[i].Name = fmt.Sprintf("%s:%s", lg.data.Workspace, group.Publishables.Entries[i].Name)
+	if group.Workspace == nil {
+		if validator.Empty(lg.data.Workspace) {
+			return customerrors.NewInputError("workspace is required. use Workspace from options.LayerGroup")
+		} else {
+			group.Workspace = &workspace.Creation{
+				Name: lg.data.Workspace,
+			}
 		}
+	}
 
-		err := validator.WorkspaceLayerFormat(lg.data.Workspace, group.Publishables.Entries[i].Name)
-		if err != nil {
-			return err
+	if err := validator.Name(group.Workspace.Name); err != nil {
+		return err
+	}
+
+	for i := range group.Publishables.Entries {
+		if !strings.HasPrefix(group.Publishables.Entries[i].Name, group.Workspace.Name) {
+			group.Publishables.Entries[i].Name = fmt.Sprintf("%s:%s", group.Workspace.Name, group.Publishables.Entries[i].Name)
 		}
 	}
 
@@ -51,7 +63,7 @@ func (lg LayerGroups) Publish(group models.Group) error {
 	return lg.requester.Create(content)
 }
 
-func (lg LayerGroups) Update(name string, group models.Group) error {
+func (lg LayerGroups) Update(name string, group layers.Group) error {
 	if err := validator.Name(name); err != nil {
 		return err
 	}
@@ -60,18 +72,31 @@ func (lg LayerGroups) Update(name string, group models.Group) error {
 		return err
 	}
 
-	for _, entry := range group.Publishables.Entries {
-		err := validator.WorkspaceLayerFormat(lg.data.Workspace, entry.Name)
-		if err != nil {
-			return err
-		}
-
-		if !strings.HasPrefix(entry.Name, lg.data.Workspace) {
-			entry.Name = fmt.Sprintf("%s:%s", lg.data.Workspace, entry.Name)
+	if group.Workspace == nil {
+		if validator.Empty(lg.data.Workspace) {
+			return customerrors.NewInputError("group.Workspace is required")
+		} else {
+			group.Workspace = &workspace.Creation{
+				Name: lg.data.Workspace,
+			}
 		}
 	}
 
-	content, err := json.Marshal(models.GroupWrapper{Group: group})
+	if err := validator.Name(group.Workspace.Name); err != nil {
+		return err
+	}
+
+	for i := range group.Publishables.Entries {
+		if !strings.HasPrefix(group.Publishables.Entries[i].Name, group.Workspace.Name) {
+			group.Publishables.Entries[i].Name = fmt.Sprintf("%s:%s", group.Workspace.Name, group.Publishables.Entries[i].Name)
+		}
+	}
+
+	if len(group.DateModified) == 0 {
+		group.DateModified = time.Now().UTC().Format(time.RFC3339)
+	}
+
+	content, err := json.Marshal(layers.GroupWrapper{Group: group})
 	if err != nil {
 		return err
 	}

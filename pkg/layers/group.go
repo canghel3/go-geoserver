@@ -3,6 +3,7 @@ package layers
 import (
 	"encoding/json"
 	"github.com/canghel3/go-geoserver/internal/models"
+	"github.com/canghel3/go-geoserver/pkg/options"
 	"github.com/canghel3/go-geoserver/pkg/shared"
 	"github.com/canghel3/go-geoserver/pkg/workspace"
 )
@@ -13,10 +14,9 @@ var (
 	ModeSingle    GroupMode = "SINGLE"
 	ModeContainer GroupMode = "CONTAINER"
 	ModeNamed     GroupMode = "NAMED"
-	ModeEo        GroupMode = "EO"
 )
 
-func NewGroup(name string, mode GroupMode, layers []LayerInput) models.Group {
+func NewGroup(name string, mode GroupMode, layers []LayerInput, options ...options.LayerGroupOption) models.Group {
 	publishables := models.Publishables{}
 	publishables.Entries = make([]struct {
 		Type string `json:"@type"`
@@ -30,11 +30,17 @@ func NewGroup(name string, mode GroupMode, layers []LayerInput) models.Group {
 		}{Type: string(layer.Type), Name: layer.Name})
 	}
 
-	return models.Group{
+	g := models.Group{
 		Name:         name,
 		Mode:         string(mode),
 		Publishables: publishables,
 	}
+
+	for _, option := range options {
+		option(&g)
+	}
+
+	return g
 }
 
 type LayerType string
@@ -62,11 +68,27 @@ type Group struct {
 	Title        string              `json:"title"`
 	Workspace    *workspace.Creation `json:"workspace,omitempty"`
 	Publishables Publishables        `json:"publishables"`
-	Bounds       shared.BoundingBox  `json:"bounds"`
+	Bounds       *shared.BoundingBox `json:"bounds,omitempty"`
 	Keywords     *shared.Keywords    `json:"keywords,omitempty"`
 	Styles       GroupStyles         `json:"styles,omitempty"`
 	DateCreated  string              `json:"dateCreated"`
 	DateModified string              `json:"dateModified"`
+}
+
+func (g *Group) MarshalJSON() ([]byte, error) {
+	type alias Group
+	var temp alias
+
+	temp.Name = g.Name
+	temp.Mode = g.Mode
+	temp.Title = g.Title
+	temp.Workspace = g.Workspace
+	temp.Publishables = g.Publishables
+	temp.Bounds = g.Bounds
+	temp.Keywords = g.Keywords
+	temp.Styles = g.Styles
+
+	return json.Marshal(temp)
 }
 
 type GroupStyles struct {
@@ -96,6 +118,7 @@ func (gs *GroupStyles) UnmarshalJSON(data []byte) error {
 
 type Publishables struct {
 	Entries []struct {
+		Type string `json:"@type"`
 		Name string `json:"name"`
 		Link string `json:"href"`
 	} `json:"published"`

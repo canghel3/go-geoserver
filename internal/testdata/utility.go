@@ -17,7 +17,6 @@ func GeoserverInfo(client internal.HTTPClient) internal.GeoserverData {
 				Password: GeoserverPassword,
 			},
 		},
-		DataDir:   GeoserverDataDir,
 		Workspace: Workspace,
 	}
 }

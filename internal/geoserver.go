@@ -9,7 +9,6 @@ type HTTPClient interface {
 type GeoserverData struct {
 	Client     HTTPClient
 	Connection GeoserverConnection
-	DataDir    string
 	Workspace  string
 }
 
@@ -27,7 +26,6 @@ func (gi GeoserverData) Clone() GeoserverData {
 	return GeoserverData{
 		Client:     gi.Client,
 		Connection: gi.Connection,
-		DataDir:    gi.DataDir,
 		Workspace:  gi.Workspace,
 	}
 }
