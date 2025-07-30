@@ -187,34 +187,3 @@ func (lgr LayerGroupRequester) Delete(name string) error {
 		return customerrors.WrapGeoserverError(fmt.Errorf("received status code %d from geoserver: %s", response.StatusCode, string(body)))
 	}
 }
-
-func (lgr LayerGroupRequester) unmarshalGroup(body []byte) (*layers.Group, error) {
-	//1. if single keyword, Keywords is a string, not a slice
-	//2. if default styles, Styles is a slice of empty strings, not the documented structure.
-
-	var layerGroupWrapper layers.GroupWrapper
-	err := json.Unmarshal(body, &layerGroupWrapper)
-	if err != nil {
-		//TODO: handle case for single keyword in response and transform it
-		//var interm models.GroupWrapperForSingleKeyword
-		//intermErr := json.Unmarshal(body, &interm)
-		//if intermErr == nil {
-		//	return &layers.Group{
-		//		Name:         interm.Group.Name,
-		//		Mode:         interm.Group.Mode,
-		//		Title:        interm.Group.Title,
-		//		Workspace:    interm.Group.Workspace,
-		//		Publishables: layers.Publishables{},
-		//		Bounds:       shared.BoundingBoxCRSClass{},
-		//		Keywords:     &shared.Keywords{Keywords: []string{interm.Group.Keywords.String}},
-		//		Styles:       layers.GroupStyles{},
-		//		DateCreated:  "",
-		//		DateModified: "",
-		//	}, nil
-		//}
-
-		return nil, err
-	}
-
-	return &layerGroupWrapper.Group, nil
-}
