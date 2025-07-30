@@ -45,17 +45,17 @@ type FeatureType struct {
 	//we avoid using this until its either fixed or im in the mood to implement it.
 	//MetadataLinks          *Links             `json:"metadataLinks,omitempty"`
 	//DataLinks              *Links             `json:"dataLinks,omitempty"`
-	NativeCRS         any                `json:"nativeCRS"`
-	Srs               string             `json:"srs"`
-	NativeBoundingBox shared.BoundingBox `json:"nativeBoundingBox"`
-	LatLonBoundingBox shared.BoundingBox `json:"latLonBoundingBox"`
-	ProjectionPolicy  string             `json:"projectionPolicy"`
-	Enabled           bool               `json:"enabled"`
-	Metadata          *Metadata          `json:"metadata,omitempty"`
-	Store             Store              `json:"store"`
-	CqlFilter         string             `json:"cqlFilter"`
-	MaxFeatures       int                `json:"maxFeatures"`
-	NumDecimals       int                `json:"numDecimals"`
+	NativeCRS         any                        `json:"nativeCRS"`
+	Srs               string                     `json:"srs"`
+	NativeBoundingBox shared.BoundingBoxCRSClass `json:"nativeBoundingBox"`
+	LatLonBoundingBox shared.BoundingBox         `json:"latLonBoundingBox"`
+	ProjectionPolicy  string                     `json:"projectionPolicy"`
+	Enabled           bool                       `json:"enabled"`
+	Metadata          *Metadata                  `json:"metadata,omitempty"`
+	Store             Store                      `json:"store"`
+	CqlFilter         string                     `json:"cqlFilter"`
+	MaxFeatures       int                        `json:"maxFeatures"`
+	NumDecimals       int                        `json:"numDecimals"`
 	//TODO: GeoServer responds wit either a struct or a slice of ints (:
 	//ResponseSRS            SRS                `json:"responseSRS"`
 	OverridingServiceSRS   bool       `json:"overridingServiceSRS"`

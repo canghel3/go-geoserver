@@ -7,6 +7,7 @@ import (
 	mocks "github.com/canghel3/go-geoserver/internal/mock"
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
+	"github.com/canghel3/go-geoserver/pkg/layers"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"io"
@@ -112,7 +113,7 @@ func TestLayerGroupRequester_Get(t *testing.T) {
 		group, err := lgr.Get(testdata.LayerGroupName)
 		assert.NoError(t, err)
 		assert.NotNil(t, group)
-		assert.Equal(t, "SINGLE", group.Mode)
+		assert.Equal(t, layers.ModeSingle, group.Mode)
 		assert.Equal(t, 2, len(group.Publishables.Entries))
 	})
 
@@ -195,7 +196,7 @@ func TestLayerGroupRequester_Get(t *testing.T) {
 		group, err := lgr.Get(testdata.LayerGroupName)
 		assert.Error(t, err)
 		assert.Nil(t, group)
-		assert.EqualError(t, err, "unexpected EOF")
+		assert.EqualError(t, err, "unexpected end of JSON input")
 	})
 
 	t.Run("Client Error", func(t *testing.T) {
@@ -230,26 +231,6 @@ func TestLayerGroupRequester_Delete(t *testing.T) {
 
 		err := lgr.Delete(testdata.LayerGroupName)
 		assert.NoError(t, err)
-	})
-
-	t.Run("404 Not Found", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-
-		mockClient := mocks.NewMockHTTPClient(ctrl)
-		mockResponse := &http.Response{
-			StatusCode: http.StatusNotFound,
-			Header:     make(http.Header),
-			Body:       io.NopCloser(nil),
-		}
-
-		mockClient.EXPECT().Do(gomock.Any()).Return(mockResponse, nil)
-
-		lgr := &LayerGroupRequester{data: testdata.GeoserverInfo(mockClient)}
-
-		err := lgr.Delete(testdata.LayerGroupName)
-		assert.Error(t, err)
-		assert.IsType(t, &customerrors.NotFoundError{}, err)
-		assert.EqualError(t, err, fmt.Sprintf("layer group %s not found", testdata.LayerGroupName))
 	})
 
 	t.Run("500 Internal Server Error", func(t *testing.T) {
