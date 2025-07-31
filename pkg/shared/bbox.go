@@ -65,15 +65,13 @@ type CRSClass struct {
 }
 
 func (c *CRSClass) UnmarshalJSON(data []byte) error {
-	// First try to unmarshal as a simple string
 	var str string
 	if err := json.Unmarshal(data, &str); err == nil {
 		c.Value = str
-		c.Class = "" // Clear class when it's a simple string
+		c.Class = ""
 		return nil
 	}
 
-	// If that fails, try to unmarshal as an object with @class and $
 	type alias CRSClass
 	var temp alias
 	if err := json.Unmarshal(data, &temp); err == nil {

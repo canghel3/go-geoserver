@@ -41,7 +41,7 @@ func TestWMS_GetMap(t *testing.T) {
 			})
 
 			t.Run("From Workspace", func(t *testing.T) {
-				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{fmt.Sprintf(testdata.FeatureTypeGeoPackage)}, shared.BBOX{
+				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{testdata.FeatureTypeGeoPackage}, shared.BBOX{
 					MinX: 264970.869,
 					MaxX: 270013.039,
 					MinY: 840102.83,
@@ -99,7 +99,7 @@ func TestWMS_GetMap(t *testing.T) {
 			})
 
 			t.Run("From Workspace", func(t *testing.T) {
-				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{fmt.Sprintf(testdata.FeatureTypeGeoPackage)}, shared.BBOX{
+				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{testdata.FeatureTypeGeoPackage}, shared.BBOX{
 					MinX: 264970.869,
 					MaxX: 270013.039,
 					MinY: 840102.83,
@@ -153,11 +153,11 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageJpeg), buf.Bytes())
 			})
 
 			t.Run("From Workspace", func(t *testing.T) {
-				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{fmt.Sprintf(testdata.FeatureTypeGeoPackage)}, shared.BBOX{
+				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{testdata.FeatureTypeGeoPackage}, shared.BBOX{
 					MinX: 264970.869,
 					MaxX: 270013.039,
 					MinY: 840102.83,
@@ -172,7 +172,7 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageJpeg), buf.Bytes())
 			})
 		})
 
@@ -211,11 +211,11 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageJpegPng), buf.Bytes())
 			})
 
 			t.Run("From Workspace", func(t *testing.T) {
-				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{fmt.Sprintf(testdata.FeatureTypeGeoPackage)}, shared.BBOX{
+				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{testdata.FeatureTypeGeoPackage}, shared.BBOX{
 					MinX: 264970.869,
 					MaxX: 270013.039,
 					MinY: 840102.83,
@@ -230,7 +230,7 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageJpegPng), buf.Bytes())
 			})
 		})
 
@@ -269,11 +269,11 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageJpegPng8), buf.Bytes())
 			})
 
 			t.Run("From Workspace", func(t *testing.T) {
-				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{fmt.Sprintf(testdata.FeatureTypeGeoPackage)}, shared.BBOX{
+				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{testdata.FeatureTypeGeoPackage}, shared.BBOX{
 					MinX: 264970.869,
 					MaxX: 270013.039,
 					MinY: 840102.83,
@@ -288,7 +288,7 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageJpegPng8), buf.Bytes())
 			})
 		})
 
@@ -327,11 +327,11 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageGif), buf.Bytes())
 			})
 
 			t.Run("From Workspace", func(t *testing.T) {
-				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{fmt.Sprintf(testdata.FeatureTypeGeoPackage)}, shared.BBOX{
+				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{testdata.FeatureTypeGeoPackage}, shared.BBOX{
 					MinX: 264970.869,
 					MaxX: 270013.039,
 					MinY: 840102.83,
@@ -346,7 +346,7 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageGif), buf.Bytes())
 			})
 		})
 
@@ -385,11 +385,11 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageTiff), buf.Bytes())
 			})
 
 			t.Run("From Workspace", func(t *testing.T) {
-				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{fmt.Sprintf(testdata.FeatureTypeGeoPackage)}, shared.BBOX{
+				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{testdata.FeatureTypeGeoPackage}, shared.BBOX{
 					MinX: 264970.869,
 					MaxX: 270013.039,
 					MinY: 840102.83,
@@ -404,7 +404,7 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageTiff), buf.Bytes())
 			})
 		})
 
@@ -443,11 +443,11 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageTiff8), buf.Bytes())
 			})
 
 			t.Run("From Workspace", func(t *testing.T) {
-				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{fmt.Sprintf(testdata.FeatureTypeGeoPackage)}, shared.BBOX{
+				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{testdata.FeatureTypeGeoPackage}, shared.BBOX{
 					MinX: 264970.869,
 					MaxX: 270013.039,
 					MinY: 840102.83,
@@ -462,7 +462,7 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageTiff8), buf.Bytes())
 			})
 		})
 
@@ -501,11 +501,11 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageGeoTiff), buf.Bytes())
 			})
 
 			t.Run("From Workspace", func(t *testing.T) {
-				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{fmt.Sprintf(testdata.FeatureTypeGeoPackage)}, shared.BBOX{
+				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{testdata.FeatureTypeGeoPackage}, shared.BBOX{
 					MinX: 264970.869,
 					MaxX: 270013.039,
 					MinY: 840102.83,
@@ -520,7 +520,7 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageGeoTiff), buf.Bytes())
 			})
 		})
 
@@ -559,11 +559,11 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageGeoTiff8), buf.Bytes())
 			})
 
 			t.Run("From Workspace", func(t *testing.T) {
-				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{fmt.Sprintf(testdata.FeatureTypeGeoPackage)}, shared.BBOX{
+				img, err := geoclient.Workspace(testdata.Workspace).WMS(wms.Version111).GetMap(500, 500, []string{testdata.FeatureTypeGeoPackage}, shared.BBOX{
 					MinX: 264970.869,
 					MaxX: 270013.039,
 					MinY: 840102.83,
@@ -578,7 +578,7 @@ func TestWMS_GetMap(t *testing.T) {
 				err = png.Encode(&buf, img)
 				assert.NoError(t, err)
 
-				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImagePng8), buf.Bytes())
+				writeFile(t, filepath.Join(imagesTestDataDir, testdata.ImageGeoTiff8), buf.Bytes())
 			})
 		})
 

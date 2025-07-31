@@ -55,6 +55,14 @@ func (lg LayerGroups) Publish(group models.Group) error {
 		}
 	}
 
+	if group.Styles != nil {
+		for i := range group.Styles.Style {
+			if !validator.Empty(group.Styles.Style[i].Name) && !strings.HasPrefix(group.Styles.Style[i].Name, group.Workspace.Name) {
+				group.Styles.Style[i].Name = fmt.Sprintf("%s:%s", group.Workspace.Name, group.Styles.Style[i].Name)
+			}
+		}
+	}
+
 	content, err := json.Marshal(models.GroupWrapper{Group: group})
 	if err != nil {
 		return err
@@ -89,6 +97,14 @@ func (lg LayerGroups) Update(name string, group layers.Group) error {
 	for i := range group.Publishables.Entries {
 		if !strings.HasPrefix(group.Publishables.Entries[i].Name, group.Workspace.Name) {
 			group.Publishables.Entries[i].Name = fmt.Sprintf("%s:%s", group.Workspace.Name, group.Publishables.Entries[i].Name)
+		}
+	}
+
+	if group.Styles != nil {
+		for i := range group.Styles.Style {
+			if !validator.Empty(group.Styles.Style[i].Name) && !strings.HasPrefix(group.Styles.Style[i].Name, group.Workspace.Name) {
+				group.Styles.Style[i].Name = fmt.Sprintf("%s:%s", group.Workspace.Name, group.Styles.Style[i].Name)
+			}
 		}
 	}
 

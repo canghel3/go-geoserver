@@ -1,7 +1,6 @@
 package client
 
 import (
-	"fmt"
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"github.com/canghel3/go-geoserver/pkg/formats"
@@ -89,6 +88,141 @@ func TestLayerGroupIntegration_Create(t *testing.T) {
 			}
 			err := geoclient.LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName+"_in_group", layers.ModeContainer, layerInputs, options.LayerGroup.Workspace(testdata.Workspace)))
 			assert.NoError(t, err)
+		})
+
+		t.Run("With Style", func(t *testing.T) {
+			t.Skip("cannot be tested until style management is implemented")
+			layerInputs := []layers.LayerInput{
+				{
+					Type:  layers.TypeLayer,
+					Name:  testdata.CoverageGeoTiffName,
+					Style: testdata.StyleGenericName,
+				},
+				{
+					Type:  layers.TypeLayer,
+					Name:  testdata.CoverageEHdrName,
+					Style: testdata.StyleGenericName,
+				},
+			}
+
+			err := geoclient.LayerGroups().Delete(testdata.LayerGroupName + "_in_group")
+			assert.NoError(t, err)
+
+			err = geoclient.LayerGroups().Delete(testdata.LayerGroupName)
+			assert.NoError(t, err)
+
+			err = geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs))
+			assert.NoError(t, err)
+
+			group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
+			assert.NoError(t, err)
+			assert.NotNil(t, group)
+			assert.Equal(t, testdata.StyleGenericName, group.Styles.Style[0].Name)
+		})
+
+		t.Run("With Keywords", func(t *testing.T) {
+			t.Run("Single Keyword", func(t *testing.T) {
+				layerInputs := []layers.LayerInput{
+					{
+						Type:  layers.TypeLayer,
+						Name:  testdata.CoverageGeoTiffName,
+						Style: testdata.StyleGenericName,
+					},
+					{
+						Type:  layers.TypeLayer,
+						Name:  testdata.CoverageEHdrName,
+						Style: testdata.StyleGenericName,
+					},
+				}
+
+				err := geoclient.LayerGroups().Delete(testdata.LayerGroupName + "_in_group")
+				assert.NoError(t, err)
+
+				err = geoclient.LayerGroups().Delete(testdata.LayerGroupName)
+				assert.NoError(t, err)
+
+				err = geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs, options.LayerGroup.Keywords("single")))
+				assert.NoError(t, err)
+
+				group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
+				assert.NoError(t, err)
+				assert.NotNil(t, group)
+				assert.Len(t, group.Keywords.Keywords, 1)
+			})
+
+			t.Run("Multi Keyword", func(t *testing.T) {
+				layerInputs := []layers.LayerInput{
+					{
+						Type:  layers.TypeLayer,
+						Name:  testdata.CoverageGeoTiffName,
+						Style: testdata.StyleGenericName,
+					},
+					{
+						Type:  layers.TypeLayer,
+						Name:  testdata.CoverageEHdrName,
+						Style: testdata.StyleGenericName,
+					},
+				}
+
+				err := geoclient.LayerGroups().Delete(testdata.LayerGroupName)
+				assert.NoError(t, err)
+
+				err = geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs, options.LayerGroup.Keywords("first", "second")))
+				assert.NoError(t, err)
+
+				group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
+				assert.NoError(t, err)
+				assert.NotNil(t, group)
+				assert.Len(t, group.Keywords.Keywords, 2)
+			})
+
+		})
+
+		t.Run("With Title", func(t *testing.T) {
+			layerInputs := []layers.LayerInput{
+				{
+					Type:  layers.TypeLayer,
+					Name:  testdata.CoverageGeoTiffName,
+					Style: testdata.StyleGenericName,
+				},
+				{
+					Type:  layers.TypeLayer,
+					Name:  testdata.CoverageEHdrName,
+					Style: testdata.StyleGenericName,
+				},
+			}
+
+			err := geoclient.LayerGroups().Delete(testdata.LayerGroupName)
+			assert.NoError(t, err)
+
+			err = geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs, options.LayerGroup.Title("title")))
+			assert.NoError(t, err)
+
+			group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
+			assert.NoError(t, err)
+			assert.NotNil(t, group)
+			assert.Equal(t, group.Title, "title")
+		})
+
+		t.Run("Single Layer With Default Style", func(t *testing.T) {
+			layerInputs := []layers.LayerInput{
+				{
+					Type: layers.TypeLayer,
+					Name: testdata.CoverageGeoTiffName,
+				},
+			}
+
+			err := geoclient.LayerGroups().Delete(testdata.LayerGroupName)
+			assert.NoError(t, err)
+
+			err = geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs))
+			assert.NoError(t, err)
+
+			group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
+			assert.NoError(t, err)
+			assert.NotNil(t, group)
+			assert.Len(t, group.Styles.Style, 1)
+			assert.Len(t, group.Publishables.Entries, 1)
 		})
 	})
 
@@ -217,19 +351,99 @@ func TestLayerGroupIntegration_Update(t *testing.T) {
 	err := geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs))
 	assert.NoError(t, err)
 
-	group, err := geoclient.LayerGroups().Get(fmt.Sprintf("%s:%s", testdata.Workspace, testdata.LayerGroupName))
+	group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
 	assert.NoError(t, err)
 	assert.NotNil(t, group)
 
 	t.Run("200 Ok", func(t *testing.T) {
-		group.Mode = layers.ModeSingle
-		err = geoclient.LayerGroups().Update(testdata.LayerGroupName, *group)
-		assert.NoError(t, err)
+		t.Run("Update Mode", func(t *testing.T) {
+			g := group
+			g.Mode = layers.ModeSingle
+			err = geoclient.LayerGroups().Update(testdata.LayerGroupName, *g)
+			assert.NoError(t, err)
 
-		group, err := geoclient.LayerGroups().Get(fmt.Sprintf("%s:%s", testdata.Workspace, testdata.LayerGroupName))
-		assert.NoError(t, err)
-		assert.NotNil(t, group)
-		assert.Equal(t, layers.ModeSingle, group.Mode)
+			group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
+			assert.NoError(t, err)
+			assert.NotNil(t, group)
+			assert.Equal(t, layers.ModeSingle, group.Mode)
+		})
+
+		t.Run("Add New Layer", func(t *testing.T) {
+			t.Run("Styles Is Nil", func(t *testing.T) {
+				g := group
+				g.Publishables = nil
+				g.Styles = nil
+				g.AddPublishables(layers.LayerInput{
+					Type:  layers.TypeLayer,
+					Name:  testdata.CoverageGeoTiffName,
+					Style: "",
+				})
+
+				err = geoclient.LayerGroups().Update(testdata.LayerGroupName, *g)
+				assert.NoError(t, err)
+
+				group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
+				assert.NoError(t, err)
+				assert.NotNil(t, group)
+				assert.Len(t, group.Publishables.Entries, 1)
+			})
+
+			t.Run("Styles Exist", func(t *testing.T) {
+				g := group
+				g.AddPublishables(layers.LayerInput{
+					Type:  layers.TypeLayer,
+					Name:  testdata.CoverageGeoTiffName,
+					Style: "",
+				})
+
+				err = geoclient.LayerGroups().Update(testdata.LayerGroupName, *g)
+				assert.NoError(t, err)
+
+				group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
+				assert.NoError(t, err)
+				assert.NotNil(t, group)
+				assert.Len(t, group.Publishables.Entries, 2)
+			})
+		})
+
+		t.Run("Add New Layer Group", func(t *testing.T) {
+			err := geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName+"interm", layers.ModeContainer, layerInputs))
+			assert.NoError(t, err)
+
+			g := group
+			g.AddPublishables(layers.LayerInput{
+				Type:  layers.TypeLayerGroup,
+				Name:  testdata.LayerGroupName + "interm",
+				Style: "",
+			})
+
+			err = geoclient.LayerGroups().Update(testdata.LayerGroupName, *g)
+			assert.NoError(t, err)
+
+			group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
+			assert.NoError(t, err)
+			assert.NotNil(t, group)
+			assert.Len(t, group.Publishables.Entries, 3)
+		})
+
+		t.Run("With Style", func(t *testing.T) {
+			t.Skip("test wont work until styles management is implemented")
+			g := group
+			g.AddPublishables(layers.LayerInput{
+				Type:  layers.TypeLayer,
+				Name:  testdata.CoverageGeoTiffName,
+				Style: testdata.StyleGenericName,
+			})
+
+			err = geoclient.LayerGroups().Update(testdata.LayerGroupName, *g)
+			assert.NoError(t, err)
+
+			gg, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
+			assert.NoError(t, err)
+			assert.NotNil(t, gg)
+			assert.Len(t, gg.Publishables.Entries, 4)
+			assert.Equal(t, gg.Styles.Style[4].Name, testdata.StyleGenericName)
+		})
 	})
 
 	//t.Run("404 Not Found", func(t *testing.T) {

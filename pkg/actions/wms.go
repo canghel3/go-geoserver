@@ -77,13 +77,13 @@ type MapFormats struct {
 
 func (mf MapFormats) Png() (image.Image, error) {
 	for _, layer := range mf.layers {
+		if !strings.HasPrefix(layer, mf.workspace) {
+			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
+		}
+
 		err := validator.WorkspaceLayerFormat(mf.workspace, layer)
 		if err != nil {
 			return nil, err
-		}
-
-		if !strings.HasPrefix(layer, mf.workspace) {
-			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
 		}
 	}
 
@@ -97,13 +97,13 @@ func (mf MapFormats) Png() (image.Image, error) {
 
 func (mf MapFormats) Png8() (image.Image, error) {
 	for _, layer := range mf.layers {
+		if !strings.HasPrefix(layer, mf.workspace) {
+			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
+		}
+
 		err := validator.WorkspaceLayerFormat(mf.workspace, layer)
 		if err != nil {
 			return nil, err
-		}
-
-		if !strings.HasPrefix(layer, mf.workspace) {
-			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
 		}
 	}
 
@@ -117,13 +117,13 @@ func (mf MapFormats) Png8() (image.Image, error) {
 
 func (mf MapFormats) Jpeg() (image.Image, error) {
 	for _, layer := range mf.layers {
+		if !strings.HasPrefix(layer, mf.workspace) {
+			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
+		}
+
 		err := validator.WorkspaceLayerFormat(mf.workspace, layer)
 		if err != nil {
 			return nil, err
-		}
-
-		if !strings.HasPrefix(layer, mf.workspace) {
-			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
 		}
 	}
 
@@ -137,13 +137,13 @@ func (mf MapFormats) Jpeg() (image.Image, error) {
 
 func (mf MapFormats) JpegPng() (image.Image, error) {
 	for _, layer := range mf.layers {
+		if !strings.HasPrefix(layer, mf.workspace) {
+			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
+		}
+
 		err := validator.WorkspaceLayerFormat(mf.workspace, layer)
 		if err != nil {
 			return nil, err
-		}
-
-		if !strings.HasPrefix(layer, mf.workspace) {
-			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
 		}
 	}
 
@@ -157,13 +157,13 @@ func (mf MapFormats) JpegPng() (image.Image, error) {
 
 func (mf MapFormats) JpegPng8() (image.Image, error) {
 	for _, layer := range mf.layers {
+		if !strings.HasPrefix(layer, mf.workspace) {
+			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
+		}
+
 		err := validator.WorkspaceLayerFormat(mf.workspace, layer)
 		if err != nil {
 			return nil, err
-		}
-
-		if !strings.HasPrefix(layer, mf.workspace) {
-			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
 		}
 	}
 
@@ -177,13 +177,13 @@ func (mf MapFormats) JpegPng8() (image.Image, error) {
 
 func (mf MapFormats) Gif() (image.Image, error) {
 	for _, layer := range mf.layers {
+		if !strings.HasPrefix(layer, mf.workspace) {
+			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
+		}
+
 		err := validator.WorkspaceLayerFormat(mf.workspace, layer)
 		if err != nil {
 			return nil, err
-		}
-
-		if !strings.HasPrefix(layer, mf.workspace) {
-			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
 		}
 	}
 
@@ -197,13 +197,13 @@ func (mf MapFormats) Gif() (image.Image, error) {
 
 func (mf MapFormats) Tiff() (image.Image, error) {
 	for _, layer := range mf.layers {
+		if !strings.HasPrefix(layer, mf.workspace) {
+			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
+		}
+
 		err := validator.WorkspaceLayerFormat(mf.workspace, layer)
 		if err != nil {
 			return nil, err
-		}
-
-		if !strings.HasPrefix(layer, mf.workspace) {
-			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
 		}
 	}
 
@@ -217,13 +217,13 @@ func (mf MapFormats) Tiff() (image.Image, error) {
 
 func (mf MapFormats) Tiff8() (image.Image, error) {
 	for _, layer := range mf.layers {
+		if !strings.HasPrefix(layer, mf.workspace) {
+			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
+		}
+
 		err := validator.WorkspaceLayerFormat(mf.workspace, layer)
 		if err != nil {
 			return nil, err
-		}
-
-		if !strings.HasPrefix(layer, mf.workspace) {
-			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
 		}
 	}
 
@@ -237,13 +237,13 @@ func (mf MapFormats) Tiff8() (image.Image, error) {
 
 func (mf MapFormats) GeoTiff() (image.Image, error) {
 	for _, layer := range mf.layers {
+		if !strings.HasPrefix(layer, mf.workspace) {
+			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
+		}
+
 		err := validator.WorkspaceLayerFormat(mf.workspace, layer)
 		if err != nil {
 			return nil, err
-		}
-
-		if !strings.HasPrefix(layer, mf.workspace) {
-			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
 		}
 	}
 
@@ -257,13 +257,13 @@ func (mf MapFormats) GeoTiff() (image.Image, error) {
 
 func (mf MapFormats) GeoTiff8() (image.Image, error) {
 	for _, layer := range mf.layers {
+		if !strings.HasPrefix(layer, mf.workspace) {
+			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
+		}
+
 		err := validator.WorkspaceLayerFormat(mf.workspace, layer)
 		if err != nil {
 			return nil, err
-		}
-
-		if !strings.HasPrefix(layer, mf.workspace) {
-			layer = fmt.Sprintf("%s:%s", mf.workspace, layer)
 		}
 	}
 

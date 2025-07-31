@@ -9,10 +9,8 @@ type GroupWrapper struct {
 	Group Group `json:"layerGroup"`
 }
 
+// Group TODO: implement custom unmarshaller in case geoserver responds with numbers for name and title
 type Group struct {
-	//TODO: Although a layer name can be sent as a string formatted number,
-	// geoserver parses it to an actual number and returns it,
-	// which will cause panics when decoding the name here.
 	Name         string              `json:"name"`
 	Mode         string              `json:"mode"`
 	Title        *string             `json:"title,omitempty"`

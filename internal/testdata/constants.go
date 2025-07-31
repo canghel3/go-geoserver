@@ -80,4 +80,9 @@ const (
 	ImageGeoTiff8 = "outputgeotiff8.tiff"
 
 	LayerGroupName = "LAYER_GROUP"
+
+	StyleGenericName = "generic"
+	StyleSLD10Name   = "sld10"
+	StyleSLD11Name   = "sld11"
+	StyleCSSName     = "css"
 )

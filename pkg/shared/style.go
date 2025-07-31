@@ -33,7 +33,7 @@ func (s *Style) MarshalJSON() ([]byte, error) {
 
 	type alias Style
 	var temp alias
-	if name != "" && link != "" {
+	if name != "" || link != "" {
 		temp.Name = name
 		temp.Link = link
 		return json.Marshal(temp)
