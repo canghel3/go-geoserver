@@ -1,13 +1,14 @@
 package client
 
 import (
+	"testing"
+
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"github.com/canghel3/go-geoserver/pkg/formats"
 	"github.com/canghel3/go-geoserver/pkg/layers"
 	"github.com/canghel3/go-geoserver/pkg/options"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestLayerGroupIntegration_Create(t *testing.T) {
@@ -45,31 +46,31 @@ func TestLayerGroupIntegration_Create(t *testing.T) {
 				},
 			}
 
-			err := geoclient.LayerGroups().Delete(testdata.LayerGroupName)
+			err := geoclient.Workspace(testdata.Workspace).LayerGroups().Delete(testdata.LayerGroupName)
 			assert.NoError(t, err)
 
 			err = geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs))
 			assert.NoError(t, err)
 		})
 
-		t.Run("Not In Workspace", func(t *testing.T) {
-			err := geoclient.LayerGroups().Delete(testdata.LayerGroupName)
-			assert.NoError(t, err)
-
-			layerInputs := []layers.LayerInput{
-				{
-					Type: layers.TypeLayer,
-					Name: testdata.CoverageGeoTiffName,
-				},
-				{
-					Type: layers.TypeLayer,
-					Name: testdata.CoverageEHdrName,
-				},
-			}
-
-			err = geoclient.LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs, options.LayerGroup.Workspace(testdata.Workspace)))
-			assert.NoError(t, err)
-		})
+		//t.Run("Not In Workspace", func(t *testing.T) {
+		//	err := geoclient.Workspace(testdata.Workspace).LayerGroups().Delete(testdata.LayerGroupName)
+		//	assert.NoError(t, err)
+		//
+		//	layerInputs := []layers.LayerInput{
+		//		{
+		//			Type: layers.TypeLayer,
+		//			Name: testdata.CoverageGeoTiffName,
+		//		},
+		//		{
+		//			Type: layers.TypeLayer,
+		//			Name: testdata.CoverageEHdrName,
+		//		},
+		//	}
+		//
+		//	err = geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs, options.LayerGroup.Workspace(testdata.Workspace)))
+		//	assert.NoError(t, err)
+		//})
 
 		t.Run("Layer Group In Layer Group", func(t *testing.T) {
 			layerInputs := []layers.LayerInput{
@@ -86,7 +87,7 @@ func TestLayerGroupIntegration_Create(t *testing.T) {
 					Name: testdata.LayerGroupName,
 				},
 			}
-			err := geoclient.LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName+"_in_group", layers.ModeContainer, layerInputs, options.LayerGroup.Workspace(testdata.Workspace)))
+			err := geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName+"_in_group", layers.ModeContainer, layerInputs, options.LayerGroup.Workspace(testdata.Workspace)))
 			assert.NoError(t, err)
 		})
 
@@ -105,10 +106,10 @@ func TestLayerGroupIntegration_Create(t *testing.T) {
 				},
 			}
 
-			err := geoclient.LayerGroups().Delete(testdata.LayerGroupName + "_in_group")
+			err := geoclient.Workspace(testdata.Workspace).LayerGroups().Delete(testdata.LayerGroupName + "_in_group")
 			assert.NoError(t, err)
 
-			err = geoclient.LayerGroups().Delete(testdata.LayerGroupName)
+			err = geoclient.Workspace(testdata.Workspace).LayerGroups().Delete(testdata.LayerGroupName)
 			assert.NoError(t, err)
 
 			err = geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs))
@@ -135,10 +136,10 @@ func TestLayerGroupIntegration_Create(t *testing.T) {
 					},
 				}
 
-				err := geoclient.LayerGroups().Delete(testdata.LayerGroupName + "_in_group")
+				err := geoclient.Workspace(testdata.Workspace).LayerGroups().Delete(testdata.LayerGroupName + "_in_group")
 				assert.NoError(t, err)
 
-				err = geoclient.LayerGroups().Delete(testdata.LayerGroupName)
+				err = geoclient.Workspace(testdata.Workspace).LayerGroups().Delete(testdata.LayerGroupName)
 				assert.NoError(t, err)
 
 				err = geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs, options.LayerGroup.Keywords("single")))
@@ -164,7 +165,7 @@ func TestLayerGroupIntegration_Create(t *testing.T) {
 					},
 				}
 
-				err := geoclient.LayerGroups().Delete(testdata.LayerGroupName)
+				err := geoclient.Workspace(testdata.Workspace).LayerGroups().Delete(testdata.LayerGroupName)
 				assert.NoError(t, err)
 
 				err = geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs, options.LayerGroup.Keywords("first", "second")))
@@ -192,7 +193,7 @@ func TestLayerGroupIntegration_Create(t *testing.T) {
 				},
 			}
 
-			err := geoclient.LayerGroups().Delete(testdata.LayerGroupName)
+			err := geoclient.Workspace(testdata.Workspace).LayerGroups().Delete(testdata.LayerGroupName)
 			assert.NoError(t, err)
 
 			err = geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs, options.LayerGroup.Title("title")))
@@ -212,7 +213,7 @@ func TestLayerGroupIntegration_Create(t *testing.T) {
 				},
 			}
 
-			err := geoclient.LayerGroups().Delete(testdata.LayerGroupName)
+			err := geoclient.Workspace(testdata.Workspace).LayerGroups().Delete(testdata.LayerGroupName)
 			assert.NoError(t, err)
 
 			err = geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs))
@@ -227,7 +228,7 @@ func TestLayerGroupIntegration_Create(t *testing.T) {
 	})
 
 	t.Run("Invalid Group Name", func(t *testing.T) {
-		err := geoclient.LayerGroups().Publish(layers.NewGroup(testdata.InvalidName, layers.ModeContainer, nil))
+		err := geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.InvalidName, layers.ModeContainer, nil))
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.InputError{}, err)
 		assert.EqualError(t, err, "name can only contain alphanumerical characters")
@@ -240,29 +241,29 @@ func TestLayerGroupIntegration_Create(t *testing.T) {
 		assert.EqualError(t, err, "name can only contain alphanumerical characters")
 	})
 
-	t.Run("Workspace Not Specified", func(t *testing.T) {
-		t.Run("And It Is Unkown", func(t *testing.T) {
-			err := geoclient.LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeSingle, nil))
-			assert.IsType(t, &customerrors.InputError{}, err)
-			assert.EqualError(t, err, "workspace is required. use Workspace from options.LayerGroup")
-		})
-
-		t.Run("And It Is Known", func(t *testing.T) {
-			layerInputs := []layers.LayerInput{
-				{
-					Type: layers.TypeLayer,
-					Name: testdata.CoverageGeoTiffName,
-				},
-				{
-					Type: layers.TypeLayer,
-					Name: testdata.CoverageEHdrName,
-				},
-			}
-
-			err := geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName+"new", layers.ModeSingle, layerInputs))
-			assert.NoError(t, err)
-		})
-	})
+	//t.Run("Workspace Not Specified", func(t *testing.T) {
+	//	t.Run("And It Is Unkown", func(t *testing.T) {
+	//		err := geoclient.LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeSingle, nil))
+	//		assert.IsType(t, &customerrors.InputError{}, err)
+	//		assert.EqualError(t, err, "workspace is required. use Workspace from options.LayerGroup")
+	//	})
+	//
+	//	t.Run("And It Is Known", func(t *testing.T) {
+	//		layerInputs := []layers.LayerInput{
+	//			{
+	//				Type: layers.TypeLayer,
+	//				Name: testdata.CoverageGeoTiffName,
+	//			},
+	//			{
+	//				Type: layers.TypeLayer,
+	//				Name: testdata.CoverageEHdrName,
+	//			},
+	//		}
+	//
+	//		err := geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName+"new", layers.ModeSingle, layerInputs))
+	//		assert.NoError(t, err)
+	//	})
+	//})
 }
 
 func TestLayerGroupIntegration_Get(t *testing.T) {
@@ -282,7 +283,7 @@ func TestLayerGroupIntegration_Get(t *testing.T) {
 			Name: testdata.CoverageEHdrName,
 		},
 	}
-	err := geoclient.LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs, options.LayerGroup.Workspace(testdata.Workspace)))
+	err := geoclient.Workspace(testdata.Workspace).LayerGroups().Publish(layers.NewGroup(testdata.LayerGroupName, layers.ModeContainer, layerInputs))
 	assert.NoError(t, err)
 
 	t.Run("200 Ok", func(t *testing.T) {
@@ -296,7 +297,7 @@ func TestLayerGroupIntegration_Get(t *testing.T) {
 	})
 
 	t.Run("404 Not Found", func(t *testing.T) {
-		group, err := geoclient.LayerGroups().Get("none")
+		group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get("none")
 		assert.Error(t, err)
 		assert.Nil(t, group)
 		assert.IsType(t, &customerrors.NotFoundError{}, err)
@@ -359,7 +360,7 @@ func TestLayerGroupIntegration_Update(t *testing.T) {
 		t.Run("Update Mode", func(t *testing.T) {
 			g := group
 			g.Mode = layers.ModeSingle
-			err = geoclient.LayerGroups().Update(testdata.LayerGroupName, *g)
+			err = geoclient.Workspace(testdata.Workspace).LayerGroups().Update(testdata.LayerGroupName, *g)
 			assert.NoError(t, err)
 
 			group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
@@ -379,7 +380,7 @@ func TestLayerGroupIntegration_Update(t *testing.T) {
 					Style: "",
 				})
 
-				err = geoclient.LayerGroups().Update(testdata.LayerGroupName, *g)
+				err = geoclient.Workspace(testdata.Workspace).LayerGroups().Update(testdata.LayerGroupName, *g)
 				assert.NoError(t, err)
 
 				group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
@@ -396,7 +397,7 @@ func TestLayerGroupIntegration_Update(t *testing.T) {
 					Style: "",
 				})
 
-				err = geoclient.LayerGroups().Update(testdata.LayerGroupName, *g)
+				err = geoclient.Workspace(testdata.Workspace).LayerGroups().Update(testdata.LayerGroupName, *g)
 				assert.NoError(t, err)
 
 				group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
@@ -417,7 +418,7 @@ func TestLayerGroupIntegration_Update(t *testing.T) {
 				Style: "",
 			})
 
-			err = geoclient.LayerGroups().Update(testdata.LayerGroupName, *g)
+			err = geoclient.Workspace(testdata.Workspace).LayerGroups().Update(testdata.LayerGroupName, *g)
 			assert.NoError(t, err)
 
 			group, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
@@ -435,7 +436,7 @@ func TestLayerGroupIntegration_Update(t *testing.T) {
 				Style: testdata.StyleGenericName,
 			})
 
-			err = geoclient.LayerGroups().Update(testdata.LayerGroupName, *g)
+			err = geoclient.Workspace(testdata.Workspace).LayerGroups().Update(testdata.LayerGroupName, *g)
 			assert.NoError(t, err)
 
 			gg, err := geoclient.Workspace(testdata.Workspace).LayerGroups().Get(testdata.LayerGroupName)
@@ -455,7 +456,7 @@ func TestLayerGroupIntegration_Update(t *testing.T) {
 	//})
 
 	t.Run("Invalid Previous Name", func(t *testing.T) {
-		err = geoclient.LayerGroups().Update(testdata.InvalidName, *group)
+		err = geoclient.Workspace(testdata.Workspace).LayerGroups().Update(testdata.InvalidName, *group)
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.InputError{}, err)
 		assert.EqualError(t, err, "name can only contain alphanumerical characters")
@@ -463,25 +464,25 @@ func TestLayerGroupIntegration_Update(t *testing.T) {
 
 	t.Run("Invalid New Name", func(t *testing.T) {
 		group.Name = testdata.InvalidName
-		err = geoclient.LayerGroups().Update("some", *group)
+		err = geoclient.Workspace(testdata.Workspace).LayerGroups().Update("some", *group)
 		assert.Error(t, err)
 		assert.IsType(t, &customerrors.InputError{}, err)
 		assert.EqualError(t, err, "name can only contain alphanumerical characters")
 	})
 
-	t.Run("Workspace Not Specified", func(t *testing.T) {
-		t.Run("And It Is Unknown", func(t *testing.T) {
-			group.Workspace = nil
-			group.Name = testdata.LayerGroupName
-			err = geoclient.LayerGroups().Update("existing", *group)
-			assert.IsType(t, &customerrors.InputError{}, err)
-			assert.EqualError(t, err, "group.Workspace is required")
-		})
-
-		t.Run("And It Is Known", func(t *testing.T) {
-			group.Name = testdata.LayerGroupName
-			err = geoclient.Workspace(testdata.Workspace).LayerGroups().Update(testdata.LayerGroupName, *group)
-			assert.NoError(t, err)
-		})
-	})
+	//t.Run("Workspace Not Specified", func(t *testing.T) {
+	//	t.Run("And It Is Unknown", func(t *testing.T) {
+	//		group.Workspace = nil
+	//		group.Name = testdata.LayerGroupName
+	//		err = geoclient.LayerGroups().Update("existing", *group)
+	//		assert.IsType(t, &customerrors.InputError{}, err)
+	//		assert.EqualError(t, err, "group.Workspace is required")
+	//	})
+	//
+	//	t.Run("And It Is Known", func(t *testing.T) {
+	//		group.Name = testdata.LayerGroupName
+	//		err = geoclient.Workspace(testdata.Workspace).LayerGroups().Update(testdata.LayerGroupName, *group)
+	//		assert.NoError(t, err)
+	//	})
+	//})
 }

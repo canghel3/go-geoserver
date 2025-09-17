@@ -2,13 +2,14 @@ package client
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/coveragestores"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"github.com/canghel3/go-geoserver/pkg/formats"
 	"github.com/canghel3/go-geoserver/pkg/options"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestCoverageStoreIntegration_Create(t *testing.T) {

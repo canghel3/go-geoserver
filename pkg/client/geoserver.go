@@ -1,11 +1,12 @@
 package client
 
 import (
+	"net/http"
+
 	"github.com/canghel3/go-geoserver/internal"
 	"github.com/canghel3/go-geoserver/pkg/actions"
 	"github.com/canghel3/go-geoserver/pkg/options"
 	"github.com/canghel3/go-geoserver/pkg/wms"
-	"net/http"
 )
 
 type GeoserverClient struct {
@@ -56,14 +57,14 @@ func (gc GeoserverClient) WMS(version wms.WMSVersion) actions.WMS {
 	return actions.NewWMSActions(gc.data.Clone(), version)
 }
 
-func (gc GeoserverClient) LayerGroups() actions.LayerGroups {
-	return actions.NewLayerGroup(gc.data.Clone())
-}
+//func (gc GeoserverClient) LayerGroups() actions.LayerGroups {
+//	return actions.NewLayerGroup(gc.data.Clone())
+//}
 
 func (gc GeoserverClient) Logging() actions.Logging {
 	return actions.NewLoggingActions(gc.data.Clone())
 }
 
-func (gc GeoserverClient) GeoWebCache() actions.GeoWebCache {
-	return actions.NewGeoWebCache(gc.data.Clone())
-}
+//func (gc GeoserverClient) GeoWebCache() actions.GeoWebCache {
+//	return actions.NewGeoWebCache(gc.data.Clone())
+//}

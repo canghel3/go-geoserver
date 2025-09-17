@@ -1,15 +1,16 @@
 package client
 
 import (
+	"os"
+	"path/filepath"
+	"testing"
+
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/coverages"
 	"github.com/canghel3/go-geoserver/pkg/datastores/postgis"
 	"github.com/canghel3/go-geoserver/pkg/featuretypes"
 	"github.com/canghel3/go-geoserver/pkg/formats"
 	"github.com/stretchr/testify/assert"
-	"os"
-	"path/filepath"
-	"testing"
 )
 
 // GDAL raster drivers: https://gdal.org/en/stable/drivers/raster/index.html

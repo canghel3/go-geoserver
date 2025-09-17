@@ -3,15 +3,16 @@ package client
 import (
 	"bytes"
 	"fmt"
+	"image/png"
+	"path/filepath"
+	"testing"
+
 	"github.com/canghel3/go-geoserver/internal/testdata"
 	"github.com/canghel3/go-geoserver/pkg/customerrors"
 	"github.com/canghel3/go-geoserver/pkg/formats"
 	"github.com/canghel3/go-geoserver/pkg/shared"
 	"github.com/canghel3/go-geoserver/pkg/wms"
 	"github.com/stretchr/testify/assert"
-	"image/png"
-	"path/filepath"
-	"testing"
 )
 
 func TestWMS_GetMap(t *testing.T) {

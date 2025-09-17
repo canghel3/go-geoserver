@@ -18,13 +18,13 @@ type Capabilities1_3_0 struct {
 	Capability Capability `xml:"Capability" json:"capability"`
 }
 
-func (c130 *Capabilities1_3_0) Version() string {
-	return string(Version130)
-}
-
-func (c130 *Capabilities1_3_0) Layers() Layer {
-	return c130.Capability.Layer
-}
+//func (c130 *Capabilities1_3_0) Version() string {
+//	return string(Version130)
+//}
+//
+//func (c130 *Capabilities1_3_0) Layers() Layer {
+//	return c130.Capability.Layer
+//}
 
 type Service struct {
 	Name                         string         `xml:"Name" json:"name"`

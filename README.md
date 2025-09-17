@@ -30,6 +30,25 @@ go get github.com/canghel3/go-geoserver
 2. GeoWebCache
     - Seeding
 
+## Examples
+
+### GeoServer
+
+| Resource              | Example                                                             |
+|-----------------------|---------------------------------------------------------------------|
+| Client Initialization | [`examples/client.go`](./pkg/client/client_test.go)                 |
+| Workspaces            | [`examples/workspaces.go`](./pkg/actions/workspace_example_test.go) |
+| DataStores            | [`examples/datastores.go`](./pkg/actions/datastore_example_test.go) |
+| Feature Types         | [`examples/featuretypes.go`](./pkg/client/featuretype_test.go)      |
+| CoverageStores        | [`examples/coveragestores.go`](./pkg/client/coveragestore_test.go)  |
+| Coverages             | [`examples/coverages.go`](./pkg/client/coverage_test.go)            |
+
+### GeoWebCache
+
+| Resource       | Example                                                            |
+|----------------|--------------------------------------------------------------------|
+| Seeding        | [`examples/client.go`](./pkg/client/client_test.go)                |
+
 ## Available Data Sources
 
 ### Vector
@@ -70,29 +89,14 @@ go get github.com/canghel3/go-geoserver
 - Styles
 - WMS, WFS, WCS, WMTS
 
-## Examples
-
-### GeoServer
-
-| Resource              | Example                                                            |
-|-----------------------|--------------------------------------------------------------------|
-| Client Initialization | [`examples/client.go`](./pkg/client/client_test.go)                |
-| Workspaces            | [`examples/workspaces.go`](./pkg/client/workspace_test.go)         |
-| DataStores            | [`examples/datastores.go`](./pkg/actions/datastore_test.go)        |
-| Feature Types         | [`examples/featuretypes.go`](./pkg/client/featuretype_test.go)     |
-| CoverageStores        | [`examples/coveragestores.go`](./pkg/client/coveragestore_test.go) |
-| Coverages             | [`examples/coverages.go`](./pkg/client/coverage_test.go)           |
-
-### GeoWebCache
-
-| Resource       | Example                                                            |
-|----------------|--------------------------------------------------------------------|
-| Seeding        | [`examples/client.go`](./pkg/client/client_test.go)                |
-
 ## Tested GeoServer Versions
 
 | Version | Status |
 |---------|--------|
 | 2.27    | ✅      |
 | 2.22    | ✅      |
+
+## Visual flow of components
+<img src="./geoclient.png">
+
 

@@ -35,26 +35,26 @@ type Seed struct {
 }
 
 func (s Seed) Status(layer string) (*gwc.SeedStatus, error) {
+	if !strings.HasPrefix(layer, s.data.Workspace) {
+		layer = fmt.Sprintf("%s:%s", s.data.Workspace, layer)
+	}
+
 	err := validator.WorkspaceLayerFormat(s.data.Workspace, layer)
 	if err != nil {
 		return nil, err
-	}
-
-	if !strings.HasPrefix(layer, s.data.Workspace) {
-		layer = fmt.Sprintf("%s:%s", s.data.Workspace, layer)
 	}
 
 	return s.requester.Status(layer)
 }
 
 func (s Seed) Run(seedData gwc.SeedData) error {
+	if !strings.HasPrefix(seedData.Layer, s.data.Workspace) {
+		seedData.Layer = fmt.Sprintf("%s:%s", s.data.Workspace, seedData.Layer)
+	}
+
 	err := validator.WorkspaceLayerFormat(s.data.Workspace, seedData.Layer)
 	if err != nil {
 		return err
-	}
-
-	if !strings.HasPrefix(seedData.Layer, s.data.Workspace) {
-		seedData.Layer = fmt.Sprintf("%s:%s", s.data.Workspace, seedData.Layer)
 	}
 
 	type seedRequest struct {

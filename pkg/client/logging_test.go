@@ -1,9 +1,10 @@
 package client
 
 import (
+	"testing"
+
 	"github.com/canghel3/go-geoserver/pkg/logging"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestLoggingIntegration_Get(t *testing.T) {
