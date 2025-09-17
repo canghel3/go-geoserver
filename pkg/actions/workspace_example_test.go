@@ -32,7 +32,7 @@ func ExampleWorkspaces_Get() {
 	}
 
 	fmt.Println("Workspace name:", workspace.Name)
-	// Output: Workspace name: example-workspace
+	// Output Workspace name: example-workspace
 }
 
 func ExampleWorkspaces_GetAll() {
@@ -68,7 +68,7 @@ func ExampleWorkspaces_Update() {
 	}
 
 	fmt.Println("Workspace updated successfully")
-	// Output: Workspace updated successfully
+	// Output Workspace updated successfully
 }
 
 func ExampleWorkspaces_Delete() {
@@ -84,7 +84,7 @@ func ExampleWorkspaces_Delete() {
 	}
 
 	fmt.Println("Workspace deleted successfully")
-	// Output: Workspace deleted successfully
+	// Output Workspace deleted successfully
 }
 
 func ExampleWorkspaces_Use() {
